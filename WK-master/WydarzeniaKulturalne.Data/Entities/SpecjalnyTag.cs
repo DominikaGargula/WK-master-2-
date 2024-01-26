@@ -12,6 +12,7 @@ namespace WydarzeniaKulturalne.Data.Entities
 {
     public class SpecjalnyTag
     {
+        [Key]
         public int Id { get; set; }
         public string? Nazwa { get; set; }
     }

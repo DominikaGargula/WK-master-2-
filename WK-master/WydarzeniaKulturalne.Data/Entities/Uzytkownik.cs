@@ -10,6 +10,7 @@ namespace WydarzeniaKulturalne.Data.Entities
 {
     public class Uzytkownik
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [MaxLength(50)]

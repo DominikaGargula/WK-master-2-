@@ -10,7 +10,7 @@ namespace WydarzeniaKulturalne.Data.Entities
 {
     public class Bilety
     {
-
+        [Key]
         public int Id { get; set; }
 
         // Klucz obcy do WydarzenieKulturalne

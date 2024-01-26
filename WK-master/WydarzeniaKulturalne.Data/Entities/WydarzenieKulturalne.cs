@@ -11,6 +11,7 @@ namespace WydarzeniaKulturalne.Data.Entities
 {
     public class WydarzenieKulturalne
     {
+        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Nazwa musi zawierać min 3 znaki, max 30")]
         [StringLength(30, MinimumLength = 3)]
