@@ -15,14 +15,14 @@ namespace WydarzeniaKulturalne.Data.Entities
 
         // Klucz obcy do WydarzenieKulturalne
         public int WydarzenieKulturalneId { get; set; }
-        public virtual WydarzenieKulturalne Wydarzenie { get; set; }
+        public virtual WydarzenieKulturalne? Wydarzenie { get; set; }
 
         // Klucz obcy do LokalizacjaWydarzenia
         public int LokalizacjaWydarzeniaId { get; set; }
 
-        public virtual LokalizacjaWydarzenia Lokalizacja { get; set; }
+        public virtual LokalizacjaWydarzenia? Lokalizacja { get; set; }
 
-
+        [Required(ErrorMessage = "Podaj liczbe biletów")]
         [Display(Name = "Pula biletów")]
         public int IloscBiletow { get; set; }
 

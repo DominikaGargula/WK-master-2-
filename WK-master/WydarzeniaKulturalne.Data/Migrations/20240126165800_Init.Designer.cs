@@ -12,15 +12,15 @@ using WydarzeniaKulturalne.Data;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     [DbContext(typeof(WydarzeniaKulturalneContext))]
-    [Migration("20240126121623_M1")]
-    partial class M1
+    [Migration("20240126165800_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

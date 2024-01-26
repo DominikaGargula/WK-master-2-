@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class M1 : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -122,6 +122,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     KategoriaWydarzeniaId = table.Column<int>(type: "int", nullable: false),
                     Promowane = table.Column<bool>(type: "bit", nullable: false),
                     SpecjalnyTagId = table.Column<int>(type: "int", nullable: true),
+                    LokalizacjaWydarzeniaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,6 +133,11 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         principalTable: "KategoriaWydarzenia",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WydarzenieKulturalne_LokalizacjaWydarzenia_LokalizacjaWydarzeniaId",
+                        column: x => x.LokalizacjaWydarzeniaId,
+                        principalTable: "LokalizacjaWydarzenia",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_WydarzenieKulturalne_SpecjalnyTag_SpecjalnyTagId",
                         column: x => x.SpecjalnyTagId,
@@ -246,6 +252,10 @@ namespace WydarzeniaKulturalne.Data.Migrations
                 table: "WydarzenieKulturalne",
                 column: "KategoriaWydarzeniaId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_WydarzenieKulturalne_LokalizacjaWydarzeniaId",
+                table: "WydarzenieKulturalne",
+                column: "LokalizacjaWydarzeniaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WydarzenieKulturalne_SpecjalnyTagId",

@@ -87,7 +87,6 @@ public class HomeController : Controller
         Random random = new Random();
         int LosoweId = random.Next(0, suma.Count);
         ViewBag.Random = wydarzenia[LosoweId];
-
         ViewBag.NoweWydarzenia = wydarzenia.OrderByDescending(x => x.Id).
             Take(5).ToList();
         ViewBag.Promowane = _context.WydarzenieKulturalne.Where(p => p.Promowane == true)

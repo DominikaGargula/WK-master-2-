@@ -54,8 +54,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WydarzenieKulturalneId,LokalizacjaWydarzeniaId,IloscBiletow, DataWydarzenia, CzyDostepne")] Bilety bilety)
+        public async Task<IActionResult> Create( Bilety bilety)
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid) //sprawdza poprawnosc wprowadzanych parametrow
             {
             
@@ -66,7 +67,45 @@ namespace WydarzeniaKulturalneMVC.Controllers
             }
             ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca", bilety.LokalizacjaWydarzeniaId);
             ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa", bilety.WydarzenieKulturalneId);
+       
             return View(bilety);
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.LokalizacjaWydarzenia == null)
+            {
+                return NotFound();
+            }
+
+            var bilety = await _context.Bilety
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (bilety == null)
+            {
+                return NotFound();
+            }
+
+            return View(bilety);
+        }
+
+        // POST: LokalizacjaWydarzenia/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Bilety == null)
+            {
+                return Problem("Entity set 'WydarzeniaKulturalneMVCContext.Bilety'  is null.");
+            }
+            var bilet = await _context.Bilety.FindAsync(id);
+            if (bilet != null)
+            {
+                _context.Bilety.Remove(bilet);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
