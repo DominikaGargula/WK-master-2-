@@ -143,41 +143,40 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             return View(wydarzenieKulturalne);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, WydarzenieKulturalne wydarzenieKulturalne)
+        {
+            if (id != wydarzenieKulturalne.Id)
+            {
+                return NotFound();
+            }
+                else
+            {
+                try
+                {
 
-        //public async Task<IActionResult> Edit(int id, WydarzenieKulturalne wydarzenieKulturalne)
-        //{
-        //    if (id != wydarzenieKulturalne.Id)
-        //    {
-        //        return NotFound();
-        //    }
+                    _context.Update(wydarzenieKulturalne);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!WydarzenieKulturalneExists(wydarzenieKulturalne.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.KategoriaWydarzenia = new SelectList(_context.KategoriaWydarzenia, "id", "Nazwa");
+            ViewBag.SpecjalneTagi = new SelectList(_context.SpecjalnyTag, "Id", "Nazwa");
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-
-
-        //            _context.Update(wydarzenieKulturalne);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!WydarzenieKulturalneExists(wydarzenieKulturalne.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewBag.KategoriaWydarzenia = new SelectList(_context.KategoriaWydarzenia, "id", "Nazwa");
-        //    ViewBag.SpecjalneTagi = new SelectList(_context.SpecjalnyTag, "Id", "Nazwa");
-
-        //    return View(wydarzenieKulturalne);
-        //}
+            return View(wydarzenieKulturalne);
+        }
 
         // GET: WydarzenieKulturalne/Delete/5
         public async Task<IActionResult> Delete(int? id)

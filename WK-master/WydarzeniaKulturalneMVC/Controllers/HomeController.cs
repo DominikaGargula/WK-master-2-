@@ -16,7 +16,7 @@ public class HomeController : Controller
     private readonly WydarzeniaKulturalneContext _context;
 
 
-    //to jest obiekt reprezentujący całą baze danych
+    //to jest obiekt reprezentującyych
     public HomeController(ILogger<HomeController> logger, WydarzeniaKulturalneContext context)
     {
         _logger = logger;
