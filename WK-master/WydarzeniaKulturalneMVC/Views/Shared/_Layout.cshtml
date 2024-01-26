@@ -1,0 +1,457 @@
+﻿@using System.Security.Claims;
+@using WydarzeniaKulturalne.Data.Entities;
+@*pozwala na wydobycie danych dot. zalogowanego uzytkownika*@
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - WydarzeniaKulturalneMVC</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css"
+          integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <!-- MDB -->
+
+    <link rel="stylesheet" href="~/css/mdb.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        -webkit-text-size-adjust: 100%;
+        max-width: 100%;
+    }
+
+    .boxSearch {
+        height: 30px;
+        display: flex;
+        align-items: center;
+        border-radius: 30px;
+        cursor: pointer;
+        border-radius: 30px;
+    }
+
+        .boxSearch:hover input {
+            width: 20rem;
+            max-width: 35rem;
+        }
+
+        .boxSearch input {
+            width: 0;
+            outline: none;
+            border: none;
+            font-weight: 500;
+            transition: 0.8s;
+            background: transparent;
+        }
+
+        .boxSearch a .fas {
+            color: #383e57
+        }
+
+    .backgroundImg2 {
+        background-color: rgba(0, 0, 0, 0.4);
+        background-image: url(img/15634887_5571280.jpg);
+        background-size: cover;
+        background-blend-mode: saturation;
+    }
+
+    .backgroundImg {
+        background: url(img/33812597_7598163.jpg);
+        background-size: cover;
+        background-blend-mode: saturation;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .card-img-promoted {
+        width: 90%;
+        height: 200px;
+        object-fit: cover;
+        aspect-ratio: 12 / 16;
+        margin: 10px;
+    }
+
+    .card-img {
+      
+        height: 200px;
+        object-fit: cover;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+         aspect-ratio: 1/ 6;
+    }
+    .card-img-list{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-img-f
+    {
+        /*width: 90%;*/
+        height: 200px;
+ 
+        aspect-ratio: 12 / 16;
+        margin: 10px;
+    }
+
+    .card-body {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .card-title {
+        flex-grow: 1;
+        object-fit: cover;
+    }
+
+    .card-header {
+        text-transform: uppercase;
+        width: 0px;
+    }
+
+    .card {
+        box-shadow: none;
+        /*   border: groove;*/
+        max-width: 30em;
+        flex-direction: row;
+        height: 100%;
+        margin-top: 5px;
+        border-radius: 0;
+    }
+
+        .card:hover {
+            opacity: 0.8;
+        }
+
+        .card h5 {
+            text-transform: uppercase;
+            color: #8b8a8b;
+        }
+
+        .card p {
+            line-height: 1.4em;
+            font-size: .9rem;
+            text-align: right;
+            color: #d6a08f;
+        }
+
+    .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-do {
+        border: none;
+        padding: 0 !important;
+        font: inherit;
+        background: none;
+        height: 30px;
+        aspect-ratio: 9 / 16;
+        position: absolute;
+        top: -40px;
+        border-radius: 25px;
+        color: #de753f;
+        width: 4%;
+    }
+
+        .owl-carousel .owl-nav button.owl-next:hover, .owl-carousel .owl-nav button.owl-prev:hover, .owl-carousel button.owl-do:hover {
+            background-color: #f8fafb;
+            color: #08183a;
+        }
+
+    .otc {
+        color:transparent;
+    }
+    h5 {
+        color: #de753f;
+    }
+
+    .owl-nav {
+        display: block !important;
+    }
+
+        .owl-nav button.owl-prev {
+            right: 5%;
+        }
+
+        .owl-nav button.owl-next {
+            right: 0;
+        }
+
+    .navbar-colour {
+        background-color: transparent;
+    }
+
+    .navDrop {
+        background: none;
+        font-size: 15px
+    }
+
+    section {
+        margin-bottom: 15px;
+    }
+
+    .search-icon-btn {
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .titleTabel {
+        text-align: left;
+        text-transform: uppercase;
+        color: #de753f;
+    }
+
+
+    .mask {
+        background-image: url(/img/7652331.jpg);
+        background-size: cover;
+        background-blend-mode: saturation;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+</style>
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+        <!-- Container wrapper -->
+        <div class="container">
+            <!-- Toggle button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarSupportedContent1"
+                    aria-controls="navbarSupportedContent1"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                <!-- Navbar brand -->
+                <a class="navbar-brand mt-2 mt-sm-0" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/Logo.jpg"
+                         height="30"
+                         alt="WK Logo"
+                         loading="lazy" />
+                </a>
+
+                @if (User.IsInRole("Admin"))
+                {
+
+                    <a class="nav-link active text-dark" asp-area="" asp-controller="Home" asp-action="AdminPanel">Panel Administratora</a>
+
+                }
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <form asp-controller="Home" asp-action="Filtruj">
+                    <div class="boxSearch me-3">
+                        <input type="text" placeholder="Szukaj" name="Szukaj" value="@ViewBag.FiltrujListe" />
+                        <button type="submit" class="search-icon-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+            @if (HttpContextAccessor?.HttpContext?.User?.Identity?.IsAuthenticated is true)
+            {
+                <a class="nav-link me-3 text-dark"> Witaj @User.FindFirst(ClaimTypes.Name).Value</a>
+
+                <a class="nav-link me-3 text-dark " asp-area="" asp-controller="Uzytkownik" asp-action="Logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </a>
+
+            }
+            else
+            {
+                @*    <li class="nav-item active">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Rejestracja">rejestracja</a>
+            </li>*@
+
+                <a class="nav-link me-3 text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
+
+            }
+
+            <a class="nav-link me-3" href="#">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge rounded-pill badge-notification bg-danger">0</span>
+            </a>
+        </div>
+        </div>
+    </nav>
+
+
+    <!-- carousel -->
+    <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+        @*        <div class="carousel-indicators">
+        <button type="button"
+        data-mdb-target="#carouselExampleCaptions"
+        data-mdb-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1"></button>
+        <button type="button"
+        data-mdb-target="#carouselExampleCaptions"
+        data-mdb-slide-to="1"
+        aria-label="Slide 2"></button>
+        <button type="button"
+        data-mdb-target="#carouselExampleCaptions"
+        data-mdb-slide-to="2"
+        aria-label="Slide 3"></button>
+        </div>*@
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="mask" />
+                <div class="carousel-caption d-none d-sm-block mb-8">
+                    <h1 class="mb-4">
+                        <strong>Bilety online na wydarzenia</strong>
+                    </h1>
+
+                    <p>
+                        <strong>   WydarzeniaKulturalne to nowoczesny sposób zakupu</strong>
+                    </p>
+
+                    <p class="mb-4 d-none d-md-block">
+                        <strong>
+
+                            Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!
+              
+                        </strong>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    @*      <nav class="navbar navbar-expand-lg navbar-dark mb-5 shadow p-2 navbar-colour ">
+    <!-- Container wrapper -->
+    <div class="container-fluid mx-5 ">
+
+    </div>
+    <!-- Container wrapper -->
+    </nav>*@
+
+    @RenderBody()
+
+
+    <footer class="text-center text-white mt-4 footer-bottom" style="background-color: #08183a">
+
+        <hr class="text-dark">
+
+        <div class="container">
+            <!-- Section: Social media -->
+            <section class="mb-3">
+
+                <!-- Facebook -->
+                <a class="btn-link btn-floating btn-lg text-white"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+
+                <!-- Google -->
+                <a class="btn-link btn-floating btn-lg text-white"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-google"></i>
+                </a>
+
+                <!-- Instagram -->
+                <a class="btn-link btn-floating btn-lg text-white"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <!-- YouTube -->
+                <a class="btn-link btn-floating btn-lg text-white"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <!-- Github -->
+                <a class="btn-link btn-floating btn-lg text-white"
+                   href="#!"
+                   role="button"
+                   data-mdb-ripple-color="dark">
+                    <i class="fab fa-github"></i>
+                </a>
+            </section>
+            <!-- Section: Social media -->
+        </div>
+        <!-- Grid container -->
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: #08183a;">
+            © 2023
+            <a class="text-white" href="https://mdbootstrap.com/">Wk</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Jquery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Owl carousel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('.owl-carousel').owlCarousel({
+            loop: false,
+            margin: 10,
+            nav: true,
+            stagePadding: 0,
+
+            responsiveClass: true,
+            navText: [
+                "<i class='fas fa-chevron-left'></i>",
+                "<i class='fas fa-chevron-right'></i>",
+            ],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                 1000: {
+                    items: 3
+                }
+            }
+        })
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,242 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    int promowane = 0;
+    int lp = 1;
+    var dodaneMiejscowosci = new List<string>();
+}
+<main>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-darkshadow p-2 navbar-colour mb-5">
+        <!-- Container wrapper -->
+        <div class="container-fluid mx-5 ">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active mx-1 ">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle navDrop " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Kategorie
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in @ViewBag.KategoriaWydarzenia)
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen"> @item.Nazwa </a>
+                                </li>
+
+                            }
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item active mx-1">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Lokalizacja
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @foreach (var item in @ViewBag.LokalizacjaWydarzenia)
+                            {
+                                if (!dodaneMiejscowosci.Contains(item.Miejscowosc))
+                                {
+                                <li>
+                                    <a class="dropdown-item" asp-route-id="@item.Id" asp-action="listaWydarzen"> @item.Miejscowosc </a>
+                                </li>
+                                    dodaneMiejscowosci.Add(item.Miejscowosc);
+                                }
+                            }
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item active mx-1">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Data
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Container wrapper -->
+        <hr />
+
+    </nav>
+    <!-- Navbar -->
+    <div class="container mt-2">
+
+        <!-- Products -->
+        <section class="events-promoted">
+            <div class="container firstContainer">
+                <header align="left">
+                    <div class="card-header">
+                            <h5>Polecane</h5>     
+                    </div>
+                </header>
+                   <div class="row justify-content-center">
+                    @foreach (var item in ViewBag.Wydarzenie)
+                    {
+                        @if (item.Wydarzenie.Promowane is true && promowane < 5  )
+                        {
+                            <div class="col-md-2 col-sm-2 col-4 pb-1">
+                                <div class="card">
+                                    <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
+                                        @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
+                                        {
+                                            <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
+                                        }
+                                    </a>
+                                    <div class="card-inner">
+                                    </div>
+                                </div>
+                            </div>
+                            promowane++;
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+        <hr />
+        <section class="TwoHeadLineTabel">
+            <div class="row tableColumn ms-2 ">
+                <div class="col-md-6 col-12 mb-3 ">
+                    <div class=" flex-md-equal w-100 my-md-3 pl-md-3">
+                        <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden backgroundImg2">
+                            <div class="my-3 py-3">
+                                <h2 class="display-5 ">Nie przegap</h2>
+                   
+                                <p class="lead">Zanurz się w wyjątkowym świecie wydarzeń</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" flex-md-equal w-100 my-md-3 pl-md-3 my-1">
+                        <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden backgroundImg">
+                            <div class="my-3 py-3">
+                                <h2 class="display-5">Odkryj pasję</h2>
+                                <p class="lead">Podaruj bliskim niezapomniane emocje</p>
+                        
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 ">
+                    <div class="flex-md-equal w-100 my-md-3 pl-md-3">
+                        <div class=" mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+                            <h5 class="card-title titleTabel"> Ostatnio dodane</h5>
+                            <div class="my-3 py-3 table-responsive">
+                                <table class="table  ">
+                                    <tbody>
+                                       
+                                    @foreach (var item in @ViewBag.NoweWydarzenia)
+                                    { 
+                                            <tr>
+                                                <th scope="row">@lp</th>
+                                                <td> <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id"> @item.Wydarzenie.Nazwa   </a></td>
+                                                <td></td>
+                                          
+                                                <td>   @item.Lokalizacja.Miejscowosc</td>
+                                            </tr>
+                                          
+                                            lp++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bg-light box-shadow mx-auto " style="width: 50%; height: %; border-radius: 21px 21px 0 0;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr />
+        <section class="headLine">
+            <div class="heroimg ms-2 mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center w-100 my-md-3 pl-md-3">
+                <div class="my-3 p-3">
+                    <h2 class="display-5">Another headline</h2>
+                    <p class="lead">And an even wittier subheading.</p>
+                </div>
+            </div>
+        </section>
+        @foreach (var kategoria in @ViewBag.KategoriaWydarzenia)
+        {
+            <hr />
+            <section class="events-slider">
+                <div class="container firstContainer">
+                    <header align="left">
+                        <div class="card-header">
+                            <a asp-controller="Home" asp-action="listaWydarzen" asp-route-id="@kategoria.id">
+                                <h5>@kategoria.Nazwa </h5>
+                            </a>
+
+                        </div>
+                    </header>
+                    <div class="owl-carousel owl-theme">
+                        @foreach (var item in ViewBag.Wydarzenie)
+                        {
+                            if (item.Wydarzenie.KategoriaWydarzenia.id == kategoria.id && item.CzyDostepne == true)
+                            {
+                                <div class="row g-5 justify-content-evenly">
+                                    <div class="col">
+                                        <div class="card hover-zoom ripple-surface ripple-surface-light">
+                                            <div class="row g-0">
+                                                <div class="col">
+                                                    @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
+                                                    {
+                                                        <img src="~/Zdjecia/noimage.png" class="card-img img-fluid" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img img-fluid" />
+                                                    }
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card-body d-flex flex-column">
+                                                        <div class="h-100">
+                                                            <h5 class="card-title">@item.Wydarzenie.Nazwa</h5>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p class="card-text">
+                                                                <small class="text-muted">
+                                                                    Najbliższe wydarzenie:
+                                                                </small>
+
+                                                                    @item.DataWydarzenia.ToShortDateString()
+                                                              
+                                                            </p>
+                                                          
+                                                            <div class="text-end">
+                                                                <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id" class="btn btn-dark">
+                                                                    Kup bilet
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </section>
+
+        }
+        <hr />
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+            <ul class="pagination">
+            </ul>
+        </nav>
+    </div>
+</main>

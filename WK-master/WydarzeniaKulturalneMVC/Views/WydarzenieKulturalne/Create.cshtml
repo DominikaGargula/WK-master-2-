@@ -1,0 +1,106 @@
+﻿@model WydarzeniaKulturalne.Data.Entities.WydarzenieKulturalne
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card shadow m-4 p-4">
+    <h4 class="ml-3 mb-3 py-3"> Wydarzenie</h4>
+
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form enctype="multipart/form-data" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-warning">Powrót</a>
+                    <input type="submit" value="Zapisz" class="btn btn-primary" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Nazwa" class="control-label">Nazwa</label>
+                            <input asp-for="Nazwa" class="form-control" />
+                            <span asp-validation-for="Nazwa" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Cena" class="control-label"></label>
+                            <input asp-for="Cena" class="form-control" />
+                            <span asp-validation-for="Cena" class="text-danger"></span>
+                        </div>
+                    </div>
+                 @*   <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="DataUwtorzenia" class="control-label"></label>
+                            <input asp-for="DataUwtorzenia" class="form-control" />
+                            <span asp-validation-for="DataUwtorzenia" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="KategoriaWydarzeniaId" class="control-label">Kategoria</label>
+                            <select asp-for="KategoriaWydarzeniaId" class="form-control" asp-items="ViewBag.KategoriaWydarzenia"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="SpecjalnyTagId" class="control-label">specjalnyTag</label>
+                            <select asp-for="SpecjalnyTagId" class="form-control" asp-items="ViewBag.SpecjalneTagi"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ZdjecieUrl" class="control-label"></label>
+                            <input asp-for="ZdjecieUrl" class="form-control" type="text" />
+                            <span asp-validation-for="ZdjecieUrl" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Opis" class="control-label"></label>
+                            <textarea asp-for="Opis" id="content"></textarea>
+                            <span asp-validation-for="Opis" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Promowane" type="checkbox" /> @Html.DisplayNameFor(model => model.Promowane)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        tinymce.init({
+            forced_root_block: "",
+            selector: 'textarea',
+            menubar: false,
+            statusbar: false,
+            language: 'pl'
+        });
+    </script>
+    }

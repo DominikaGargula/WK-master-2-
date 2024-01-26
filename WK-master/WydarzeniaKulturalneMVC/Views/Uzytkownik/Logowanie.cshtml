@@ -1,0 +1,56 @@
+﻿@model WydarzeniaKulturalneMVC.ViewModel.LogowanieViewModel
+
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="py-5">
+    <div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-5 col-md-8">
+                    <form class="bg-white rounded-5 shadow-5-strong p-5" asp-action="Logowanie" asp-controller="Uzytkownik">
+                        <!-- Email input -->
+                        <div class="form-group mb-4">
+                            <label for="exampleInputEmail1">Email</label>
+                            <input asp-for="Email" type="Email" placeholder="Email" id="form3Example4cg" class="form-control form-control-user" />
+                        </div>
+                        <!-- Password input -->
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="form1Example2">Hasło</label>
+                            <input type="password" asp-for="Haslo" class="form-control form-control-user" placeholder="Hasło" />
+                        </div>
+                        <!-- 2 column grid layout for inline styling -->
+                        <div class="row mb-4">
+                            <div class="col d-flex justify-content-center">
+                                                               <div>
+                                    <label class="form-check-label" for="form1Example3">
+                                      <a asp-action="Rejestracja"> Zarejestruj się </a> 
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col text-center">
+                                <!-- Simple link -->
+                              @*  <a href="#!">Przypomnij hasło</a>*@
+                            </div>
+                        </div>
+                       
+                        <p style="color: darkred">@ViewBag.ErrorMessageLogin</p>
+                        <input type="submit" value="Logowanie" class="btn btn-primary btn-user btn-block" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*@section Scripts {
+@{
+await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
+*@
+

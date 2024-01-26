@@ -1,0 +1,56 @@
+﻿@model WydarzeniaKulturalne.Data.Entities.Rola
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card shadow m-4 p-4">
+    <h4 class="ml-3 mb-3 py-3">Rola</h4>
+
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <form enctype="multipart/form-data" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-warning">Powrót</a>
+                    <input type="submit" value="Zapisz" class="btn btn-primary" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Nazwa" class="control-label">Nazwa</label>
+                            <input asp-for="Nazwa" class="form-control" />
+                            <span asp-validation-for="Nazwa" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Aktywna" type="checkbox" /> @Html.DisplayNameFor(model => model.Aktywna)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        tinymce.init({
+            forced_root_block: "",
+            selector: 'textarea',
+            menubar: false,
+            statusbar: false,
+            language: 'pl'
+        });
+    </script>
+    }
