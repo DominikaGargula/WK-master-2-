@@ -46,5 +46,27 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             return View(bilety);
         }
+        public IActionResult Create()
+        {
+            ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca");
+            ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,WydarzenieKulturalneId,LokalizacjaWydarzeniaId,IloscBiletow, DataWydarzenia, CzyDostepne")] Bilety bilety)
+        {
+            if (ModelState.IsValid) //sprawdza poprawnosc wprowadzanych parametrow
+            {
+            
+                _context.Add(bilety);
+                await _context.SaveChangesAsync();
+                TempData["Save"] = "Pomyślnie utworzono nowy obiekt";
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca", bilety.LokalizacjaWydarzeniaId);
+            ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa", bilety.WydarzenieKulturalneId);
+            return View(bilety);
+        }
     }
 }
