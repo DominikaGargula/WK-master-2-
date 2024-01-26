@@ -22,22 +22,17 @@ namespace WydarzeniaKulturalneMVC.Controllers
         public async Task<IActionResult> Index(string Filtruj)
         {
 
-            var wydarzenia = _context.WydarzenieKulturalne
-              
+            var wydarzenia = _context.WydarzenieKulturalne   
                 .Include(w => w.KategoriaWydarzenia)
                 .ToList();
 
             ViewBag.Filtruj = Filtruj;
-
             if (Filtruj != null)
             {
                 wydarzenia = wydarzenia.Where(f => ContainsString(f.Nazwa, Filtruj) ||
-                                                
-                                                 ContainsString(f.KategoriaWydarzenia.Nazwa, Filtruj))
-                                      .ToList();
+                ContainsString(f.KategoriaWydarzenia.Nazwa, Filtruj))
+                    .ToList();
             }
-
-
             return View(wydarzenia);
 
         }
@@ -89,21 +84,20 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
        
         [HttpPost]
-    
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create( WydarzenieKulturalne wydarzenieKulturalne)
         {
+            if (ModelState.IsValid) //sprawdza poprawnosc wprowadzanych parametrow
+            {
+                wydarzenieKulturalne.DataUwtorzenia = DateTime.Now;
+                _context.Add(wydarzenieKulturalne);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-                    wydarzenieKulturalne.DataUwtorzenia = DateTime.Now;
-                    _context.Add(wydarzenieKulturalne);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-      
-            // Jeśli ModelState.IsValid == false lub wystąpił inny błąd, pobierz ponownie listę kategorii i zwróć widok
-            //ViewBag.Kategorie = _context.KategoriaWydarzenia.ToList();
-            //ViewBag.SpecjalneTagi = _context.SpecjalnyTag.ToList();
-            //ViewBag.KategoriaWydarzenia = new SelectList(_context.KategoriaWydarzenia, "id", "Nazwa");
-            //ViewBag.SpecjalneTagi = new SelectList(_context.SpecjalnyTag, "Id", "Nazwa");
-            //return View(wydarzenieKulturalne);
+            ViewBag.KategoriaWydarzenia = new SelectList(_context.KategoriaWydarzenia, "id", "Nazwa",wydarzenieKulturalne.KategoriaWydarzeniaId);
+            ViewBag.SpecjalneTagi = new SelectList(_context.SpecjalnyTag, "Id", "Nazwa", wydarzenieKulturalne.SpecjalnyTagId);
+            return View(wydarzenieKulturalne);
         }
 
         public async Task<IActionResult> Filtruj(string Filtruj)
@@ -151,7 +145,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
             {
                 return NotFound();
             }
-                else
+            if (ModelState.IsValid)
             {
                 try
                 {

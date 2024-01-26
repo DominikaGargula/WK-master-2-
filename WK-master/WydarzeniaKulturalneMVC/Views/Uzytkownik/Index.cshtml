@@ -14,13 +14,14 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-2">
             <form asp-action="Index" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
-                    <input type="text" name="Filtruj" placeholder="Szukaj" value="@ViewBag.Filtruj" class="form-control d-inline  border-1 small"
-                           border-1 small"
-                           aria-label="Szukaj"/>
-                           
+                    <input type="text" name="Filtruj" placeholder="Szukaj" value="@ViewBag.Filtruj" class="form-control d-inline"
+                           aria-label="Szukaj" />
                     <div class="input-group-append">
                         <button class="btn btn-primary btn-small" type="submit">
                             <i class="fas fa-search fa-sm"></i>
+                        </button>
+                        <button class="btn btn-secondary btn-small" type="button" onclick="location.href='@Url.Action("Index")'">
+                            <i class="fas fa-times fa-sm"></i>
                         </button>
                     </div>
                 </div>

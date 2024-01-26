@@ -26,7 +26,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
 
-        var wydarzenie1 = _context.WydarzenieKulturalne.Include(w=>w.KategoriaWydarzenia).
+        var wydarzenie = _context.WydarzenieKulturalne.Include(w=>w.KategoriaWydarzenia).
             ToList();
         var bilety = _context.Bilety
             .Include(w => w.Lokalizacja)
@@ -45,7 +45,7 @@ public class HomeController : Controller
            select lokalizacja
            ).ToList();
 
-        ViewBag.NazwaKategorii = wydarzenie1.FirstOrDefault()?.KategoriaWydarzenia?.Nazwa;
+        ViewBag.NazwaKategorii = wydarzenie.FirstOrDefault()?.KategoriaWydarzenia?.Nazwa;
 
         //var kategorieZWydarzeniami = _context.KategoriaWydarzenia
         //  .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne.Any())

@@ -15,7 +15,7 @@ namespace WydarzeniaKulturalne.Data.Entities
         public int Id { get; set; }
         [Required(ErrorMessage = "Nazwa musi zawierać min 3 znaki, max 30")]
         [StringLength(30, MinimumLength = 3)]
-        public string Nazwa { get; set; }
+        public string? Nazwa { get; set; }
         // ? nie każde wydarzenie musi mieć swój opis
 
         public string? Opis { get; set; }
@@ -36,7 +36,7 @@ namespace WydarzeniaKulturalne.Data.Entities
         public bool Promowane { get; set; }
         public SpecjalnyTag? SpecjalnyTag { get; set; }
         public int? SpecjalnyTagId { get; set; }
-        public virtual ICollection<Bilety> Bilety { get; set; }
+        public virtual ICollection<Bilety>? Bilety { get; set; }
         //public int? LokalizacjaWydarzeniaId { get; set; } = null;
     }
 }

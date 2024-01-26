@@ -85,9 +85,11 @@
     .bg-white {
         background-color: #1e1e2f !important;
     }
-    .bg-footer{
+
+    .bg-footer {
         background-color: #00000000 !important;
     }
+
     .btn-primary {
         color: #fff;
         background-color: #de753f !important;
@@ -105,6 +107,7 @@
         border: 1px solid #242639;
         border-radius: .35rem;
     }
+
     .sidebar-dark .nav-item .nav-link i {
         color: #ffffff;
     }
@@ -323,29 +326,36 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" asp-action="" asp-controller="WydarzenieKulturalne" asp-action="Index">
+                <a class="nav-link" asp-controller="Bilety" asp-action="Index">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Bilety</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="WydarzenieKulturalne" asp-action="Index">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Wydarzenia</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="" asp-controller="KategoriaWydarzenia" asp-action="Index">
+                <a class="nav-link" asp-controller="KategoriaWydarzenia" asp-action="Index">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Kategoria wydarzenia</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-action="" asp-controller="Bilety" asp-action="Index">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Bilety</span>
-                </a>
-            </li>
+
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" asp-action="" asp-controller="LokalizacjaWydarzenia" asp-action="Index">
+                <a class="nav-link" asp-controller="LokalizacjaWydarzenia" asp-action="Index">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Lokalizacja wydarzenia</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="SpecjalnyTag" asp-action="Index">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>SpecjalnyTag</span>
                 </a>
             </li>
 

@@ -30,7 +30,7 @@ namespace WydarzeniaKulturalne.Data.Entities
         [Display(Name = "Data wydarzenia")]
         public DateTime DataWydarzenia { get; set; }
 
-        [Display(Name = "Czy dostępne")]
+        [Display(Name = "Czy dostępne?")]
         public bool CzyDostepne { get; set; }
     }
 }

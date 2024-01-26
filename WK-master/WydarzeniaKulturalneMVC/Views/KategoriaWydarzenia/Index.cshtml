@@ -12,13 +12,16 @@
             <h1 class="h3 mb-0 text-primary admin-table-title">Kategoria </h1>
         </div>
         <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <form asp-action="Index" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
-                    <input type="text" class="form-control border-1 small" placeholder="Szukaj"
-                           aria-label="Szukaj"/>
+                    <input type="text" name="Filtruj" placeholder="Szukaj" value="@ViewBag.Filtruj" class="form-control d-inline"
+                           aria-label="Szukaj" />
                     <div class="input-group-append">
-                        <button class="btn btn-primary admin-btn-search" type="button">
+                        <button class="btn btn-primary btn-small" type="submit">
                             <i class="fas fa-search fa-sm"></i>
+                        </button>
+                        <button class="btn btn-secondary btn-small" type="button" onclick="location.href='@Url.Action("Index")'">
+                            <i class="fas fa-times fa-sm"></i>
                         </button>
                     </div>
                 </div>

@@ -11,8 +11,6 @@ namespace WydarzeniaKulturalneMVC.Controllers;
 public class RolaController : Controller
 {
 
-    private readonly ILogger<HomeController> _logger;
-
 
     private readonly WydarzeniaKulturalneContext _context;
 
