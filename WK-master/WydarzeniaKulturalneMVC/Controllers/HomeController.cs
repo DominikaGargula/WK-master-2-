@@ -38,24 +38,18 @@ public class HomeController : Controller
         ViewBag.NoweWydarzenia = bilety.OrderByDescending(x => x.Id).
            Take(5).ToList();
 
-        ViewBag.LokalizacjaWydarzenia =
-           (
-           from lokalizacja in _context.LokalizacjaWydarzenia
-           orderby lokalizacja.Id
-           select lokalizacja
-           ).ToList();
+        ViewBag.LokalizacjaWydarzenia = _context.Bilety
+                   .Select(b => b.Lokalizacja)
+                   .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+                   .Distinct()
+                   .ToList();
 
         ViewBag.NazwaKategorii = wydarzenie.FirstOrDefault()?.KategoriaWydarzenia?.Nazwa;
-
-        //var kategorieZWydarzeniami = _context.KategoriaWydarzenia
-        //  .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne.Any())
-        //  .ToList();
-
 
         var kategorieZWydarzeniami = _context.KategoriaWydarzenia
         .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
         .Any(w => w.Bilety != null && w.Bilety.Any()))
-    .   ToList();
+    .ToList();
 
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
 
@@ -118,15 +112,23 @@ public class HomeController : Controller
     public async Task<IActionResult> Filtruj(string Szukaj)
 
     {
+        var kategorieZWydarzeniami = _context.KategoriaWydarzenia
+        .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
+        .Any(w => w.Bilety != null && w.Bilety.Any()))
+        .ToList();
+        ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
 
-        ViewBag.KategoriaWydarzenia = _context.KategoriaWydarzenia.ToList();
-
-        ViewBag.LokalizacjaWydarzenia = _context.LokalizacjaWydarzenia.ToList();
+        ViewBag.LokalizacjaWydarzenia = await _context.Bilety
+        .Select(b => b.Lokalizacja)
+        .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+        .Distinct()
+        .ToListAsync();
 
         var bilety = _context.Bilety
             .Include(x => x.Wydarzenie)
             .Include(x => x.Wydarzenie.KategoriaWydarzenia)
             .ToList();
+
         ViewBag.FiltrujListe = Szukaj;
 
         if (!string.IsNullOrWhiteSpace(Szukaj) && Szukaj.Length > 2)
@@ -156,27 +158,53 @@ public class HomeController : Controller
     public async Task<IActionResult> ListaWydarzen(int? id)
     {
 
-        var bilety = await _context.Bilety.Include(w => w.Wydarzenie.KategoriaWydarzenia)
-      .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
-      .ToListAsync();
-
- 
         var kategorieZWydarzeniami = _context.KategoriaWydarzenia
        .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
        .Any(w => w.Bilety != null && w.Bilety.Any()))
        .ToList();
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
 
-        ViewBag.LokalizacjaWydarzenia = await (
-            from lokalizacja in _context.LokalizacjaWydarzenia
-            orderby lokalizacja.Id
-            select lokalizacja
-        ).ToListAsync();
+        ViewBag.LokalizacjaWydarzenia = await _context.Bilety
+              .Select(b => b.Lokalizacja)
+              .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+              .Distinct()
+              .ToListAsync();
+        var bilety = await _context.Bilety.Include(w => w.Wydarzenie.KategoriaWydarzenia)
+      .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
+      .ToListAsync();
+
+
 
         //ViewBag.Nazwa = bilety;
 
         return View(bilety);
     }
 
+    public async Task<IActionResult> ListaLokalizacji(int? id)
+    {
 
+        var kategorieZWydarzeniami = _context.KategoriaWydarzenia
+       .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
+       .Any(w => w.Bilety != null && w.Bilety.Any()))
+       .ToList();
+        ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
+
+
+        ViewBag.LokalizacjaWydarzenia = await _context.Bilety
+        .Select(b => b.Lokalizacja)
+        .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+        .Distinct()
+        .ToListAsync();
+
+        var bilety = await _context.Bilety
+        .Include(w => w.Wydarzenie.KategoriaWydarzenia)
+        .Where(item =>
+            (id == null || item.LokalizacjaWydarzeniaId == id))
+        .ToListAsync();
+
+
+        //ViewBag.Nazwa = bilety;
+
+        return View(bilety);
+    }
 }
