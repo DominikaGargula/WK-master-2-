@@ -89,7 +89,7 @@
                 <!--Content-->
                 <div class="p-4">
                     <div class="mb-3">
-                        
+
                         @if (@wydarzenie.Wydarzenie?.Promowane == true)
                         {
                             <span class="badge bg-info me-1">Promowane</span>
@@ -104,62 +104,66 @@
         <div class="container rounded mt-3 bg-white p-md-4">
             <div class="h5-detail m-3 mb-3">
                 Dostępne wydarzenia
-                <a class="btn btn-dark btn-details-header float-end mb-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Lokalizacja
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+ @*               <div class="dropdown float-end mb-3">
+                    <button class="btn btn-dark btn-details-header dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lokalizacja
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>*@
             </div>
             <div class="table-responsive w-100">
                 <table class="table table-details">
-                                        <thead>
-                    <tr>
-                    <th scope="col">Data</th>
-                    <th scope="col">Miejsce</th>
-                    <th scope="col"></th>
-                    <th scope="col">Status</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th scope="col">Data</th>
+                            <th scope="col">Miejsce</th>
+                            <th scope="col"></th>
+                            <th scope="col">Status</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach (var bilet in ViewBag.InformacjeOWydarzeniu1)
                         {
-                        <tr class="bg-details">
-                            <td class="pt-3 mt-1">
-                                    @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br/>
+                            <tr class="bg-details">
+                                <td class="pt-3 mt-1">
+                                    @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br />
                                     @bilet.DataWydarzenia.ToString(" HH:mm:ss")
-                            </td>
-                            <td class="pt-3 mt-1">
-                                <div class="pl-lg-5 pl-md-3 pl-1 nameDetails">
+                                </td>
+                                <td class="pt-3 mt-1">
+                                    <div class="pl-lg-5 pl-md-3 pl-1 nameDetails">
                                         @bilet.Lokalizacja?.Miejscowosc
-                                    <br>
+                                        <br>
                                         @bilet.Lokalizacja?.NazwaMiejsca
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
 
-                            <td class="pt-3 mt-1">
-                                Dotępne bilety: @bilet.IloscBiletow
-                                <br>
+                                <td class="pt-3 mt-1">
+                                    Dotępne bilety: @bilet.IloscBiletow
+                                    <br>
                                     Cena: @bilet.Wydarzenie.Cena.ToString("C")
-                            </td>
-                                @if(@bilet.IloscBiletow > 0)
+                                </td>
+                                @if (@bilet.IloscBiletow > 0)
                                 {
                                     <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
+                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right">Kup bilet</button></td>
                                 }
                                 else
                                 {
                                     <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane</td>
+                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right" disabled>Kup bilet</button></td>
                                 }
 
-                            <td class="pt-3 mt-2"><span class="btn btn-dark" style="float:right">Kup bilet</span></td>
-                        </tr>
-                         
-                        <tr id="spacing-row">
-                            <td></td>
-                        </tr>
-                            }
+                            
+                            </tr>
+
+                            <tr id="spacing-row">
+                                <td></td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
