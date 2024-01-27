@@ -19,14 +19,14 @@
                         <button class="btn btn-secondary dropdown-toggle navDrop " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Kategorie
                         </button>
-                                           <ul class="dropdown-menu">
-                        @foreach (var item in @ViewBag.KategoriaWydarzenia)
-                        {
-                        <li>
-                        <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen"> @item.Nazwa </a>
-                        </li>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in @ViewBag.KategoriaWydarzenia)
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen"> @item.Nazwa </a>
+                                </li>
 
-                        }
+                            }
                         </ul>
                     </div>
                 </li>
@@ -37,13 +37,13 @@
                         </a>
 
                         <ul class="dropdown-menu">
-                               @foreach (var item in @ViewBag.LokalizacjaWydarzenia)
+                            @foreach (var item in @ViewBag.LokalizacjaWydarzenia)
                             {
                                 if (!dodaneMiejscowosci.Contains(item.Miejscowosc))
                                 {
-                                <li>
+                                    <li>
                                         <a class="dropdown-item" asp-route-id="@item.Id" asp-action="ListaLokalizacji"> @item.Miejscowosc </a>
-                                </li>
+                                    </li>
                                     dodaneMiejscowosci.Add(item.Miejscowosc);
                                 }
                             }
@@ -84,9 +84,9 @@
                 {
                     @foreach (var bilety in Model)
                     {
-                        if (!pojedynczeWydarzenie.Contains(ViewBag.Wydarzenie.Id))
+                        if (!pojedynczeWydarzenie.Contains(bilety.Wydarzenie.Id))
                         {
-                            pojedynczeWydarzenie.Add(ViewBag.Wydarzenie.Id);
+                            pojedynczeWydarzenie.Add(bilety.Wydarzenie.Id);
                             <div class="col-md-4 col-sm-6">
                                 <div class="card hover-zoom ripple-surface ripple-surface-light">
                                     <div class="row g-0">
@@ -103,14 +103,14 @@
                                         <div class="col">
                                             <div class="card-body d-flex flex-column">
                                                 <div class="h-100">
-                                                    <h5 class="card-title">@bilety.Wydarzenie.Nazwa ni ko</h5>
+                                                    <h5 class="card-title">@bilety.Wydarzenie.Nazwa</h5>
                                                 </div>
                                                 <div class="col">
                                                     <p class="card-text ">
                                                         <small class="text-muted">
-                                                            Najbliższe wydarzenie/data utworzenia
-                                                            @bilety.DataWydarzenia
+                                                            Najbliższe wydarzenie
                                                         </small>
+                                                        <small>@bilety.DataWydarzenia.ToShortDateString()</small>
                                                     </p>
                                                     <div class="text-end">
                                                         <a asp-controller="Bilety" asp-route-id="@bilety.Id" asp-action="DetailsCard" class="btn btn-dark">

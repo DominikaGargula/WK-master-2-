@@ -169,9 +169,11 @@ public class HomeController : Controller
               .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
               .Distinct()
               .ToListAsync();
-        var bilety = await _context.Bilety.Include(w => w.Wydarzenie.KategoriaWydarzenia)
-      .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
-      .ToListAsync();
+        var bilety = await _context.Bilety
+        .Include(w => w.Wydarzenie.KategoriaWydarzenia)
+        .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
+        .OrderBy(w => w.DataWydarzenia)
+        .ToListAsync();
 
 
 
@@ -200,10 +202,8 @@ public class HomeController : Controller
         .Include(w => w.Wydarzenie.KategoriaWydarzenia)
         .Where(item =>
             (id == null || item.LokalizacjaWydarzeniaId == id))
+        .OrderBy(w => w.DataWydarzenia)
         .ToListAsync();
-
-
-        //ViewBag.Nazwa = bilety;
 
         return View(bilety);
     }

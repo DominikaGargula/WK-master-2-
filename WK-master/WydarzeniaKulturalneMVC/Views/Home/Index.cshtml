@@ -75,34 +75,34 @@
             <div class="container firstContainer">
                 <header align="left">
                     <div class="card-header">
-                            <h5>Polecane</h5>     
+                        <h5>Polecane</h5>
                     </div>
                 </header>
-                   <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     @foreach (var item in ViewBag.Wydarzenie)
                     {
-                       
-                            @if (item.Wydarzenie.Promowane is true && promowane < 5)
-                            {
-                                <div class="col-md-2 col-sm-2 col-4 pb-1">
-                                    <div class="card">
-                                        <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
-                                            @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
-                                            {
-                                                <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
-                                            }
-                                        </a>
-                                        <div class="card-inner">
-                                        </div>
+
+                        @if (item.Wydarzenie.Promowane is true && promowane < 5)
+                        {
+                            <div class="col-md-2 col-sm-2 col-4 pb-1">
+                                <div class="card">
+                                    <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
+                                        @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
+                                        {
+                                            <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
+                                        }
+                                    </a>
+                                    <div class="card-inner">
                                     </div>
                                 </div>
-                                promowane++;
-                            }
-                        
+                            </div>
+                            promowane++;
+                        }
+
                     }
                 </div>
             </div>
@@ -115,7 +115,7 @@
                         <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden backgroundImg2">
                             <div class="my-3 py-3">
                                 <h2 class="display-5 ">Nie przegap</h2>
-                   
+
                                 <p class="lead">Zanurz się w wyjątkowym świecie wydarzeń</p>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                             <div class="my-3 py-3">
                                 <h2 class="display-5">Odkryj pasję</h2>
                                 <p class="lead">Podaruj bliskim niezapomniane emocje</p>
-                        
+
                             </div>
 
                         </div>
@@ -138,17 +138,17 @@
                             <div class="my-3 py-3 table-responsive">
                                 <table class="table  ">
                                     <tbody>
-                                       
-                                    @foreach (var item in @ViewBag.NoweWydarzenia)
-                                    { 
+
+                                        @foreach (var item in @ViewBag.NoweWydarzenia)
+                                        {
                                             <tr>
                                                 <th scope="row">@lp</th>
                                                 <td> <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id"> @item.Wydarzenie.Nazwa   </a></td>
                                                 <td></td>
-                                          
+
                                                 <td>   @item.Lokalizacja.Miejscowosc</td>
                                             </tr>
-                                          
+
                                             lp++;
                                         }
                                     </tbody>
@@ -212,11 +212,8 @@
                                                                 <small class="text-muted">
                                                                     Najbliższe wydarzenie:
                                                                 </small>
-
-                                                                    @item.DataWydarzenia.ToShortDateString()
-                                                              
+                                                                <small>  @item.DataWydarzenia.ToShortDateString()</small>
                                                             </p>
-                                                          
                                                             <div class="text-end">
                                                                 <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id" class="btn btn-dark">
                                                                     Kup bilet

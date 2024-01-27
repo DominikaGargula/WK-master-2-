@@ -106,10 +106,9 @@
                                                 <div class="col">
                                                     <p class="card-text ">
                                                         <small class="text-muted">
-                                                            Najbliższe wydarzenie/datautworzenia
-                                                            @bilety.Wydarzenie.DataUwtorzenia
-                                                            @bilety.Wydarzenie.KategoriaWydarzenia.Nazwa
+                                                            Najbliższe wydarzenie                   
                                                         </small>
+                                                        <small>@bilety.DataWydarzenia.ToShortDateString()</small>
                                                     </p>
                                                     <div class="text-end">
                                                         <a asp-controller="Bilety" asp-route-id="@bilety.Id" asp-action="DetailsCard" class="btn btn-dark">
