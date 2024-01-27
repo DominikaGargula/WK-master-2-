@@ -26,7 +26,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
 
-        var wydarzenie = _context.WydarzenieKulturalne.Include(w=>w.KategoriaWydarzenia).
+        var wydarzenie = _context.WydarzenieKulturalne.Include(w => w.KategoriaWydarzenia).
             ToList();
         var bilety = _context.Bilety
             .Include(w => w.Lokalizacja)
@@ -53,9 +53,9 @@ public class HomeController : Controller
 
 
         var kategorieZWydarzeniami = _context.KategoriaWydarzenia
-    .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
+        .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
         .Any(w => w.Bilety != null && w.Bilety.Any()))
-    .ToList();
+    .   ToList();
 
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
 
@@ -155,22 +155,17 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> ListaWydarzen(int? id)
     {
-        //return View(await _context.WydarzenieKulturalne.Where(item => item.KategoriaWydarzeniaId == id).ToListAsync());
-
-        //var bilety = _context.Bilety
-        //    .Include(w => w.Lokalizacja)
-        //    .Include(w => w.Wydarzenie)
-        //    .ToList();
 
         var bilety = await _context.Bilety.Include(w => w.Wydarzenie.KategoriaWydarzenia)
       .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
       .ToListAsync();
 
-        ViewBag.KategoriaWydarzenia = await (
-            from kategoria in _context.KategoriaWydarzenia
-            orderby kategoria.id
-            select kategoria
-        ).ToListAsync();
+ 
+        var kategorieZWydarzeniami = _context.KategoriaWydarzenia
+       .Where(k => k.WydarzenieKulturalne != null && k.WydarzenieKulturalne
+       .Any(w => w.Bilety != null && w.Bilety.Any()))
+       .ToList();
+        ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
 
         ViewBag.LokalizacjaWydarzenia = await (
             from lokalizacja in _context.LokalizacjaWydarzenia

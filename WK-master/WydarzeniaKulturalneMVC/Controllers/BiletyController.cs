@@ -65,7 +65,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
             {
                 _context.Add(bilety);
                 await _context.SaveChangesAsync();
-                TempData["Save"] = "Pomyślnie utworzono nowy obiekt";
+                TempData["Save"] = "Pomyślnie utworzono biekt";
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca", bilety.LokalizacjaWydarzeniaId);

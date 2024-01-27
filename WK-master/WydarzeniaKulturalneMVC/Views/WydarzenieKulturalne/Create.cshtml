@@ -17,16 +17,15 @@
                     <input type="submit" value="Zapisz" class="btn btn-primary" />
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-10">
                         <div class="form-group">
                             <label asp-for="Nazwa" class="control-label">Nazwa</label>
                             <input asp-for="Nazwa" class="form-control" />
                             <span asp-validation-for="Nazwa" class="text-danger"></span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
+            
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label asp-for="Cena" class="control-label"></label>
                             <input asp-for="Cena" class="form-control" />
@@ -48,11 +47,9 @@
                             <select asp-for="KategoriaWydarzeniaId" class="form-control" asp-items="ViewBag.KategoriaWydarzenia"></select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label asp-for="SpecjalnyTagId" class="control-label">specjalnyTag</label>
+                            <label asp-for="SpecjalnyTagId" class="control-label">Specjalny Tag</label>
                             <select asp-for="SpecjalnyTagId" class="form-control" asp-items="ViewBag.SpecjalneTagi"></select>
                         </div>
                     </div>

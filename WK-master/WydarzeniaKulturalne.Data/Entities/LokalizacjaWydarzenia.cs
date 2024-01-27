@@ -31,7 +31,7 @@ namespace WydarzeniaKulturalne.Data.Entities
         [MinLength(3)]
         [Display(Name = "Nazwa miejsca")]
         public string NazwaMiejsca { get; set; }
-
+        public virtual ICollection<Bilety>? Bilety { get; set; }
         public virtual ICollection<WydarzenieKulturalne>? WydarzenieKulturalne { get; set; }
     }
 }

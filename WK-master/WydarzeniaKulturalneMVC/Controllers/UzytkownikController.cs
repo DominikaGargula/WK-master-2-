@@ -19,11 +19,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             _context = context;
         }
 
-        // GET: Uzytkownik
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
         public async Task<IActionResult> Index(string Filtruj)
         {
 
@@ -139,10 +134,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
 
        
-
-        // POST: Uzytkownik/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Uzytkownik uzytkownik, string weryfikujHaslo)
