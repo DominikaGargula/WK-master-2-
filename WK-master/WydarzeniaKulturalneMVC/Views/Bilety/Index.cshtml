@@ -45,9 +45,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Lokalizacja)
                         </th>
-                        @* <th>
-                        @Html.DisplayNameFor(model => model.ZdjecieUrl)
-                        </th>*@
+                        <th>
+                            @Html.DisplayName("Miejscowość")
+                        </th>
                         <th>
                             @Html.DisplayNameFor(model => model.IloscBiletow)
                         </th>
@@ -57,7 +57,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.CzyDostepne)
                         </th>
-   
+
                         <th class="th-action">
                             Akcja
                         </th>
@@ -74,16 +74,16 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Lokalizacja.NazwaMiejsca)
                             </td>
-                            @*    <td>
-                        @Html.DisplayFor(modelItem => item.ZdjecieUrl)
-                        </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Lokalizacja.Miejscowosc)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.IloscBiletow)
                             </td>
                             <td>
                                 @item.DataWydarzenia.ToString("yyyy-MM-dd HH:mm")
                             </td>
-            <td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.CzyDostepne)
                             </td>
                             <td>
