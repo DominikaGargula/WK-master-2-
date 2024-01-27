@@ -1,6 +1,7 @@
-﻿@model WydarzeniaKulturalne.Data.Entities.Bilety
+﻿@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
 @{
     ViewData["Title"] = "DetailsCard";
+    var wydarzenie = ViewBag.InformacjeOWydarzeniu as WydarzeniaKulturalne.Data.Entities.Bilety;
 }
 <style>
 
@@ -66,187 +67,98 @@
 <main class="mt-2 pt-4">
     <div class="container mt-2">
         <div class="row">
-            <!--Grid column-->
-  @*          <div class="col-md-6 mb-4 " style="width: 20rem;">
-                <button class="btn btn-dark ms-1">
-                    Cofnij
-                    <i class="fas fa-arrow-left ms-1"></i>
-                </button>
-            </div>*@
         </div>
         <hr />
         <!--Grid row-->
         <div class="row">
             <!--Grid column-->
             <div class="col-md-6 mb-4 " style="width: 20rem;">
-                @if (string.IsNullOrEmpty(Model.Wydarzenie.ZdjecieUrl))
+
+                @if (string.IsNullOrEmpty(wydarzenie.Wydarzenie?.ZdjecieUrl))
                 {
                     <img src="~/Zdjecia/noimage.png" class="img-fluid" />
                 }
                 else
                 {
-                    <img src="@Model.Wydarzenie.ZdjecieUrl" class="img-fluid" alt="" />
+                    <img src="@wydarzenie.Wydarzenie?.ZdjecieUrl" class="img-fluid" alt="" />
                 }
             </div>
-          
+
             <div class="col-md-6 mb-4">
                 <!--Content-->
                 <div class="p-4">
                     <div class="mb-3">
-                        <a href="">
-                       @*     <span class="badge bg-dark me-1">@Model.Wydarzenie.KategoriaWydarzenia.Nazwa</span>*@
-                        </a>
-                        <a href="">
-                            <span class="badge bg-info me-1">New</span>
-                        </a>
-                        <a href="">
-                            <span class="badge bg-danger me-1">@*@Model.SpecjalnyTag.Nazwa*@ SpecjalnhyTag</span>
-                        </a>
+                        
+                        @if (@wydarzenie.Wydarzenie?.Promowane == true)
+                        {
+                            <span class="badge bg-info me-1">Promowane</span>
+                        }
                     </div>
-
-                    <p class="lead">
-
-                        <span>  Cena:    @Model.Wydarzenie.Cena.ToString("C") </span>
-                        <br />
-                        <span>  Pula dostąpnych biletów: @Model.IloscBiletow </span>
-
-                    </p>
-
-                    <strong><p style="font-size: 20px;">@Model.Wydarzenie.Nazwa</p></strong>
-                   
-
-                    <p>@Html.Raw(@Model.Wydarzenie.Opis)</p>
-
-                    <form class="d-flex justify-content-left">
-                        <!-- Default input -->
-                        <div class="form-outline me-1" style="width: 100px;">
-                            <input type="number" value="1" class="form-control" />
-                        </div>
-                        <button class="btn btn-darkms-1" type="submit">
-                            Dodaj do karty
-                            <i class="fas fa-shopping-cart ms-1"></i>
-                        </button>
-                    </form>
+                    <strong><p style="font-size: 20px;">@wydarzenie.Wydarzenie?.Nazwa</p></strong>
+                    <p>@Html.Raw(@wydarzenie.Wydarzenie?.Opis)</p>
                 </div>
-                <!--Content-->
             </div>
-            <!--Grid column-->
         </div>
-        <!--Grid row-->
-
         <hr />
-
-        <!--Grid row-->
-        @*      <div class="row d-flex justify-content-center">
-        <!--Grid column-->
-        <div class="col-md-6 text-center">
-        <h4 class="my-4 h4">Additional information</h4>
-
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit voluptates, quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
-        </div>
-        <!--Grid column-->
-        </div>*@
-        <!--Grid row-->
-        <!--Grid row-->
-        @*       <div class="row">
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-12 mb-4">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="" />
-        </div>
-        <!--Grid column-->
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="" />
-        </div>
-        <!--Grid column-->
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="" />
-        </div>
-        <!--Grid column-->
-        </div>*@
-        <!--Table list-->
-
         <div class="container rounded mt-3 bg-white p-md-4">
             <div class="h5-detail m-3 mb-3">
                 Dostępne wydarzenia
-
-
                 <a class="btn btn-dark btn-details-header float-end mb-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Lokalizacja
                 </a>
-
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Action</a></li>
                     <li><a class="dropdown-item" href="#">Another action</a></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
-
             </div>
-
             <div class="table-responsive w-100">
                 <table class="table table-details">
-                    @*                    <thead>
+                                        <thead>
                     <tr>
                     <th scope="col">Data</th>
                     <th scope="col">Miejsce</th>
                     <th scope="col"></th>
                     <th scope="col">Status</th>
                     </tr>
-                    </thead>*@
+                    </thead>
                     <tbody>
+                        @foreach (var bilet in ViewBag.InformacjeOWydarzeniu1)
+                        {
                         <tr class="bg-details">
                             <td class="pt-3 mt-1">
-                                25 Sep 2020 <br />
-                                godz. 11:30
+                                    @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br/>
+                                    @bilet.DataWydarzenia.ToString(" HH:mm:ss")
                             </td>
                             <td class="pt-3 mt-1">
                                 <div class="pl-lg-5 pl-md-3 pl-1 nameDetails">
-                                    Kraków
+                                        @bilet.Lokalizacja?.Miejscowosc
                                     <br>
-                                    Klub Studio
+                                        @bilet.Lokalizacja?.NazwaMiejsca
                                 </div>
                             </td>
 
                             <td class="pt-3 mt-1">
-                                Dotępne bilety: 15
+                                Dotępne bilety: @bilet.IloscBiletow
                                 <br>
-                                Cena: 120zł
+                                    Cena: @bilet.Wydarzenie.Cena.ToString("C")
                             </td>
-                            <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
+                                @if(@bilet.IloscBiletow > 0)
+                                {
+                                    <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
+                                }
+                                else
+                                {
+                                    <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane</td>
+                                }
+
                             <td class="pt-3 mt-2"><span class="btn btn-dark" style="float:right">Kup bilet</span></td>
                         </tr>
+                         
                         <tr id="spacing-row">
                             <td></td>
                         </tr>
-                        <tr class="bg-details">
-                            <td class="pt-3 mt-1">
-                                25 Sep 2020 <br />
-                                godz. 11:30
-                            </td>
-                            <td class="pt-3 mt-1">
-                                <div class="pl-lg-5 pl-md-3 pl-1 nameDetails">
-                                    Kraków
-                                    <br>
-                                    Klub Studio
-                                </div>
-                            </td>
-
-                            <td class="pt-3 mt-1">
-                                Dotępne bilety: 15
-                                <br>
-                                Cena: 120zł
-                            </td>
-                          
-                            <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
-                            <td class="form-outline me-1" style="width: 100px;">
-                                <input type="number" value="1" class="form-control" />
-                            </td>
-                            <td class="pt-3 mt-2"><span class="btn btn-dark" style="float:right">Kup bilet</span></td>
-                        </tr>
-                        <tr id="spacing-row-details">
-                            <td></td>
-                        </tr>
+                            }
                     </tbody>
                 </table>
             </div>

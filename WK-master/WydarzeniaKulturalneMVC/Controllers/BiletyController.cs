@@ -38,18 +38,25 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
         public async Task<IActionResult> DetailsCard(int? id)
         {
-            if (id == null || _context.Bilety == null)
-            {
-                return NotFound();
-            }
-            var bilety = await _context.Bilety.Include(w => w.Lokalizacja).Include(w => w.Wydarzenie)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bilety == null)
-            {
-                return NotFound();
-            }
-            return View(bilety);
+
+            var wydarzenie = await _context.Bilety
+                .Include(b => b.Wydarzenie)
+                .Include(b => b.Lokalizacja)
+                .Where(b => b.Id == id)
+                .FirstOrDefaultAsync();
+
+            var bilety = await _context.Bilety
+                .Include(b => b.Wydarzenie)
+                .Include(b => b.Lokalizacja)
+                .Where(b => b.WydarzenieKulturalneId == wydarzenie.WydarzenieKulturalneId)
+                .ToListAsync();
+
+            ViewBag.InformacjeOWydarzeniu = wydarzenie;
+            ViewBag.InformacjeOWydarzeniu1 = bilety;
+
+            return View();
         }
+
         public IActionResult Create()
         {
             ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca");
