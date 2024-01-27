@@ -49,6 +49,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 .Include(b => b.Wydarzenie)
                 .Include(b => b.Lokalizacja)
                 .Where(b => b.WydarzenieKulturalneId == wydarzenie.WydarzenieKulturalneId)
+                .OrderBy(b => b.DataWydarzenia)
                 .ToListAsync();
 
             ViewBag.InformacjeOWydarzeniu = wydarzenie;

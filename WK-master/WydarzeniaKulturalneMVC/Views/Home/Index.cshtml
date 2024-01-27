@@ -3,6 +3,8 @@
     int promowane = 0;
     int lp = 1;
     var dodaneMiejscowosci = new List<string>();
+
+
 }
 <main>
 
@@ -79,26 +81,28 @@
                    <div class="row justify-content-center">
                     @foreach (var item in ViewBag.Wydarzenie)
                     {
-                        @if (item.Wydarzenie.Promowane is true && promowane < 5  )
-                        {
-                            <div class="col-md-2 col-sm-2 col-4 pb-1">
-                                <div class="card">
-                                    <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
-                                        @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
-                                        {
-                                            <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
-                                        }
-                                        else
-                                        {
-                                            <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
-                                        }
-                                    </a>
-                                    <div class="card-inner">
+                       
+                            @if (item.Wydarzenie.Promowane is true && promowane < 5)
+                            {
+                                <div class="col-md-2 col-sm-2 col-4 pb-1">
+                                    <div class="card">
+                                        <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
+                                            @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
+                                            {
+                                                <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
+                                            }
+                                        </a>
+                                        <div class="card-inner">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            promowane++;
-                        }
+                                promowane++;
+                            }
+                        
                     }
                 </div>
             </div>

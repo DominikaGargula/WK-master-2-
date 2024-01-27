@@ -3,6 +3,7 @@
     ViewData["Title"] = "Lista wydarzen";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var dodaneMiejscowosci = new List<string>();
+    var pojedynczeWydarzenie = new List<int>();
 }
 <main>
 
@@ -80,45 +81,49 @@
                 {
                     @foreach (var bilety in Model)
                     {
-                        <div class="col-4">
-                            <div class="card hover-zoom ripple-surface ripple-surface-light">
-                                <div class="row g-0">
-                                    <div class="col">
-                                        @if (string.IsNullOrEmpty(bilety.Wydarzenie.ZdjecieUrl))
-                                        {
+                        if (!pojedynczeWydarzenie.Contains(bilety.Wydarzenie.Id))
+                        {
+                            pojedynczeWydarzenie.Add(bilety.Wydarzenie.Id);
+                            <div class="col-4">
+                                <div class="card hover-zoom ripple-surface ripple-surface-light">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            @if (string.IsNullOrEmpty(bilety.Wydarzenie.ZdjecieUrl))
+                                            {
 
-                                            <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
-                                        }
-                                        else
-                                        {
-                                            <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
-                                        }
-                                    </div>
-                                    <div class="col">
-                                        <div class="card-body d-flex flex-column">
-                                            <div class="h-100">
-                                                <h5 class="card-title"> @bilety.Wydarzenie.Nazwa</h5>
-                                            </div>
-                                            <div class="col">
-                                                <p class="card-text ">
-                                                    <small class="text-muted">
-                                                        Najbliższe wydarzenie/datautworzenia
-                                                        @bilety.Wydarzenie.DataUwtorzenia
-                                                        @bilety.Wydarzenie.KategoriaWydarzenia.Nazwa
-                                                    </small>
-                                                </p>
-                                                <div class="text-end">
-                                                    <a asp-controller="Bilety" asp-route-id="@bilety.Id" asp-action="DetailsCard" class="btn btn-dark">
-                                                        Kup bilet
-                                                    </a>
+                                                <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
+                                            }
+                                        </div>
+                                        <div class="col">
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="h-100">
+                                                    <h5 class="card-title"> @bilety.Wydarzenie.Nazwa</h5>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="card-text ">
+                                                        <small class="text-muted">
+                                                            Najbliższe wydarzenie/datautworzenia
+                                                            @bilety.Wydarzenie.DataUwtorzenia
+                                                            @bilety.Wydarzenie.KategoriaWydarzenia.Nazwa
+                                                        </small>
+                                                    </p>
+                                                    <div class="text-end">
+                                                        <a asp-controller="Bilety" asp-route-id="@bilety.Id" asp-action="DetailsCard" class="btn btn-dark">
+                                                            Kup bilet
+                                                        </a>
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     }
                 }
                 else

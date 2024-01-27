@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
 @{
     ViewData["Title"] = "DetailsCard";
-    var wydarzenie = ViewBag.InformacjeOWydarzeniu as WydarzeniaKulturalne.Data.Entities.Bilety;
+    var wydarzenie = (WydarzeniaKulturalne.Data.Entities.Bilety)ViewBag.InformacjeOWydarzeniu;
+
 }
 <style>
 
@@ -149,7 +150,7 @@
                                 }
                                 else
                                 {
-                                    <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane1</td>
+                                    <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane</td>
                                 }
 
                             <td class="pt-3 mt-2"><span class="btn btn-dark" style="float:right">Kup bilet</span></td>

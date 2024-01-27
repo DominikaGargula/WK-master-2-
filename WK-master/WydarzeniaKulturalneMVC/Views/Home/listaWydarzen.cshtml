@@ -3,6 +3,7 @@
     ViewData["Title"] = "Lista wydarzen";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var dodaneMiejscowosci = new List<string>();
+    var pojedynczeWydarzenie = new List<int>();
 }
 <main>
 
@@ -80,6 +81,10 @@
                 {
                     @foreach (var bilety in Model)
                     {
+                        if (!pojedynczeWydarzenie.Contains(bilety.Wydarzenie.Id))
+                        {
+                            pojedynczeWydarzenie.Add(bilety.Wydarzenie.Id);
+                        
                         <div class="col-4">
                             <div class="card hover-zoom ripple-surface ripple-surface-light">
                                 <div class="row g-0">
@@ -119,6 +124,7 @@
                                 </div>
                             </div>
                         </div>
+                        }
                     }
                 }
                 else
