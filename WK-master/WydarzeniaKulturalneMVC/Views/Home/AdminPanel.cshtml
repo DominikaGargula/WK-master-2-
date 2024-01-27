@@ -115,9 +115,10 @@
                                 {
                                     <tr>
                                         <td>
-                                            @item.Nazwa
+                                            @item.Wydarzenie.Nazwa
                                         </td>
                                         <td>
+                                            
                                         </td>
                                         <td>
                                         </td>
@@ -135,8 +136,8 @@
         </div>
 
         <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="mb-4 p-0">
+        <div class="col-xl-4 col-lg-5 d-flex">
+            <div class="p-0 d-flex">
                 <div class="card shadow mb-4 text-center small pb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -236,9 +237,6 @@
                                         Nazwa
                                     </th>
                                     <th>
-                                        Lokalizacja
-                                    </th>
-                                    <th>
                                       Data
                                     </th>
                                 </tr>
@@ -251,12 +249,8 @@
                                             @item.Nazwa
                                         </td>
                                         <td>
-                                  @*          @item.LokalizacjaWydarzenia.Miejscowosc*@
-                                        </td>
-                                        <td>
-                                            @item.DataUwtorzenia
-                                        </td>
-                                       
+                                            @item.DataUwtorzenia.ToString("yyyy-MM-dd")
+                                        </td>                       
                                     </tr>
                                 }
                             </tbody>

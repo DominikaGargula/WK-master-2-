@@ -261,9 +261,7 @@
 
                 @if (User.IsInRole("Admin"))
                 {
-
                     <a class="nav-link active text-dark" asp-area="" asp-controller="Home" asp-action="AdminPanel">Panel Administratora</a>
-
                 }
                 </ul>
             </div>
@@ -282,17 +280,11 @@
             {
                 <a class="nav-link me-3 text-dark"> Witaj @User.FindFirst(ClaimTypes.Name).Value</a>
 
-                <a class="nav-link me-3 text-dark " asp-area="" asp-controller="Uzytkownik" asp-action="Logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </a>
-
+                <a class="nav-link me-3 text-dark" asp-controller="Uzytkownik" asp-action="Logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </a>
             }
             else
             {
-                @*    <li class="nav-item active">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Rejestracja">rejestracja</a>
-            </li>*@
-
-                <a class="nav-link me-3 text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
-
+                <a class="nav-link me-3 text-dark" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
             }
 
             <a class="nav-link me-3" href="#">
@@ -302,43 +294,20 @@
         </div>
         </div>
     </nav>
-
-
-    <!-- carousel -->
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-mdb-ride="carousel">
-        @*        <div class="carousel-indicators">
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="0"
-        class="active"
-        aria-current="true"
-        aria-label="Slide 1"></button>
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="1"
-        aria-label="Slide 2"></button>
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="2"
-        aria-label="Slide 3"></button>
-        </div>*@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="mask" />
-                <div class="carousel-caption d-none d-sm-block mb-8">
+                <div class="carousel-caption d-none d-sm-block mb-5">
                     <h1 class="mb-4">
                         <strong>Bilety online na wydarzenia</strong>
                     </h1>
-
                     <p>
-                        <strong>   WydarzeniaKulturalne to nowoczesny sposób zakupu</strong>
+                        <strong>WydarzeniaKulturalne to nowoczesny sposób zakupu</strong>
                     </p>
-
                     <p class="mb-4 d-none d-md-block">
                         <strong>
-
-                            Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!
-              
+                            Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!           
                         </strong>
                     </p>
                 </div>
@@ -346,71 +315,50 @@
 
         </div>
     </div>
-    @*      <nav class="navbar navbar-expand-lg navbar-dark mb-5 shadow p-2 navbar-colour ">
-    <!-- Container wrapper -->
-    <div class="container-fluid mx-5 ">
-
-    </div>
-    <!-- Container wrapper -->
-    </nav>*@
-
     @RenderBody()
-
-
     <footer class="text-center text-white mt-4 footer-bottom" style="background-color: #08183a">
 
         <hr class="text-dark">
 
         <div class="container">
-            <!-- Section: Social media -->
             <section class="mb-3">
-
-                <!-- Facebook -->
-                <a class="btn-link btn-floating btn-lg text-white"
+          @*      <a class="btn-link btn-floating btn-lg text-white"
                    href="#!"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-facebook-f"></i>
-                </a>
+                </a>*@
 
-                <!-- Google -->
                 <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
+                   href="http://www.google.pl"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-google"></i>
                 </a>
-
-                <!-- Instagram -->
-                <a class="btn-link btn-floating btn-lg text-white"
+           @*     <a class="btn-link btn-floating btn-lg text-white"
                    href="#!"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-instagram"></i>
-                </a>
-
-                <!-- YouTube -->
+                </a>*@
                 <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
+                   href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-youtube"></i>
                 </a>
-                <!-- Github -->
                 <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
+                   href="https://github.com/DominikaGargula/WK-master-2-"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-github"></i>
                 </a>
             </section>
-            <!-- Section: Social media -->
         </div>
-        <!-- Grid container -->
-        <!-- Copyright -->
         <div class="text-center p-3" style="background-color: #08183a;">
             © 2023
-            <a class="text-white" href="https://mdbootstrap.com/">Wk</a>
+            <a class="text-white" href="https://mdbootstrap.com/">Wk
+                </a>
         </div>
         <!-- Copyright -->
     </footer>
