@@ -9,7 +9,7 @@ namespace WydarzeniaKulturalneMVC.Models
     public class Koszyk
     {
         private readonly WydarzeniaKulturalneContext _context;
-        private string IdSesjiKoszyka;
+        public string IdSesjiKoszyka;
         public Koszyk(WydarzeniaKulturalneContext context, HttpContext httpContext)
         {
             _context = context;
@@ -94,6 +94,7 @@ namespace WydarzeniaKulturalneMVC.Models
                 // Zapisz zmiany w bazie danych
                 _context.SaveChanges();
             }
+           
             return liczbaElementowWKoszyku;
         }
 

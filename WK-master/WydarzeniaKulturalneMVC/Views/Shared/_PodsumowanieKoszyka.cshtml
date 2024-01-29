@@ -1,0 +1,16 @@
+﻿@{
+    int iloscBiletow = ViewBag.IloscBiletow ?? 0;
+ 
+}
+
+
+<div>
+    @if (iloscBiletow > 0)
+    {
+        <p>Ilość biletów w koszyku: @iloscBiletow</p>
+    }
+    else
+    {
+        <p>Koszyk jest pusty</p>
+    }
+</div>

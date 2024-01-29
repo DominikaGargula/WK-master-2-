@@ -24,6 +24,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 Razem = await koszyk.GetRazem(),
                 IloscBiletow = await koszyk.GetIloscBiletow()
             };
+            ViewBag.IloscBiletow = daneDoKoszyka.IloscBiletow;
             //przekazujemy dane do koszyka złozone z dwóch elementów do widoku
             return View(daneDoKoszyka);
 
@@ -47,54 +48,11 @@ namespace WydarzeniaKulturalneMVC.Controllers
             // Bilet został znaleziony, dodaj go do koszyka
             Koszyk koszyk = new Koszyk(_context, this.HttpContext);
             koszyk.DodajDoKoszyka(bilet);
+            bilet.IloscBiletow--;
 
+            _context.SaveChanges();
             // Po dodaniu biletu do koszyka, przechodzę do widoku koszyka (Index)
             return RedirectToAction("Index", "Koszyk");
-        }
-
-        [HttpPost]
-        //public ActionResult UsunZKoszyka(int id)
-        //{
-        //    // Remove the item from the cart
-        //    var koszyk = ShoppingCart.GetCart(this.HttpContext);
-
-        //    // Get the name of the album to display confirmation
-        //    string albumName = storeDB.Carts
-        //        .Single(item => item.RecordId == id).Album.Title;
-
-        //    // Remove from cart
-        //    int itemCount = cart.RemoveFromCart(id);
-
-        //    // Display the confirmation message
-        //    var results = new ShoppingCartRemoveViewModel
-        //    {
-        //        Message = Server.HtmlEncode(albumName) +
-        //            " has been removed from your shopping cart.",
-        //        CartTotal = cart.GetTotal(),
-        //        CartCount = cart.GetCount(),
-        //        ItemCount = itemCount,
-        //        DeleteId = id
-        //    };
-        //    return Json(results);
-        //}
-
-        //public ActionResult PodsumowanieKoszyka()
-        //{
-        //    // Utwórz instancję klasy Koszyk, przekazując do konstruktora wymagane parametry
-        //    var koszyk = new Koszyk(_context, this.HttpContext);
-
-        //    ViewData["koszykIlosc"] = koszyk.GetIlosc();
-        //    return PartialView("PodsumowanieKoszyka");
-        //}
-
-        public PartialViewResult PodsumowanieKoszyka()
-        {
-            var koszyk = new Koszyk(_context, this.HttpContext);
-            int iloscElementowWKoszyku = koszyk.GetIlosc();
-
-            ViewData["koszykIlosc"] = iloscElementowWKoszyku;
-
-            return PartialView("PodsumowanieKoszyka", iloscElementowWKoszyku);
         }
 
         [HttpPost]
@@ -110,21 +68,37 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             // Usuń z koszyka
             int iloscElementowWKoszyku = koszyk.UsunZKoszyka(id);
-
+            var bilet = _context.Bilety.Find(id);
             // Wyświetl komunikat potwierdzenia
-            var wyniki = new DaneKoszykUsuwanie
-            {
-                //Informacja = System.Web.HttpUtility.HtmlEncode(nazwaBiletu) +
-                //    " został usunięty z koszyka.",
-                SumaKoszyka = koszyk.GetRazem().Result, // Odczekaj na asynchroniczną operację
-                LiczKoszyk = koszyk.GetIlosc(),
-                LiczbaElementow = iloscElementowWKoszyku,
-                UsunId = id
-            };
+            //var wyniki = new DaneKoszykUsuwanie
+            //{
+            //    //Informacja = System.Web.HttpUtility.HtmlEncode(nazwaBiletu) +
+            //    //    " został usunięty z koszyka.",
+            //    SumaKoszyka = koszyk.GetRazem().Result, // Odczekaj na asynchroniczną operację
+            //    LiczKoszyk = koszyk.GetIlosc(),
+            //    LiczbaElementow = iloscElementowWKoszyku,
+            //    UsunId = id
+            //};
 
             //return Json(wyniki);
 
+            // Pobierz bilet z bazy danych
+
+
+            // Aktualizuj wartość IloscBiletow
+
+            _context.SaveChanges();
+
             return RedirectToAction("Index");
+        }
+        public PartialViewResult PodsumowanieKoszyka()
+        {
+            var koszyk = new Koszyk(_context, this.HttpContext);
+            int iloscBiletowWKoszyku = koszyk.GetIloscBiletow().Result;
+
+            ViewData["iloscBiletowWKoszyku"] = iloscBiletowWKoszyku;
+     
+            return PartialView("_PodsumowanieKoszyka", iloscBiletowWKoszyku);
         }
 
 

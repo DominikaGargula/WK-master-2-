@@ -8,6 +8,7 @@ using WydarzeniaKulturalne.Data;
 using WydarzeniaKulturalne.Data.Entities;
 using System.Security.Cryptography;
 using System.Text;
+using WydarzeniaKulturalneMVC.Models;
 
 namespace WydarzeniaKulturalneMVC.Controllers
 {
@@ -90,6 +91,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
                     new Claim(ClaimTypes.Name, uzytkownik.Imie),
                     new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa)
                 };
+
+                MigrujKoszyk(uzytkownik.Email);
+
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -182,6 +186,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
                         _context.Add(uzytkownik);
 
                         await _context.SaveChangesAsync();
+
+                        MigrujKoszyk(uzytkownik.Email);
+
                         ViewBag.LoginMessage = "Konto zostało utworzone.";
                         TempData["Save"] = "Pomyślnie utworzono nowy obiekt";
                         return View("Logowanie");
@@ -206,7 +213,15 @@ namespace WydarzeniaKulturalneMVC.Controllers
         {
             return source.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0;
         }
+        private void MigrujKoszyk(string uzytkownik)
+        {
+            // Associate shopping cart items with logged-in user
+            var koszyk = new Koszyk(_context, this.HttpContext);
 
+            koszyk.MigrujKoszyk(uzytkownik);
+
+            this.HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik);
+        }
     }
    
 

@@ -1,6 +1,7 @@
 ﻿@using System.Security.Claims;
 @using WydarzeniaKulturalne.Data.Entities;
 @*pozwala na wydobycie danych dot. zalogowanego uzytkownika*@
+@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
 
@@ -93,26 +94,24 @@
     }
 
     .card-img {
-      
         height: 200px;
         object-fit: cover;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
-         aspect-ratio: 1/ 6;
+        aspect-ratio: 1/ 6;
     }
-    .card-img-list{
+
+    .card-img-list {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
 
-    .card-img-f
-    {
+    .card-img-f {
         /*width: 90%;*/
         height: 200px;
- 
         aspect-ratio: 12 / 16;
         margin: 10px;
     }
@@ -134,7 +133,7 @@
         width: 0px;
     }
 
-   
+
 
     .card {
         box-shadow: none;
@@ -162,10 +161,8 @@
             color: #d6a08f;
         }
 
-        .card-shop
-        {
-
-        }
+    .card-shop {
+    }
 
     .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-do {
         border: none;
@@ -187,18 +184,18 @@
         }
 
     .otc {
-        color:transparent;
+        color: transparent;
     }
+
     h5 {
         color: #de753f;
     }
 
-    h6
-    {
-          color: #de753f;
-
-          font:500;
+    h6 {
+        color: #de753f;
+        font: 500;
     }
+
     .owl-nav {
         display: block !important;
     }
@@ -245,26 +242,22 @@
         background-color: rgba(0, 0, 0, 0.4);
     }
 
+    }
 
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
 
- 
-}
+    .card-registration .select-arrow {
+        top: 13px;
+    }
 
-.card-registration .select-input.form-control[readonly]:not([disabled]) {
-font-size: 1rem;
-line-height: 2.15;
-padding-left: .75em;
-padding-right: .75em;
-}
-
-.card-registration .select-arrow {
-top: 13px;
-}
-
-.bg-grey {
-background-color: #eae8e8;
-}
-
+    .bg-grey {
+        background-color: #eae8e8;
+    }
 
 </style>
 <body>
@@ -321,37 +314,27 @@ background-color: #eae8e8;
             }
             else
             {
-                @*    <li class="nav-item active">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Rejestracja">rejestracja</a>
-            </li>*@
 
                 <a class="nav-link me-3 text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
 
             }
-            @Html.Partial("PodsumowanieKoszyka", ViewData["koszykIlosc"])
+            <div>
+@*
+                @await Html.PartialAsync("_PodsumowanieKoszyka")*@
+
+                <a class="nav-link me-3" href="@Url.Action("Index", "Koszyk")">
+                            <i class="fas fa-shopping-cart"></i>
+                    @*        <span class="badge rounded-pill badge-notification bg-danger">0</span>*@
+                        </a>
+                </div>
+            </div>
         </div>
         </div>
     </nav>
 
-
+    
     <!-- carousel -->
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-mdb-ride="carousel">
-        @*        <div class="carousel-indicators">
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="0"
-        class="active"
-        aria-current="true"
-        aria-label="Slide 1"></button>
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="1"
-        aria-label="Slide 2"></button>
-        <button type="button"
-        data-mdb-target="#carouselExampleCaptions"
-        data-mdb-slide-to="2"
-        aria-label="Slide 3"></button>
-        </div>*@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="mask" />
@@ -366,9 +349,7 @@ background-color: #eae8e8;
 
                     <p class="mb-4 d-none d-md-block">
                         <strong>
-
                             Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!
-              
                         </strong>
                     </p>
                 </div>
@@ -376,13 +357,6 @@ background-color: #eae8e8;
 
         </div>
     </div>
-    @*      <nav class="navbar navbar-expand-lg navbar-dark mb-5 shadow p-2 navbar-colour ">
-    <!-- Container wrapper -->
-    <div class="container-fluid mx-5 ">
-
-    </div>
-    <!-- Container wrapper -->
-    </nav>*@
 
     @RenderBody()
 
@@ -394,15 +368,6 @@ background-color: #eae8e8;
         <div class="container">
             <!-- Section: Social media -->
             <section class="mb-3">
-
-                <!-- Facebook -->
-                <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-
                 <!-- Google -->
                 <a class="btn-link btn-floating btn-lg text-white"
                    href="www.google.pl"
@@ -410,15 +375,6 @@ background-color: #eae8e8;
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-google"></i>
                 </a>
-
-                <!-- Instagram -->
-                <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-instagram"></i>
-                </a>
-
                 <!-- YouTube -->
                 <a class="btn-link btn-floating btn-lg text-white"
                    href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
@@ -475,7 +431,7 @@ background-color: #eae8e8;
                 600: {
                     items: 2
                 },
-                 1000: {
+                1000: {
                     items: 3
                 }
             }
