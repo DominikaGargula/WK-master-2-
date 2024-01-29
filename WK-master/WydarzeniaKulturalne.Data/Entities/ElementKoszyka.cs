@@ -14,7 +14,7 @@ namespace WydarzeniaKulturalne.Data.Entities
         public int IdElementuKoszyka { get; set; }
         public string IdSesjiKoszyka { get; set; }
         public int IdBilet { get; set; } //idtowaru
-        public virtual Bilety Bilety { get; set; } // public virtual Wydarzenie Wydarzenie 
+        public virtual Bilety? Bilety { get; set; } // public virtual Wydarzenie Wydarzenie 
         public int Ilosc { get; set; }
         public DateTime DataUtworzenia { get; set; }
 

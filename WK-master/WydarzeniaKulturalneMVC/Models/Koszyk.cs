@@ -71,11 +71,11 @@ namespace WydarzeniaKulturalneMVC.Models
         }
         // to jest metoda, która pobiera elementy koszyka danego użytkownika
 
-        public int UsunZKoszyka(int Id)
+        public int UsunZKoszyka(int idElementuKoszyka)
         {
             // Znajdź element koszyka dla danego biletu
             var elementKoszyka = _context.ElementKoszyka
-                .Where(e => e.IdBilet == Id && e.IdSesjiKoszyka == IdSesjiKoszyka)
+                .Where(e => e.IdElementuKoszyka == idElementuKoszyka && e.IdSesjiKoszyka == IdSesjiKoszyka)
                 .FirstOrDefault();
             int liczbaElementowWKoszyku = 0;
 
@@ -96,6 +96,7 @@ namespace WydarzeniaKulturalneMVC.Models
             }
             return liczbaElementowWKoszyku;
         }
+
         public void OproznijKoszyk()
         {
             var elementyKoszyka = _context.ElementKoszyka.Where(
@@ -142,6 +143,16 @@ namespace WydarzeniaKulturalneMVC.Models
             ).SumAsync() ?? decimal.Zero;
 
             return suma;
+        }
+        public async Task<int> GetIloscBiletow()
+        {
+            var iloscBiletow = await (
+                from element in _context.ElementKoszyka
+                where element.IdSesjiKoszyka == this.IdSesjiKoszyka
+                select (int?)element.Ilosc
+            ).SumAsync() ?? 0;
+
+            return iloscBiletow;
         }
         public int GetIlosc() // służy do pobierania liczby przedmiotów znajdujących się w koszyku
         {

@@ -21,7 +21,8 @@ namespace WydarzeniaKulturalneMVC.Controllers
             DaneKoszyk daneDoKoszyka = new DaneKoszyk
             {
                 ElementyKoszyka = koszyk.GetElementyKoszyka(),
-                Razem = await koszyk.GetRazem()
+                Razem = await koszyk.GetRazem(),
+                IloscBiletow = await koszyk.GetIloscBiletow()
             };
             //przekazujemy dane do koszyka złozone z dwóch elementów do widoku
             return View(daneDoKoszyka);
@@ -96,14 +97,16 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return PartialView("PodsumowanieKoszyka", iloscElementowWKoszyku);
         }
 
+        [HttpPost]
         public ActionResult UsunZKoszyka(int id)
         {
-            // Usuń element z koszyka
+            // Pobierz koszyk z sesji
             var koszyk = new Koszyk(_context, this.HttpContext);
 
             // Pobierz nazwę biletu do wyświetlenia potwierdzenia
-            string nazwaBiletu = _context.ElementKoszyka
-                .Single(item => item.IdElementuKoszyka == id).Bilety.Wydarzenie.Nazwa; // Zakładam, że masz właściwość "Nazwa" w modelu Bilety
+            //string nazwaBiletu = _context.ElementKoszyka           
+            //    .Single(item => item.IdElementuKoszyka == id)
+            //    .Bilety.Wydarzenie.Nazwa;
 
             // Usuń z koszyka
             int iloscElementowWKoszyku = koszyk.UsunZKoszyka(id);
@@ -111,15 +114,19 @@ namespace WydarzeniaKulturalneMVC.Controllers
             // Wyświetl komunikat potwierdzenia
             var wyniki = new DaneKoszykUsuwanie
             {
-                Informacja = System.Web.HttpUtility.HtmlEncode(nazwaBiletu) +
-                    " został usunięty z koszyka.",
+                //Informacja = System.Web.HttpUtility.HtmlEncode(nazwaBiletu) +
+                //    " został usunięty z koszyka.",
                 SumaKoszyka = koszyk.GetRazem().Result, // Odczekaj na asynchroniczną operację
                 LiczKoszyk = koszyk.GetIlosc(),
                 LiczbaElementow = iloscElementowWKoszyku,
                 UsunId = id
             };
-            return Json(wyniki);
+
+            //return Json(wyniki);
+
+            return RedirectToAction("Index");
         }
+
     }
 }
 

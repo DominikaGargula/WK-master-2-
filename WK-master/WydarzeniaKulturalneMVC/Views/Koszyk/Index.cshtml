@@ -8,7 +8,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $(".RemoveLink").click(function () {
-            var recordToDelete = $(this).data("Id");
+            var recordToDelete = $(this).data("id");
             if (recordToDelete !== '') {
                 $.ajax({
                     url: "/Koszyk/UsunZKoszyka",
@@ -74,6 +74,11 @@
                     <a href="#" class="RemoveLink" data-id="@item.IdElementuKoszyka">Remove from cart</a>
                     <button class="btn btn-danger" onclick="UsunZKoszyka(@item.IdElementuKoszyka)">Usuń z koszyka</button>
                     <button class="btn btn-danger" onclick="RemoveLink(@item.IdElementuKoszyka)">Usuń z koszyka</button>
+
+                    <form asp-action="UsunZKoszyka" method="post">
+                        <input type="hidden" asp-for="@item.IdElementuKoszyka" name="id" />
+                        <input type="submit" value="Usuń" class="btn btn-danger" />
+                    </form>
                 </td>
             </tr>
         }
@@ -85,6 +90,7 @@
             <td></td>
             <td id="cart-total">
                 @Model.Razem
+                @Model.IloscBiletow
             </td>
         </tr>
     </tfoot>
