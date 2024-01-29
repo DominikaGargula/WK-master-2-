@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".RemoveLink").click(function () {
+        $(".Usuwanie").click(function () {
             var recordToDelete = $(this).data("id");
             if (recordToDelete !== '') {
                 $.ajax({
@@ -15,21 +15,14 @@
                     type: "POST",
                     data: { "id": recordToDelete },
                     success: function (data) {
-                        if (data.ItemCount === 0) {
-                            $('#row-' + data.UsunId).fadeOut('slow');
-                        } else {
-                            $('#item-count-' + data.UsunId).text(data.LiczKoszyk);
-                        }
-                        $('#cart-total').text(data.SumaKoszyka);
-                        $('#update-message').text(data.Informacja);
-                        $('#cart-status').text('Koszyk (' + data.LiczbaElementow + ')');
+                         location.reload(true);
                     }
                 });
             }
         });
     });
 </script>
-
+@*
 <h1>Index</h1>
 
 <h3>
@@ -71,7 +64,7 @@
                     @item.Ilosc
                 </td>
                 <td>
-                    <a href="#" class="RemoveLink" data-id="@item.IdElementuKoszyka">Remove from cart</a>
+                    <a href="#" class="Usuwanie" data-id="@item.IdElementuKoszyka">Remove from cart</a>
                     <button class="btn btn-danger" onclick="UsunZKoszyka(@item.IdElementuKoszyka)">Usuń z koszyka</button>
                     <button class="btn btn-danger" onclick="RemoveLink(@item.IdElementuKoszyka)">Usuń z koszyka</button>
 
@@ -94,4 +87,111 @@
             </td>
         </tr>
     </tfoot>
-</table>
+</table>*@
+<main class="mt-5 pt-4">
+    <section>
+
+
+        <div class="container py-5 ">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-12 mb-5">
+                    <div class="card-shop">
+                        <div class="card-body p-0">
+
+                            <div class="row g-0">
+                                <div class="col-lg-8">
+                                    <div class="p-5">
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <strong><p style="font-size: 20px;">Koszyk</p></strong>
+                                            <h6 class="mb-0 text-muted">
+                                                Łacznie biletów:
+                                                @Model.IloscBiletow
+                                            </h6>
+
+                                        </div>
+                                        <hr class="my-4">
+
+                                        @foreach (var item in Model.ElementyKoszyka)
+                                        {
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                    <img src="@item.Bilety?.Wydarzenie?.ZdjecieUrl"
+                                                     class="img-fluid rounded-3">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <h6 class="text-muted">@item.Bilety?.Wydarzenie?.Nazwa</h6>
+                                                    <h6 class="text-black mb-2">@item.Bilety?.Lokalizacja?.NazwaMiejsca</h6>
+                                                     <h6 class="text-black mb-2 small">@item.Bilety?.Lokalizacja?.Miejscowosc</h6>
+                                                    <h6 class="text-black mt-2 small">@item.Bilety?.DataWydarzenia.ToString("yyyy-MM-dd")</h6>
+                                                </div>
+
+
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                    <a href="#" class="Usuwanie" data-id="@item.IdElementuKoszyka">
+                                                     <i class="fas fa-minus" style="margin-right: 1rem;"></i>
+                                                     </a>
+                                                      @item.Ilosc
+                                                </div>
+
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <h6 class="mb-0">@item.Bilety?.Wydarzenie?.Cena.ToString("C")</h6>
+                                                </div>
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                    <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="pt-5">
+                                            <h6 class="mb-0">
+                                                <a asp-controller="Home" asp-action="Index" class="text-body">
+                                                    <i class="fas fa-long-arrow-alt-left me-2"></i>Powrót
+                                                </a>
+                                            </h6>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class=" col-lg-4 bg-grey">
+                                    <div class="p-5 mt-2">
+                                        <div class="card-header mt-1">
+                                            <h5>Podsumowanie</h5>
+                                        </div>
+                                        <hr class="my-4">
+                                        <div class="row">
+                                            <div class="col-6"></div>
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <h6 class="text-uppercase text-muted">Kwota</h6>
+                                                <h6>  @Model.Razem.ToString("C")</h6>
+                                            </div>
+                                         </div>
+                                            <div class="row ">
+                                                <div class="d-flex justify-content-between mb-4">
+                                                    <div class="col-4 mt-2">      
+                                                        <h6 class="text-uppercase text-mude mb-3">Podaj kod</h6></div
+                                                    <div class="col-8">
+                                                        <div class="form-outline">
+                                                            <input type="text" id="typeText" class="form-control" />
+                                                             <label class="form-label" for="typeText"></label>
+                                                         </div>
+                                                    </div>
+                                                </div>
+                                             </div>   
+                                              <div class="col-12">
+                                        <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
+                                            Zapłać
+                                        </button>
+                                    </div>
+                                    </div>                            
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
