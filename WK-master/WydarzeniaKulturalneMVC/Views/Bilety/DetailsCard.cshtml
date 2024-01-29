@@ -95,9 +95,7 @@
                             <span class="badge bg-info me-1">Promowane</span>
                         }
                     </div>
-                    <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
-                        Kup bilet
-                    </a>
+
                     <strong><p style="font-size: 20px;">@wydarzenie.Wydarzenie?.Nazwa</p></strong>
                     <p>@Html.Raw(@wydarzenie.Wydarzenie?.Opis)</p>
                 </div>
@@ -152,15 +150,25 @@
                                 @if (@bilet.IloscBiletow > 0)
                                 {
                                     <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
-                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right">Kup bilet</button></td>
+                                    <td class="pt-3 mt-2">
+                                        <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
+                                            Kup bilet
+                                        </a>
+                                    </td>
                                 }
                                 else
                                 {
                                     <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane</td>
-                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right" disabled>Kup bilet</button></td>
+                                    <td class="pt-3 mt-2">
+                                        <a class="btn btn-grey" disabled>
+                                         Wyprzedane
+                                        </a>
+                                    </td>
                                 }
 
-
+                               @* <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
+                                    Kup bilet
+                                </a>*@
                             </tr>
 
                             <tr id="spacing-row">

@@ -116,8 +116,15 @@
                                         {
                                             <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                 <div class="col-md-2 col-lg-2 col-xl-2">
-                                                    <img src="@item.Bilety?.Wydarzenie?.ZdjecieUrl"
-                                                     class="img-fluid rounded-3">
+                                                       @if (string.IsNullOrEmpty(@item.Bilety?.Wydarzenie?.ZdjecieUrl))
+                                                        {
+                                                            <img src="~/Zdjecia/noimage.png"  class="img-fluid rounded-3"  />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@item.Bilety?.Wydarzenie.ZdjecieUrl"  class="img-fluid rounded-3"/>
+                                                        }
+
                                                 </div>
                                                 <div class="col-md-3 col-lg-3 col-xl-3">
                                                     <h6 class="text-muted">@item.Bilety?.Wydarzenie?.Nazwa</h6>

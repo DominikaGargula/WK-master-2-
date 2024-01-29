@@ -127,6 +127,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return RedirectToAction("Index");
         }
 
+
     }
 }
 
