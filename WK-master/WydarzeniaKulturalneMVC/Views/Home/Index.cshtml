@@ -3,11 +3,9 @@
     int promowane = 0;
     int lp = 1;
     var dodaneMiejscowosci = new List<string>();
-
-
 }
-<main>
 
+<main>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-darkshadow p-2 navbar-colour mb-5">
         <!-- Container wrapper -->
@@ -22,9 +20,8 @@
                             @foreach (var item in @ViewBag.KategoriaWydarzenia)
                             {
                                 <li>
-                                    <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen"> @item.Nazwa </a>
+                                    <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen">@item.Nazwa</a>
                                 </li>
-
                             }
                         </ul>
                     </div>
@@ -40,7 +37,7 @@
                                 if (!dodaneMiejscowosci.Contains(item.Miejscowosc))
                                 {
                                     <li>
-                                        <a class="dropdown-item" asp-route-id="@item.Id" asp-action="ListaLokalizacji"> @item.Miejscowosc </a>
+                                        <a class="dropdown-item" asp-route-id="@item.Id" asp-action="ListaLokalizacji">@item.Miejscowosc</a>
                                     </li>
                                     dodaneMiejscowosci.Add(item.Miejscowosc);
                                 }
@@ -48,61 +45,68 @@
                         </ul>
                     </div>
                 </li>
+                <form asp-controller="Home" asp-action="WyszukajPoDacie" method="post">
                 <li class="nav-item active mx-1">
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Data
+                            Wybierz date
                         </a>
-
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <div class="form-group">
+                            <li>
+                                <a class="dropdown-item">
+                                    <div class="input-group">
+                                        <input type="date" id="dataPicker" name="dataWydarzenia" class="form-control" />
+                                        <span class="input-group-text">
+                                            <button type="submit" class="search-icon-btn">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
+                </form>
             </ul>
         </div>
-        <!-- Container wrapper -->
         <hr />
-
     </nav>
     <!-- Navbar -->
-    <div class="container mt-2">
 
+    <div class="container mt-2">
         <!-- Products -->
         <section class="events-promoted">
             <div class="container firstContainer">
                 <header align="left">
                     <div class="card-header">
-                            <h5>Polecane</h5>     
+                        <h5>Polecane</h5>
                     </div>
                 </header>
-                   <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     @foreach (var item in ViewBag.Wydarzenie)
                     {
-                       
-                            @if (item.Wydarzenie.Promowane is true && promowane < 5)
-                            {
-                                <div class="col-md-2 col-sm-2 col-4 pb-1">
-                                    <div class="card">
-                                        <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
-                                            @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
-                                            {
-                                                <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
-                                            }
-                                        </a>
-                                        <div class="card-inner">
-                                        </div>
+                        @if (item.Wydarzenie.Promowane is true && promowane < 5)
+                        {
+                            <div class="col-md-2 col-sm-2 col-4 pb-1">
+                                <div class="card">
+                                    <a class="image" asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">
+                                        @if (string.IsNullOrEmpty(item.Wydarzenie.ZdjecieUrl))
+                                        {
+                                            <img src="~/Zdjecia/noimage.png" class="card-img-list img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@item.Wydarzenie.ZdjecieUrl" class="card-img-list img-fluid" />
+                                        }
+                                    </a>
+                                    <div class="card-inner">
                                     </div>
                                 </div>
-                                promowane++;
-                            }
-                        
+                            </div>
+                            promowane++;
+                        }
                     }
                 </div>
             </div>
@@ -111,23 +115,20 @@
         <section class="TwoHeadLineTabel">
             <div class="row tableColumn ms-2 ">
                 <div class="col-md-6 col-12 mb-3 ">
-                    <div class=" flex-md-equal w-100 my-md-3 pl-md-3">
+                    <div class="flex-md-equal w-100 my-md-3 pl-md-3">
                         <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden backgroundImg2">
                             <div class="my-3 py-3">
                                 <h2 class="display-5 ">Nie przegap</h2>
-                   
                                 <p class="lead">Zanurz się w wyjątkowym świecie wydarzeń</p>
                             </div>
                         </div>
                     </div>
-                    <div class=" flex-md-equal w-100 my-md-3 pl-md-3 my-1">
+                    <div class="flex-md-equal w-100 my-md-3 pl-md-3 my-1">
                         <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden backgroundImg">
                             <div class="my-3 py-3">
                                 <h2 class="display-5">Odkryj pasję</h2>
                                 <p class="lead">Podaruj bliskim niezapomniane emocje</p>
-                        
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -138,17 +139,14 @@
                             <div class="my-3 py-3 table-responsive">
                                 <table class="table  ">
                                     <tbody>
-                                       
-                                    @foreach (var item in @ViewBag.NoweWydarzenia)
-                                    { 
+                                        @foreach (var item in @ViewBag.NoweWydarzenia)
+                                        {
                                             <tr>
                                                 <th scope="row">@lp</th>
-                                                <td> <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id"> @item.Wydarzenie.Nazwa   </a></td>
+                                                <td> <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">@item.Wydarzenie.Nazwa</a></td>
                                                 <td></td>
-                                          
-                                                <td>   @item.Lokalizacja.Miejscowosc</td>
+                                                <td>@item.Lokalizacja.Miejscowosc</td>
                                             </tr>
-                                          
                                             lp++;
                                         }
                                     </tbody>
@@ -178,9 +176,8 @@
                     <header align="left">
                         <div class="card-header">
                             <a asp-controller="Home" asp-action="listaWydarzen" asp-route-id="@kategoria.id">
-                                <h5>@kategoria.Nazwa </h5>
+                                <h5>@kategoria.Nazwa</h5>
                             </a>
-
                         </div>
                     </header>
                     <div class="owl-carousel owl-theme">
@@ -212,11 +209,8 @@
                                                                 <small class="text-muted">
                                                                     Najbliższe wydarzenie:
                                                                 </small>
-
-                                                                    @item.DataWydarzenia.ToShortDateString()
-                                                              
+                                                                @item.DataWydarzenia.ToShortDateString()
                                                             </p>
-                                                          
                                                             <div class="text-end">
                                                                 <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id" class="btn btn-dark">
                                                                     Kup bilet
@@ -234,7 +228,6 @@
                     </div>
                 </div>
             </section>
-
         }
         <hr />
         <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
