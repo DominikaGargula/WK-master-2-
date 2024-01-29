@@ -55,6 +55,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
             ViewBag.InformacjeOWydarzeniu = wydarzenie;
             ViewBag.InformacjeOWydarzeniu1 = bilety;
 
+            var idBiletu = wydarzenie.Id;
+            ViewBag.IdBiletu = idBiletu;
+
             return View();
         }
 

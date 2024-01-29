@@ -44,6 +44,14 @@ namespace WydarzeniaKulturalneMVC.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+            HttpContext.Session.Clear();
+
+            // Zeruj ciasteczka sesji
+            foreach (var cookieKey in HttpContext.Request.Cookies.Keys)
+            {
+                HttpContext.Response.Cookies.Delete(cookieKey);
+            }
+
             return Redirect("/");
 
         }

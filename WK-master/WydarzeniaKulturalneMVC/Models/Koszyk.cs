@@ -117,7 +117,10 @@ namespace WydarzeniaKulturalneMVC.Models
         {
             return _context.ElementKoszyka
                 .Where(e => e.IdSesjiKoszyka == IdSesjiKoszyka)
-                .Include(e => e.Bilety).ToList();
+                .Include(e => e.Bilety)
+                .Include(w => w.Bilety.Lokalizacja)
+                .Include(b => b.Bilety.Wydarzenie)
+                .ToList();
         }
         //Funkcja oblicza wartość koszyka danego użytkownika
         //public async Task<decimal> GetRazem()
@@ -142,11 +145,11 @@ namespace WydarzeniaKulturalneMVC.Models
         }
         public int GetIlosc() // służy do pobierania liczby przedmiotów znajdujących się w koszyku
         {
-          
+
             int? zlicz = (from element in _context.ElementKoszyka
                           where element.IdSesjiKoszyka == this.IdSesjiKoszyka
                           select (int?)element.Ilosc).Sum();
-           //jeśli zlicz nie jest null, to zwróci jego wartość; w przeciwnym razie zwróci 0.
+            //jeśli zlicz nie jest null, to zwróci jego wartość; w przeciwnym razie zwróci 0.
             return zlicz ?? 0;
         }
         public int StworzZamowienie(Zamowienie zamowienie)

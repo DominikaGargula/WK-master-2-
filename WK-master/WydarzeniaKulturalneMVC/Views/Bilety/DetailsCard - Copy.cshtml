@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "DetailsCard";
     var wydarzenie = (WydarzeniaKulturalne.Data.Entities.Bilety)ViewBag.InformacjeOWydarzeniu;
-    var idBiletu = ViewBag.IdBiletu;
+
 }
 <style>
 
@@ -95,9 +95,6 @@
                             <span class="badge bg-info me-1">Promowane</span>
                         }
                     </div>
-                    <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
-                        Kup bilet
-                    </a>
                     <strong><p style="font-size: 20px;">@wydarzenie.Wydarzenie?.Nazwa</p></strong>
                     <p>@Html.Raw(@wydarzenie.Wydarzenie?.Opis)</p>
                 </div>
@@ -107,15 +104,15 @@
         <div class="container rounded mt-3 bg-white p-md-4">
             <div class="h5-detail m-3 mb-3">
                 Dostępne wydarzenia
-                @*               <div class="dropdown float-end mb-3">
-                <button class="btn btn-dark btn-details-header dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                Lokalizacja
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+ @*               <div class="dropdown float-end mb-3">
+                    <button class="btn btn-dark btn-details-header dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lokalizacja
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
                 </div>*@
             </div>
             <div class="table-responsive w-100">
@@ -160,7 +157,7 @@
                                     <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right" disabled>Kup bilet</button></td>
                                 }
 
-
+                            
                             </tr>
 
                             <tr id="spacing-row">

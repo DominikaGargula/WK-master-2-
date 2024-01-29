@@ -33,14 +33,24 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
         public async Task<ActionResult> DodajDoKoszyka(int id)
         {
+            // Sprawdź, czy bilet o podanym id istnieje
+            var bilet = await _context.Bilety.FindAsync(id);
+            if (bilet == null)
+            {
+                // Jeśli bilet nie istnieje, możesz obsłużyć to odpowiednim komunikatem lub przekierowaniem
+                // W tym przypadku zakładam, że przekierowujesz z powrotem do widoku z błędem
+                TempData["Error"] = "Bilet o podanym identyfikatorze nie został znaleziony.";
+                return RedirectToAction("Index", "Home"); // Zmienić na odpowiednią akcję i kontroler
+            }
 
+            // Bilet został znaleziony, dodaj go do koszyka
             Koszyk koszyk = new Koszyk(_context, this.HttpContext);
-            //do koszyka dodaje towar o danym id
-            koszyk.DodajDoKoszyka(await _context.Bilety.FindAsync(id));
-            //po dodaniu towaru do koszyka, przechodzę do tego koszyka, czyli do index, który wyświetli koszyk
-            return RedirectToAction("Index");//to jest przejście do widoku index
+            koszyk.DodajDoKoszyka(bilet);
 
+            // Po dodaniu biletu do koszyka, przechodzę do widoku koszyka (Index)
+            return RedirectToAction("Index", "Koszyk");
         }
+
         [HttpPost]
         //public ActionResult UsunZKoszyka(int id)
         //{
@@ -67,13 +77,23 @@ namespace WydarzeniaKulturalneMVC.Controllers
         //    return Json(results);
         //}
 
-        public ActionResult PodsumowanieKoszyka()
-        {
-            // Utwórz instancję klasy Koszyk, przekazując do konstruktora wymagane parametry
-            var koszyk = new Koszyk(_context, this.HttpContext);
+        //public ActionResult PodsumowanieKoszyka()
+        //{
+        //    // Utwórz instancję klasy Koszyk, przekazując do konstruktora wymagane parametry
+        //    var koszyk = new Koszyk(_context, this.HttpContext);
 
-            ViewData["koszykIlosc"] = koszyk.GetIlosc();
-            return PartialView("PodsumowanieKoszyka");
+        //    ViewData["koszykIlosc"] = koszyk.GetIlosc();
+        //    return PartialView("PodsumowanieKoszyka");
+        //}
+
+        public PartialViewResult PodsumowanieKoszyka()
+        {
+            var koszyk = new Koszyk(_context, this.HttpContext);
+            int iloscElementowWKoszyku = koszyk.GetIlosc();
+
+            ViewData["koszykIlosc"] = iloscElementowWKoszyku;
+
+            return PartialView("PodsumowanieKoszyka", iloscElementowWKoszyku);
         }
 
         public ActionResult UsunZKoszyka(int id)

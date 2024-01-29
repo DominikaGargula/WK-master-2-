@@ -1,0 +1,91 @@
+﻿@model WydarzeniaKulturalneMVC.Models.DaneKoszyk
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".RemoveLink").click(function () {
+            var recordToDelete = $(this).data("Id");
+            if (recordToDelete !== '') {
+                $.ajax({
+                    url: "/Koszyk/UsunZKoszyka",
+                    type: "POST",
+                    data: { "id": recordToDelete },
+                    success: function (data) {
+                        if (data.ItemCount === 0) {
+                            $('#row-' + data.UsunId).fadeOut('slow');
+                        } else {
+                            $('#item-count-' + data.UsunId).text(data.LiczKoszyk);
+                        }
+                        $('#cart-total').text(data.SumaKoszyka);
+                        $('#update-message').text(data.Informacja);
+                        $('#cart-status').text('Koszyk (' + data.LiczbaElementow + ')');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<h1>Index</h1>
+
+<h3>
+    <em>Review</em> your cart:
+</h3>
+
+<p class="button">
+    <a asp-action="AddressAndPayment" asp-controller="Checkout">Checkout >></a>
+</p>
+
+<div id="update-message"></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Biletu</th>
+            <th>Nazwa Wydarzenia</th>
+            <th>Cena (za jeden)</th>
+            <th>Ilość</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ElementyKoszyka)
+        {
+            <tr id="row-@item.IdElementuKoszyka">
+                <td>
+                    <a asp-action="Index" asp-controller="Koszyk" asp-route-id="@item.Bilety?.Id">
+                        @item.Bilety?.Id
+                    </a>
+                </td>
+                <td>
+                    @item.Bilety?.Wydarzenie?.Nazwa
+                </td>
+                <td>
+                    @item.Bilety?.Wydarzenie?.Cena
+                </td>
+                <td id="item-count-@item.IdElementuKoszyka">
+                    @item.Ilosc
+                </td>
+                <td>
+                    <a href="#" class="RemoveLink" data-id="@item.IdElementuKoszyka">Remove from cart</a>
+                    <button class="btn btn-danger" onclick="UsunZKoszyka(@item.IdElementuKoszyka)">Usuń z koszyka</button>
+                    <button class="btn btn-danger" onclick="RemoveLink(@item.IdElementuKoszyka)">Usuń z koszyka</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td id="cart-total">
+                @Model.Razem
+            </td>
+        </tr>
+    </tfoot>
+</table>

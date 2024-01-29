@@ -18,6 +18,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Uzytkownik/Logowanie";
         options.AccessDeniedPath = "/Errors/Error401";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
     });
 builder.Services.AddAuthorization(options =>
 {
@@ -44,7 +45,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

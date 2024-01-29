@@ -294,11 +294,7 @@
                 <a class="nav-link me-3 text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
 
             }
-
-            <a class="nav-link me-3" href="#">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="badge rounded-pill badge-notification bg-danger">0</span>
-            </a>
+            @Html.Partial("PodsumowanieKoszyka", ViewData["koszykIlosc"])
         </div>
         </div>
     </nav>
