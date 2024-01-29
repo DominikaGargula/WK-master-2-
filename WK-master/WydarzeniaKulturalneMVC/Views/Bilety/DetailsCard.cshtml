@@ -3,6 +3,7 @@
     ViewData["Title"] = "DetailsCard";
     var wydarzenie = (WydarzeniaKulturalne.Data.Entities.Bilety)ViewBag.InformacjeOWydarzeniu;
     var idBiletu = ViewBag.IdBiletu;
+    
 }
 <style>
 
@@ -151,8 +152,9 @@
                                 {
                                     <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
                                     <td class="pt-3 mt-2">
-                                        <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
+                                        <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@bilet.Id" class="btn btn-dark">
                                             Kup bilet
+                                          
                                         </a>
                                     </td>
                                 }
