@@ -2,7 +2,7 @@
 using WydarzeniaKulturalneMVC.ViewModel;
 using WydarzeniaKulturalne.Data;
 using WydarzeniaKulturalneMVC.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace WydarzeniaKulturalneMVC.Controllers
 {
@@ -32,7 +32,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
         //Funkcja kontrollera dodaje towar do koszyka
         //To jest akcja, która zostanie wywołana pod przyciskiem dodaj do koszyka
-
         public async Task<ActionResult> DodajDoKoszyka(int id)
         {
             // Sprawdź, czy bilet o podanym id istnieje
@@ -48,46 +47,44 @@ namespace WydarzeniaKulturalneMVC.Controllers
             // Bilet został znaleziony, dodaj go do koszyka
             Koszyk koszyk = new Koszyk(_context, this.HttpContext);
             koszyk.DodajDoKoszyka(bilet);
+
+            // Zmniejsz ilość dostępnych biletów o 1
             bilet.IloscBiletow--;
 
-            _context.SaveChanges();
+            // Zapisz zmiany w bazie danych
+            await _context.SaveChangesAsync();
+
             // Po dodaniu biletu do koszyka, przechodzę do widoku koszyka (Index)
             return RedirectToAction("Index", "Koszyk");
         }
-
         [HttpPost]
-        public ActionResult UsunZKoszyka(int id)
+      
+public ActionResult UsunZKoszyka(int id)
         {
             // Pobierz koszyk z sesji
             var koszyk = new Koszyk(_context, this.HttpContext);
 
-            // Pobierz nazwę biletu do wyświetlenia potwierdzenia
-            //string nazwaBiletu = _context.ElementKoszyka           
-            //    .Single(item => item.IdElementuKoszyka == id)
-            //    .Bilety.Wydarzenie.Nazwa;
+            // Pobierz element koszyka z bazy danych
+            var elementKoszykaWithBilet = _context.ElementKoszyka.Include(e => e.Bilety).FirstOrDefault(e => e.IdElementuKoszyka == id);
 
-            // Usuń z koszyka
-            int iloscElementowWKoszyku = koszyk.UsunZKoszyka(id);
-            var bilet = _context.Bilety.Find(id);
-            // Wyświetl komunikat potwierdzenia
-            //var wyniki = new DaneKoszykUsuwanie
-            //{
-            //    //Informacja = System.Web.HttpUtility.HtmlEncode(nazwaBiletu) +
-            //    //    " został usunięty z koszyka.",
-            //    SumaKoszyka = koszyk.GetRazem().Result, // Odczekaj na asynchroniczną operację
-            //    LiczKoszyk = koszyk.GetIlosc(),
-            //    LiczbaElementow = iloscElementowWKoszyku,
-            //    UsunId = id
-            //};
+            if (elementKoszykaWithBilet != null)
+            {
+                // Pobierz bilet przypisany do elementu koszyka
+                var bilet = elementKoszykaWithBilet.Bilety;
+                
 
-            //return Json(wyniki);
+                if (bilet != null)
+                {
+                    // Zwiększ ilość dostępnych biletów o 1
+                    bilet.IloscBiletow++;
 
-            // Pobierz bilet z bazy danych
+                    // Usuń z koszyka
+                    koszyk.UsunZKoszyka(id);
 
-
-            // Aktualizuj wartość IloscBiletow
-
-            _context.SaveChanges();
+                    // Zapisz zmiany w bazie danych
+                    _context.SaveChanges();
+                }
+            }
 
             return RedirectToAction("Index");
         }
