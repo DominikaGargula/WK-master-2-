@@ -101,7 +101,7 @@
                                                 <h6>  @Model.Razem.ToString("C")</h6>
                                             </div>
                                          </div>
-                                        <div class="row ">
+                                  @*      <div class="row ">
                                                 <div class="d-flex justify-content-between mb-4">
                                                     <div class="col-4 mt-2">      
                                                         <h6 class="text-uppercase text-mude mb-3">Podaj kod</h6></div
@@ -112,11 +112,14 @@
                                                          </div>
                                                     </div>
                                                 </div>
-                                         </div>   
+                                         </div>  *@ 
                                     <div class="col-12">
+                                            <a asp-controller="FinalizacjaKoszyka" asp-action="Index" class="text-body">
                                         <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
                                             Zapłać
-                                        </button>
+                                            </button>
+                                            
+                                        </a>
                                     </div>
                                     </div>                            
                                 </div>

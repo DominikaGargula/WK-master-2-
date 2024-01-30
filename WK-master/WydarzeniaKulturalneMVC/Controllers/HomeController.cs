@@ -207,16 +207,19 @@ public class HomeController : Controller
 
         return View(bilety);
     }
+
+
     [HttpPost]
     public IActionResult WyszukajPoDacie(DateTime dataWydarzenia)
     {
-        // Tutaj możesz użyć dataWydarzenia do porównania z datami w bazie danych
-        // Przykładowe zapytanie LINQ
+
+
         var biletyZDaty = _context.Bilety
             .Where(b => b.DataWydarzenia.Date == dataWydarzenia.Date)
+            .Include(b=>b.Wydarzenie)
             .ToList();
 
-        return View("WynikiWyszukiwania", biletyZDaty);
+        return View("WynikData", biletyZDaty);
     }
 
 }
