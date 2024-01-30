@@ -83,10 +83,13 @@ public class HomeController : Controller
         ViewBag.Random = wydarzenia[LosoweId];
         ViewBag.NoweWydarzenia = wydarzenia.OrderByDescending(x => x.Id).
             Take(5).ToList();
-        ViewBag.Promowane = _context.WydarzenieKulturalne.Where(p => p.Promowane == true)
+        ViewBag.Promowane = _context.Bilety.Where(p => p.Wydarzenie.Promowane == true)
             .OrderByDescending(p => p.Id).
             Take(5).ToList();
-
+        ViewBag.Bilety = _context.Bilety
+            .Include(w => w.Lokalizacja)
+            .Include(w => w.Wydarzenie)
+            .ToList();
         return View();
     }
 
@@ -169,9 +172,11 @@ public class HomeController : Controller
               .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
               .Distinct()
               .ToListAsync();
-        var bilety = await _context.Bilety.Include(w => w.Wydarzenie.KategoriaWydarzenia)
-      .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
-      .ToListAsync();
+        var bilety = await _context.Bilety
+        .Include(w => w.Wydarzenie.KategoriaWydarzenia)
+        .Where(item => item.Wydarzenie.KategoriaWydarzeniaId == id)
+        .OrderBy(w => w.DataWydarzenia)
+        .ToListAsync();
 
 
 
@@ -200,10 +205,8 @@ public class HomeController : Controller
         .Include(w => w.Wydarzenie.KategoriaWydarzenia)
         .Where(item =>
             (id == null || item.LokalizacjaWydarzeniaId == id))
+        .OrderBy(w => w.DataWydarzenia)
         .ToListAsync();
-
-
-        //ViewBag.Nazwa = bilety;
 
         return View(bilety);
     }
