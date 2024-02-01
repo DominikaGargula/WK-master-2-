@@ -32,6 +32,5 @@ namespace WydarzeniaKulturalne.Data.Entities
 
         [Display(Name = "Czy dostępne?")]
         public bool CzyDostepne { get; set; }
-        public virtual ICollection<ZamowienieSzczegoly> ZamowienieSzczegoly { get; set; }
     }
 }

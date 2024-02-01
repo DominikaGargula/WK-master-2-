@@ -300,9 +300,6 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdZamowienieSzczegoly"));
 
-                    b.Property<int>("BiletyId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Cena")
                         .HasColumnType("decimal(18, 2)");
 
@@ -315,12 +312,10 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Property<int>("Ilosc")
                         .HasColumnType("int");
 
-                    b.Property<int>("ZamowienieIdZamowienie")
+                    b.Property<int?>("ZamowienieIdZamowienie")
                         .HasColumnType("int");
 
                     b.HasKey("IdZamowienieSzczegoly");
-
-                    b.HasIndex("BiletyId");
 
                     b.HasIndex("ZamowienieIdZamowienie");
 
@@ -400,26 +395,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.ZamowienieSzczegoly", b =>
                 {
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Bilety", "Bilety")
-                        .WithMany("ZamowienieSzczegoly")
-                        .HasForeignKey("BiletyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", "Zamowienie")
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", null)
                         .WithMany("ZamowienieSzczegolu")
-                        .HasForeignKey("ZamowienieIdZamowienie")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bilety");
-
-                    b.Navigation("Zamowienie");
-                });
-
-            modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.Bilety", b =>
-                {
-                    b.Navigation("ZamowienieSzczegoly");
+                        .HasForeignKey("ZamowienieIdZamowienie");
                 });
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.KategoriaWydarzenia", b =>
