@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WydarzeniaKulturalne.Data;
 using WydarzeniaKulturalne.Data.Entities;
 
@@ -26,64 +27,65 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Platnosc(Zamowienie zamowienie)
+        public IActionResult Platnosc(Zamowienie zamowienie, string kodPromocyjny)
         {
-            try
-            {
+            
+                int uzytkownikId = 0;
+                var uzytkownikIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (uzytkownikIdClaim != null && int.TryParse(uzytkownikIdClaim, out var parsedId))
+                {
+                    uzytkownikId = parsedId;
+                }
+
                 var order = new Zamowienie
                 {
                     Imie = zamowienie.Imie,
                     Nazwisko = zamowienie.Nazwisko,
-                    Email = zamowienie.Email,
+                    Email = User.Identity.Name,
+                    UzytkownikId = uzytkownikId, // Ustawienie UzytkownikId
+                    OrderDate = DateTime.Now,
                     // ... inne pola zamówienia
                 };
 
-                if (string.Equals(zamowienie.Imie, kodPromocyjny, StringComparison.OrdinalIgnoreCase) == false)
+                if (string.Equals(kodPromocyjny, kodPromocyjny, StringComparison.OrdinalIgnoreCase) == false)
                 {
                     ViewBag.ErrorMessage = "Invalid promo code.";
                     return View(order);
                 }
-                else
+
+
+                // Zapisz zamówienie
+                _context.Zamowienie.Add(order);
+                _context.SaveChanges();
+
+                // Pobierz elementy koszyka dla zalogowanego użytkownika
+                var loggedInUserCartItems = _context.ElementKoszyka
+                    .Where(c => c.IdSesjiKoszyka == User.Identity.Name)
+                    .Include(c => c.Bilety)
+                    .Include(c=>c.Bilety.Wydarzenie)
+                    .ToList();
+
+                // Przypisz elementy koszyka do zamówienia
+                foreach (var cartItem in loggedInUserCartItems)
                 {
-                    order.Imie = User.Identity.Name;
-                    order.OrderDate = DateTime.Now;
-
-                    // Zapisz zamówienie
-                    _context.Zamowienie.Add(order);
-                    _context.SaveChanges();
-
-                    // Pobierz elementy koszyka dla zalogowanego użytkownika
-                    var loggedInUserCartItems = _context.ElementKoszyka
-                        .Where(c => c.IdSesjiKoszyka == User.Identity.Name)
-                        .ToList();
-
-                    // Przypisz elementy koszyka do zamówienia
-                    foreach (var cartItem in loggedInUserCartItems)
+                    var szczegolZamowienia = new ZamowienieSzczegoly
                     {
-                        var szczegolZamowienia = new ZamowienieSzczegoly
-                        {
-                            IdZamowienie = order.IdZamowienie,
-                            IdBilet = cartItem.IdBilet,
-                            Ilosc = cartItem.Ilosc,
-                            Cena = cartItem.Bilety.Wydarzenie.Cena // Uzupełnij odpowiednią właściwość zależnie od Twojego modelu
-                                                                   // ... inne pola szczegółów zamówienia
-                        };
+                        IdZamowienie = order.IdZamowienie,
+                        IdBilet = cartItem.IdBilet,
+                        Ilosc = cartItem.Ilosc,
+                        Cena = cartItem.Bilety.Wydarzenie.Cena // Uzupełnij odpowiednią właściwość zależnie od Twojego modelu
+                                                               // ... inne pola szczegółów zamówienia
+                    };
 
-                        _context.ZamowienieSzczegoly.Add(szczegolZamowienia);
-                    }
-
-                    // Wyczyść koszyk użytkownika
-                    _context.ElementKoszyka.RemoveRange(loggedInUserCartItems);
-                    _context.SaveChanges();
-
-                    return RedirectToAction("Complete", new { id = order.IdZamowienie });
+                    _context.ZamowienieSzczegoly.Add(szczegolZamowienia);
                 }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "An error occurred while processing your order. Please try again.";
-                return View();
-            }
+
+                // Wyczyść koszyk użytkownika
+                _context.ElementKoszyka.RemoveRange(loggedInUserCartItems);
+                _context.SaveChanges();
+
+                return RedirectToAction("Complete", new { id = order.IdZamowienie });
+       
         }
         public IActionResult Zakoncz(int id)
         {

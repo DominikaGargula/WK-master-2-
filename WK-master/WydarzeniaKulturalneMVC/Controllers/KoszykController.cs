@@ -54,7 +54,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
             bilet.IloscBiletow--;
 
             // Zapisz zmiany w bazie danych
-            await _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
 
             // Po dodaniu biletu do koszyka, przechodzę do widoku koszyka (Index)
             return RedirectToAction("Index", "Koszyk");

@@ -149,8 +149,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, uzytkownik.Email),
-            new Claim(ClaimTypes.Name, uzytkownik.Imie),
-            new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa)
+            new Claim(ClaimTypes.Name, uzytkownik.Email),
+            new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa),
+            new Claim(ClaimTypes.NameIdentifier, uzytkownik.Id.ToString()),
         };
 
                 // Przesyłamy aktualną nazwę użytkownika, ponieważ jest już zalogowany
