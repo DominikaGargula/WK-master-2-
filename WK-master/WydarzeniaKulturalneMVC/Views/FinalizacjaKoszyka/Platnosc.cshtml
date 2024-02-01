@@ -3,7 +3,7 @@
     ViewBag.Title = "Address And Payment";
 }
 
-<h2>@ViewData["Title"]</h2>
+@*<h2>@ViewData["Title"]</h2>
 
 <form asp-action="Platnosc" method="post">
     <fieldset>
@@ -11,7 +11,9 @@
         <div class="form-group">
             <!-- Pola formularza dla modelu Order -->
             <label asp-for="Imie">Imię</label>
-            <input asp-for="Imie" class="form-control" />
+            <input asp-for="Imie" class="form-control" />   <!-- Pola formularza dla modelu Order -->
+            <label asp-for="Nazwisko">Nazwisko</label>
+            <input asp-for="Nazwisko" class="form-control" />
             <!-- Dodaj resztę pól dla informacji o wysyłce... -->
         </div>
     </fieldset>
@@ -25,4 +27,27 @@
         </div>
     </fieldset>
     <button type="submit" class="btn btn-primary">Submit Order</button>
+</form>*@<h2>Płatność</h2>
+
+<form asp-action="Platnosc" method="post">
+    <div class="form-group">
+        <label asp-for="Imie">Imię</label>
+        <input asp-for="Imie" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Nazwisko">Nazwisko</label>
+        <input asp-for="Nazwisko" class="form-control" />
+    </div>
+
+    <div class="form-group">
+
+    </div>
+
+    <div class="form-group">
+        <label for="kodPromocyjny">Kod Promocyjny:</label>
+        <input type="text" name="kodPromocyjny" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
 </form>

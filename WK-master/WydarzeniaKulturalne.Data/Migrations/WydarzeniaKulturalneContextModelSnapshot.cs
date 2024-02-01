@@ -62,7 +62,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdElementuKoszyka"));
 
-                    b.Property<int?>("BiletyId")
+                    b.Property<int>("BiletyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataUtworzenia")
@@ -267,6 +267,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdZamowienie"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Imie")
@@ -349,7 +350,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
                 {
                     b.HasOne("WydarzeniaKulturalne.Data.Entities.Bilety", "Bilety")
                         .WithMany()
-                        .HasForeignKey("BiletyId");
+                        .HasForeignKey("BiletyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bilety");
                 });
@@ -398,7 +401,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.ZamowienieSzczegoly", b =>
                 {
                     b.HasOne("WydarzeniaKulturalne.Data.Entities.Bilety", "Bilety")
-                        .WithMany()
+                        .WithMany("ZamowienieSzczegoly")
                         .HasForeignKey("BiletyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -412,6 +415,11 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Navigation("Bilety");
 
                     b.Navigation("Zamowienie");
+                });
+
+            modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.Bilety", b =>
+                {
+                    b.Navigation("ZamowienieSzczegoly");
                 });
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.KategoriaWydarzenia", b =>

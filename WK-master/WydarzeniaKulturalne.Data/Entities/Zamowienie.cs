@@ -14,8 +14,8 @@ namespace WydarzeniaKulturalne.Data.Entities
         [Key]
         [ScaffoldColumn(false)]
         public int IdZamowienie { get; set; } //orderId
-        public string Imie { get; set; }
-        public string Nazwisko { get; set; }
+        public string? Imie { get; set; }
+        public string? Nazwisko { get; set; }
 
         [ScaffoldColumn(false)]
         public string Email { get; set; }
@@ -28,6 +28,6 @@ namespace WydarzeniaKulturalne.Data.Entities
         public decimal Suma { get; set; } //total
         [ScaffoldColumn(false)]
         public DateTime OrderDate { get; set; }
-        public List<ZamowienieSzczegoly> ZamowienieSzczegolu { get; set; }
+        public ICollection <ZamowienieSzczegoly> ZamowienieSzczegolu { get; set; }
     }
 }
