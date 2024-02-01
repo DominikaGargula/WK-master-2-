@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -14,9 +15,11 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
         private readonly WydarzeniaKulturalneContext _context;
         string kodPromocyjny = "WSB";
-        public FinalizacjaKoszykaController(WydarzeniaKulturalneContext context)
-        {
+        private Koszyk _koszyk;
 
+        public FinalizacjaKoszykaController(WydarzeniaKulturalneContext context, IHttpContextAccessor httpContextAccessor)
+        {
+            _koszyk = new Koszyk(context, httpContextAccessor.HttpContext);
             _context = context;
         }
         public IActionResult Index()
@@ -30,7 +33,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
         [HttpPost]
         public IActionResult Platnosc(Zamowienie zamowienie, string kodPromocyjny)
         {
-
+            var idSesjiKoszyka = _koszyk.IdSesjiKoszyka;
             int uzytkownikId = 0;
             var uzytkownikIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (uzytkownikIdClaim != null && int.TryParse(uzytkownikIdClaim, out var parsedId))
@@ -41,11 +44,11 @@ namespace WydarzeniaKulturalneMVC.Controllers
             var koszykElementy = _context.ElementKoszyka
                                  .Include(e => e.Bilety)
                                  .Include(e=> e.Bilety.Wydarzenie)
-                                 .Where(e => e.IdSesjiKoszyka == User.Identity.Name).ToList();
+                                 .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka).ToList();
 
 
             decimal sumaZamowienia = _context.ElementKoszyka
-                                 .Where(e => e.IdSesjiKoszyka == User.Identity.Name)
+                                 .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka)
                                  .Sum(item => item.Bilety.Wydarzenie.Cena * item.Ilosc);
 
             var order = new Zamowienie
@@ -74,7 +77,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
                 // Pobierz elementy koszyka dla zalogowanego użytkownika
                 var loggedInUserCartItems = _context.ElementKoszyka
-                        .Where(c => c.IdSesjiKoszyka == User.Identity.Name)
+                        .Where(c => c.IdSesjiKoszyka == idSesjiKoszyka)
                      
                         .Include(c => c.Bilety)
                         .Include(c => c.Bilety.Wydarzenie)

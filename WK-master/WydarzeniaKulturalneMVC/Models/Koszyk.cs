@@ -17,28 +17,51 @@ namespace WydarzeniaKulturalneMVC.Models
         }
         // to jest funkcja która zwraca idSesji danej przeglądarki
         // to jest funkcja która zwraca idSesji danej przeglądarki
-        private string GetIdSesjiKoszyka(HttpContext httpContext)
-        {
-            //jeżeli idSesjiKoszyka jest nullem
-            if (httpContext.Session.GetString("IdSesjiKoszyka") == null)
-            {
-                //jeżeli identity użytkownika nie jest puste i nie posiada białych znaków
-                if (!string.IsNullOrWhiteSpace(httpContext.User.Identity.Name))
-                {
-                    //Wtedy staje się idSesja koszyka
-                    httpContext.Session.SetString("IdSesjiKoszyka", httpContext.User.Identity.Name); //tutaj szukaj rozwiazania 
-                }
-                else
-                {
-                    //w przeciwnym wypadku generujemy idSesjiKoszyka przy pomocy Guid
+        //private string GetIdSesjiKoszyka(HttpContext httpContext)
+        //{
+        //    //jeżeli idSesjiKoszyka jest nullem
+        //    if (httpContext.Session.GetString("IdSesjiKoszyka") == null)
+        //    {
+        //        //jeżeli identity użytkownika nie jest puste i nie posiada białych znaków
+        //        if (!string.IsNullOrWhiteSpace(httpContext.User.Identity.Name))
+        //        {
+        //            //Wtedy staje się idSesja koszyka
+        //            httpContext.Session.SetString("IdSesjiKoszyka", httpContext.User.Identity.Name); //tutaj szukaj rozwiazania 
+        //        }
+        //        else
+        //        {
+        //            //w przeciwnym wypadku generujemy idSesjiKoszyka przy pomocy Guid
 
-                    Guid tempIdSesjiKoszyka = Guid.NewGuid();
-                    httpContext.Session.SetString("IdSesjiKoszyka", tempIdSesjiKoszyka.ToString());
-                }
-            }
-            return httpContext.Session.GetString("IdSesjiKoszyka").ToString();
-        }
+        //            Guid tempIdSesjiKoszyka = Guid.NewGuid();
+        //            httpContext.Session.SetString("IdSesjiKoszyka", tempIdSesjiKoszyka.ToString());
+        //        }
+        //    }
+        //    return httpContext.Session.GetString("IdSesjiKoszyka").ToString();
+        //}
         //to jest funkcja ktora e nowy towar danego uzytkownika do koszyja
+
+
+
+        public string GetIdSesjiKoszyka(HttpContext httpContext)
+        {
+            // Sprawdzanie, czy w sesji jest już zapisane IdSesjiKoszyka
+            var idSesjiKoszyka = httpContext.Session.GetString("IdSesjiKoszyka");
+
+            // Jeżeli IdSesjiKoszyka nie istnieje, generujemy nowe i zapisujemy w sesji
+            if (string.IsNullOrWhiteSpace(idSesjiKoszyka))
+            {
+                // Generowanie nowego GUID
+                Guid tempIdSesjiKoszyka = Guid.NewGuid();
+
+                // Konwersja GUID na string i zapisanie w sesji
+                idSesjiKoszyka = tempIdSesjiKoszyka.ToString();
+                httpContext.Session.SetString("IdSesjiKoszyka", idSesjiKoszyka);
+            }
+
+            // Zwracanie IdSesjiKoszyka
+            return idSesjiKoszyka;
+        }
+
         public void DodajDoKoszyka(Bilety bilety)
         {
             //Najpierw sprawdzamy czy w koszyku tego użytkownika jest ten towar
@@ -212,7 +235,7 @@ namespace WydarzeniaKulturalneMVC.Models
             var koszyk = _context.ElementKoszyka.Where(c => c.IdSesjiKoszyka == IdSesjiKoszyka).ToList();
             foreach (ElementKoszyka item in koszyk)
             {
-                item.IdSesjiKoszyka = nazwaUzytkownika;
+                item.IdSesjiKoszyka = this.IdSesjiKoszyka;
             }
             _context.SaveChanges();
         }

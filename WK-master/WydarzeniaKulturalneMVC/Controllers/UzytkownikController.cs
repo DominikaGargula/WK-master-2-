@@ -158,10 +158,10 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 var koszyk = new Koszyk(_context, this.HttpContext);
 
                 // Przesyłamy aktualną nazwę użytkownika, ponieważ jest już zalogowany
-                koszyk.MigrujKoszyk(uzytkownik.Email);
+                //koszyk.MigrujKoszyk(uzytkownik.Email);
 
-                // Przypisz sesję do zalogowanego użytkownika
-                HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik.Email);
+                //// Przypisz sesję do zalogowanego użytkownika
+                //HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik.Email);
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
