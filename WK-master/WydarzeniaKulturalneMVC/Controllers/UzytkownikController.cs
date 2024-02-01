@@ -62,6 +62,69 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
 
         [HttpPost]
+        //public async Task<IActionResult> Logowanie(string Email, string Haslo)
+        //{
+        //    // Check for empty email or password
+        //    if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Haslo))
+        //    {
+        //        ViewBag.ErrorMessageLogin = "Email i hasło są wymagane.";
+        //        return View("Logowanie");
+        //    }
+
+        //    var uzytkownik = await _context.Uzytkownik.Include(x => x.Rola).FirstOrDefaultAsync(x => x.Email == Email);
+        //    var ctx = HttpContext.User;
+
+        //    if (uzytkownik == null)
+        //    {
+        //        ViewBag.ErrorMessageLogin = "Użytkownik o podanym adresie email nie istnieje.";
+        //        return View("Logowanie");
+        //    }
+
+        //    if (uzytkownik.Haslo == hashPassword(Haslo))
+        //    {
+
+        //        ClaimsPrincipal rezultat = new ClaimsPrincipal();
+
+        //        var claims = new List<Claim>
+        //        {
+        //           new Claim(ClaimTypes.Email, uzytkownik.Email),
+        //            new Claim(ClaimTypes.Name, uzytkownik.Imie),
+        //            new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa)
+        //        };
+
+
+
+        //        var claimsIdentity = new ClaimsIdentity(
+        //            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        //        MigrujKoszyk(uzytkownik.Email);
+        //        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        //            new ClaimsPrincipal(new ClaimsIdentity(claimsIdentity)));
+
+        //        var authProperties = new AuthenticationProperties
+        //        {
+        //            ExpiresUtc = DateTime.Now.AddMinutes(30),
+        //        };
+
+        //        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        //        new ClaimsPrincipal(claimsIdentity), authProperties);
+
+
+        //        if (uzytkownik.Rola?.Nazwa == "Admin")
+        //        {
+        //            return RedirectToAction("AdminPanel", "Home");
+        //        }
+        //        else
+        //        {
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ViewBag.ErrorMessageLogin = "Mail lub hasło jest niepoprawne.";
+        //        return View("Logowanie");
+        //    }
+        //}
+        [HttpPost]
         public async Task<IActionResult> Logowanie(string Email, string Haslo)
         {
             // Check for empty email or password
@@ -72,7 +135,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             }
 
             var uzytkownik = await _context.Uzytkownik.Include(x => x.Rola).FirstOrDefaultAsync(x => x.Email == Email);
-            var ctx = HttpContext.User;
 
             if (uzytkownik == null)
             {
@@ -82,33 +144,37 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             if (uzytkownik.Haslo == hashPassword(Haslo))
             {
-
                 ClaimsPrincipal rezultat = new ClaimsPrincipal();
 
                 var claims = new List<Claim>
-                {
-                   new Claim(ClaimTypes.Email, uzytkownik.Email),
-                    new Claim(ClaimTypes.Name, uzytkownik.Imie),
-                    new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa)
-                };
+        {
+            new Claim(ClaimTypes.Email, uzytkownik.Email),
+            new Claim(ClaimTypes.Name, uzytkownik.Imie),
+            new Claim(ClaimTypes.Role, uzytkownik.Rola.Nazwa)
+        };
 
-                MigrujKoszyk(uzytkownik.Email);
+                // Przesyłamy aktualną nazwę użytkownika, ponieważ jest już zalogowany
+                var koszyk = new Koszyk(_context, this.HttpContext);
+
+                // Przesyłamy aktualną nazwę użytkownika, ponieważ jest już zalogowany
+                koszyk.MigrujKoszyk(uzytkownik.Email);
+
+                // Przypisz sesję do zalogowanego użytkownika
+                HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik.Email);
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(new ClaimsIdentity(claimsIdentity)));
-
+           
                 var authProperties = new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.Now.AddMinutes(30),
                 };
 
+
+
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity), authProperties);
-
-
+                    new ClaimsPrincipal(new ClaimsIdentity(claimsIdentity)));
                 if (uzytkownik.Rola?.Nazwa == "Admin")
                 {
                     return RedirectToAction("AdminPanel", "Home");
@@ -124,8 +190,8 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 return View("Logowanie");
             }
         }
-    
-        
+
+
 
         // GET: Uzytkownik/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -176,7 +242,13 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 return View("Rejestracja");
             }
 
-            if (hashPassword(uzytkownik.Haslo) == hashPassword(weryfikujHaslo))
+            if (hashPassword(uzytkownik.Haslo) != hashPassword(weryfikujHaslo))
+            {
+                ViewBag.PasswordErrorMessage = "Hasła różnią się od siebie. Zweryfikuj wpisane dane";
+                return View("Rejestracja");
+            }
+
+                if (hashPassword(uzytkownik.Haslo) == hashPassword(weryfikujHaslo))
             {
                 if (nowyUzytkownik == null)
                 {
@@ -189,7 +261,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
                         MigrujKoszyk(uzytkownik.Email);
 
-                        ViewBag.LoginMessage = "Konto zostało utworzone.";
+                        ViewBag.LoginMessage = "Konto zostało pomyślnie utworzone";
                         TempData["Save"] = "Pomyślnie utworzono nowy obiekt";
                         return View("Logowanie");
                     }
@@ -215,7 +287,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
         private void MigrujKoszyk(string uzytkownik)
         {
-            // Associate shopping cart items with logged-in user
+          
             var koszyk = new Koszyk(_context, this.HttpContext);
 
             koszyk.MigrujKoszyk(uzytkownik);

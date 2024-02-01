@@ -38,7 +38,7 @@ namespace WydarzeniaKulturalneMVC.Models
             }
             return httpContext.Session.GetString("IdSesjiKoszyka").ToString();
         }
-        //to jest funkcja ktora dodaje nowy towar danego uzytkownika do koszyja
+        //to jest funkcja ktora e nowy towar danego uzytkownika do koszyja
         public void DodajDoKoszyka(Bilety bilety)
         {
             //Najpierw sprawdzamy czy w koszyku tego użytkownika jest ten towar
@@ -206,9 +206,10 @@ namespace WydarzeniaKulturalneMVC.Models
         // be associated with their username
         public void MigrujKoszyk(string nazwaUzytkownika)
         {
-            var koszyk = _context.ElementKoszyka.Where(
-                c => c.IdSesjiKoszyka == IdSesjiKoszyka);
+            //var koszyk = _context.ElementKoszyka.Where(
+            //    c => c.IdSesjiKoszyka == IdSesjiKoszyka);
 
+            var koszyk = _context.ElementKoszyka.Where(c => c.IdSesjiKoszyka == IdSesjiKoszyka).ToList();
             foreach (ElementKoszyka item in koszyk)
             {
                 item.IdSesjiKoszyka = nazwaUzytkownika;

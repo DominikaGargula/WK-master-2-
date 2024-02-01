@@ -152,10 +152,20 @@
                                 {
                                     <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
                                     <td class="pt-3 mt-2">
-                                        <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@bilet.Id" class="btn btn-dark">
-                                            Kup bilet
-                                          
-                                        </a>
+
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@bilet.Id" class="btn btn-dark">
+                                                Kup bilet
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <p>Zaloguj się, aby dodać bilet do koszyka.</p>
+                                            <a asp-controller="Uzytkownik" asp-action="Logowanie" class="btn btn-primary">
+                                                Zaloguj się
+                                            </a>
+                                        }
                                     </td>
                                 }
                                 else
