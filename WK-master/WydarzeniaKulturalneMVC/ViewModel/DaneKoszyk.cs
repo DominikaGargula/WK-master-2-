@@ -6,5 +6,6 @@ namespace WydarzeniaKulturalneMVC.Models
     {
         public List<ElementKoszyka> ElementyKoszyka { get; set; }
         public decimal Razem { get; set; }
+        public int IloscBiletow { get; set; }
     }
 }

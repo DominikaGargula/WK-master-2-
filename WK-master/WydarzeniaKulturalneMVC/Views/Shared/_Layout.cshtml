@@ -1,6 +1,7 @@
-﻿@using System.Security.Claims;
+@using System.Security.Claims;
 @using WydarzeniaKulturalne.Data.Entities;
 @*pozwala na wydobycie danych dot. zalogowanego uzytkownika*@
+@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
 
@@ -16,7 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script src="https://cdn.tiny.cloud/1/7l51pfigmxtfq5oi43r0sr60ypv9do0d9vwu6guikgwqeaoc/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <!-- Google Fonts Roboto -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
@@ -93,26 +94,24 @@
     }
 
     .card-img {
-      
         height: 200px;
         object-fit: cover;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
-         aspect-ratio: 1/ 6;
+        aspect-ratio: 1/ 6;
     }
-    .card-img-list{
+
+    .card-img-list {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
 
-    .card-img-f
-    {
+    .card-img-f {
         /*width: 90%;*/
         height: 200px;
- 
         aspect-ratio: 12 / 16;
         margin: 10px;
     }
@@ -133,6 +132,8 @@
         text-transform: uppercase;
         width: 0px;
     }
+
+
 
     .card {
         box-shadow: none;
@@ -160,6 +161,9 @@
             color: #d6a08f;
         }
 
+    .card-shop {
+    }
+
     .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-do {
         border: none;
         padding: 0 !important;
@@ -180,10 +184,16 @@
         }
 
     .otc {
-        color:transparent;
+        color: transparent;
     }
+
     h5 {
         color: #de753f;
+    }
+
+    h6 {
+        color: #de753f;
+        font: 500;
     }
 
     .owl-nav {
@@ -232,6 +242,23 @@
         background-color: rgba(0, 0, 0, 0.4);
     }
 
+    }
+
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+
+    .bg-grey {
+        background-color: #eae8e8;
+    }
+
 </style>
 <body>
 
@@ -261,7 +288,9 @@
 
                 @if (User.IsInRole("Admin"))
                 {
+
                     <a class="nav-link active text-dark" asp-area="" asp-controller="Home" asp-action="AdminPanel">Panel Administratora</a>
+
                 }
                 </ul>
             </div>
@@ -280,34 +309,47 @@
             {
                 <a class="nav-link me-3 text-dark"> Witaj @User.FindFirst(ClaimTypes.Name).Value</a>
 
-                <a class="nav-link me-3 text-dark" asp-controller="Uzytkownik" asp-action="Logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </a>
+                <a class="nav-link me-3 text-dark " asp-area="" asp-controller="Uzytkownik" asp-action="Logout"> <i class="fa-solid fa-arrow-right-from-bracket"></i> </a>
+
             }
             else
             {
-                <a class="nav-link me-3 text-dark" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
-            }
 
-            <a class="nav-link me-3" href="#">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="badge rounded-pill badge-notification bg-danger">0</span>
-            </a>
+                <a class="nav-link me-3 text-dark" asp-area="" asp-controller="Uzytkownik" asp-action="Logowanie"> <i class="fa-regular fa-user"> </i></a>
+
+            }
+            <div>
+@*
+                @await Html.PartialAsync("_PodsumowanieKoszyka")*@
+
+                <a class="nav-link me-3" href="@Url.Action("Index", "Koszyk")">
+                            <i class="fas fa-shopping-cart"></i>
+                    @*        <span class="badge rounded-pill badge-notification bg-danger">0</span>*@
+                        </a>
+                </div>
+            </div>
         </div>
         </div>
     </nav>
+
+    
+    <!-- carousel -->
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-mdb-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="mask" />
-                <div class="carousel-caption d-none d-sm-block mb-5">
+                <div class="carousel-caption d-none d-sm-block mb-8">
                     <h1 class="mb-4">
                         <strong>Bilety online na wydarzenia</strong>
                     </h1>
+
                     <p>
-                        <strong>WydarzeniaKulturalne to nowoczesny sposób zakupu</strong>
+                        <strong>   WydarzeniaKulturalne to nowoczesny sposób zakupu</strong>
                     </p>
+
                     <p class="mb-4 d-none d-md-block">
                         <strong>
-                            Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!           
+                            Odkryj emocje na żywo - kup bilet, zabierz Przyjaciół, stwórz wspomnienia!
                         </strong>
                     </p>
                 </div>
@@ -315,38 +357,32 @@
 
         </div>
     </div>
+
     @RenderBody()
+
+
     <footer class="text-center text-white mt-4 footer-bottom" style="background-color: #08183a">
 
         <hr class="text-dark">
 
         <div class="container">
+            <!-- Section: Social media -->
             <section class="mb-3">
-          @*      <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-facebook-f"></i>
-                </a>*@
-
+                <!-- Google -->
                 <a class="btn-link btn-floating btn-lg text-white"
-                   href="http://www.google.pl"
+                   href="www.google.pl"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-google"></i>
                 </a>
-           @*     <a class="btn-link btn-floating btn-lg text-white"
-                   href="#!"
-                   role="button"
-                   data-mdb-ripple-color="dark">
-                    <i class="fab fa-instagram"></i>
-                </a>*@
+                <!-- YouTube -->
                 <a class="btn-link btn-floating btn-lg text-white"
                    href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
                    role="button"
                    data-mdb-ripple-color="dark">
                     <i class="fab fa-youtube"></i>
                 </a>
+                <!-- Github -->
                 <a class="btn-link btn-floating btn-lg text-white"
                    href="https://github.com/DominikaGargula/WK-master-2-"
                    role="button"
@@ -354,11 +390,13 @@
                     <i class="fab fa-github"></i>
                 </a>
             </section>
+            <!-- Section: Social media -->
         </div>
+        <!-- Grid container -->
+        <!-- Copyright -->
         <div class="text-center p-3" style="background-color: #08183a;">
             © 2023
-            <a class="text-white" href="https://mdbootstrap.com/">Wk
-                </a>
+            <a class="text-white" href="https://mdbootstrap.com/">Wk</a>
         </div>
         <!-- Copyright -->
     </footer>
@@ -393,7 +431,7 @@
                 600: {
                     items: 2
                 },
-                 1000: {
+                1000: {
                     items: 3
                 }
             }

@@ -1,11 +1,9 @@
-@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
-
+﻿@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Lista wydarzen";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var dodaneMiejscowosci = new List<string>();
     var pojedynczeWydarzenie = new List<int>();
-
 }
 <main>
 
@@ -35,7 +33,6 @@
                         <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Lokalizacja
                         </a>
-
                         <ul class="dropdown-menu">
                             @foreach (var item in @ViewBag.LokalizacjaWydarzenia)
                             {
@@ -85,71 +82,77 @@
         <div class="container firstContainer">
             <header align="left">
                 <div>
-                    <h5>WYNIK WYSZUKIWANIA</h5>
+                    <h5>LISTA WYDARZEŃ</h5>
                     <hr />
-
                 </div>
             </header>
+
             <div class="row g-5">
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var bilety in Model)
                     {
-                        @*  if (pojedynczeWydarzenie.Contains(ViewBag.Wydarzenie.Id))
-                {
-                pojedynczeWydarzenie.Add(ViewBag.Wydarzenie.Id);*@
+                        if (!pojedynczeWydarzenie.Contains(bilety.Wydarzenie.Id))
+                        {
+                            pojedynczeWydarzenie.Add(bilety.Wydarzenie.Id);
 
-                        <div class="col-md-4 col-sm-6">
-                            <div class="card hover-zoom ripple-surface ripple-surface-light">
-                                <div class="row g-0">
-                                    <div class="col">
-                                        @if (string.IsNullOrEmpty(@bilety.Wydarzenie.ZdjecieUrl))
-                                        {
-                                            <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
-                                        }
-                                        else
-                                        {
-                                            <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
-                                        }
-                                    </div>
-                                    <div class="col">
-                                        <div class="card-body d-flex flex-column">
-                                            <div class="h-100">
-                                                <h5 class="card-title">@bilety.Wydarzenie.Nazwa</h5>
-                                            </div>
-                                            <div class="col">
-                                                <p class="card-text">
-                                                    <small class="text-muted">
-                                                        Najbliższe wydarzenie:
-                                                    </small>
-                                                    @bilety.DataWydarzenia.ToShortDateString()
-                                                </p>
-                                                <div class="text-end">
-                                                    <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@bilety.Id" class="btn btn-dark">
-                                                        Kup bilet
-                                                    </a>
+                            <div class="col-4">
+                                <div class="card hover-zoom ripple-surface ripple-surface-light">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            @if (string.IsNullOrEmpty(bilety.Wydarzenie.ZdjecieUrl))
+                                            {
+
+                                                <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
+                                            }
+                                        </div>
+                                        <div class="col">
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="h-100">
+                                                    <h5 class="card-title">@bilety.Wydarzenie.Nazwa</h5>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="card-text">
+                                                        <small class="text-muted">
+                                                            Najbliższe wydarzenie:
+                                                        </small>
+                                                        @bilety.DataWydarzenia.ToShortDateString()
+                                                    </p>
+                                                    <div class="text-end">
+                                                        <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@bilety.Id" class="btn btn-dark">
+                                                            Kup bilet
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        // }
+                        }
                     }
                 }
                 else
                 {
-                    <div class="col mb-5">
+                    <div class="col">
                         <div class="card-body d-flex flex-column">
-                            <div class="mb-10">
-                                <h5 class="card-title"> Brak wyniku spełniającego kryteria</h5>
+                            <div class="mb-12">
+                                <h5 class="card-title"> Brak wydarzeń w tej kategorii</h5>
                             </div>
                         </div>
                     </div>
                 }
             </div>
-
         </div>
     </section>
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+        </ul>
+    </nav>
+
 </main>

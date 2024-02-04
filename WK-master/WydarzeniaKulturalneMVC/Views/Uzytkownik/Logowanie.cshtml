@@ -13,6 +13,8 @@
             <div class="row justify-content-center">
                 <div class="col-xl-5 col-md-8">
                     <form class="bg-white rounded-5 shadow-5-strong p-5" asp-action="Logowanie" asp-controller="Uzytkownik">
+
+                        <p class="text-primary">@ViewBag.LoginMessage</p>
                         <!-- Email input -->
                         <div class="form-group mb-4">
                             <label for="exampleInputEmail1">Email</label>
@@ -28,7 +30,7 @@
                             <div class="col d-flex justify-content-center">
                                                                <div>
                                     <label class="form-check-label" for="form1Example3">
-                                      <a asp-action="Rejestracja"> Zarejestruj się </a> 
+                                        <a asp-action="Rejestracja"> <h6>Zarejestruj się</h6> </a>
                                     </label>
                                 </div>
                             </div>
@@ -39,7 +41,7 @@
                         </div>
                        
                         <p style="color: darkred">@ViewBag.ErrorMessageLogin</p>
-                        <input type="submit" value="Logowanie" class="btn btn-primary btn-user btn-block" />
+                        <input type="submit" value="Logowanie" class="btn btn-dark btn-user btn-block" />
                     </form>
                 </div>
             </div>

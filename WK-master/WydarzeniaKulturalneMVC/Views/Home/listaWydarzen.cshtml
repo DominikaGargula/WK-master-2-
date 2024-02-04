@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
+@model IEnumerable<WydarzeniaKulturalne.Data.Entities.Bilety>
 @{
     ViewData["Title"] = "Lista wydarzen";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -47,19 +47,30 @@
                         </ul>
                     </div>
                 </li>
+                <form asp-controller="Home" asp-action="WyszukajPoDacie" method="post">
                 <li class="nav-item active mx-1">
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Data
+                            Wybierz date
                         </a>
-
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <div class="form-group">
+                            <li>
+                                <a class="dropdown-item">
+                                    <div class="input-group">
+                                        <input type="date" id="dataPicker" name="dataWydarzenia" class="form-control" />
+                                        <span class="input-group-text">
+                                            <button type="submit" class="search-icon-btn">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
+                </form>
             </ul>
         </div>
         <!-- Container wrapper -->
@@ -84,45 +95,44 @@
                         if (!pojedynczeWydarzenie.Contains(bilety.Wydarzenie.Id))
                         {
                             pojedynczeWydarzenie.Add(bilety.Wydarzenie.Id);
+                        
+                        <div class="col-4">
+                            <div class="card hover-zoom ripple-surface ripple-surface-light">
+                                <div class="row g-0">
+                                    <div class="col">
+                                        @if (string.IsNullOrEmpty(bilety.Wydarzenie.ZdjecieUrl))
+                                        {
 
-                            <div class="col-4">
-                                <div class="card hover-zoom ripple-surface ripple-surface-light">
-                                    <div class="row g-0">
-                                        <div class="col">
-                                            @if (string.IsNullOrEmpty(bilety.Wydarzenie.ZdjecieUrl))
-                                            {
-
-                                                <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
-                                            }
-                                        </div>
+                                            <img src="~/Zdjecia/noimage.png" class="card-img-f img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@bilety.Wydarzenie.ZdjecieUrl" class="card-img-f img-fluid" />
+                                        }
+                                    </div>
                                         <div class="col">
                                             <div class="card-body d-flex flex-column">
                                                 <div class="h-100">
-                                                    <h5 class="card-title"> @bilety.Wydarzenie.Nazwa</h5>
+                                                    <h5 class="card-title">@bilety.Wydarzenie.Nazwa</h5>
                                                 </div>
                                                 <div class="col">
-                                                    <p class="card-text ">
+                                                    <p class="card-text">
                                                         <small class="text-muted">
-                                                            Najbliższe wydarzenie
+                                                            Najbliższe wydarzenie:
                                                         </small>
-                                                        <small>@bilety.DataWydarzenia.ToShortDateString()</small>
+                                                        @bilety.DataWydarzenia.ToShortDateString()
                                                     </p>
                                                     <div class="text-end">
-                                                        <a asp-controller="Bilety" asp-route-id="@bilety.Id" asp-action="DetailsCard" class="btn btn-dark">
+                                                        <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@bilety.Id" class="btn btn-dark">
                                                             Kup bilet
                                                         </a>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
+                        </div>
                         }
                     }
                 }

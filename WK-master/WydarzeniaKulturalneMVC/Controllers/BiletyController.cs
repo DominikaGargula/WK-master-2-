@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WydarzeniaKulturalne.Data.Entities;
 using WydarzeniaKulturalne.Data;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WydarzeniaKulturalneMVC.Controllers
 {
@@ -36,6 +37,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             return View(bilety);
         }
+       
         public async Task<IActionResult> DetailsCard(int? id)
         {
 
@@ -54,6 +56,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             ViewBag.InformacjeOWydarzeniu = wydarzenie;
             ViewBag.InformacjeOWydarzeniu1 = bilety;
+
+            var idBiletu = wydarzenie.Id;
+            ViewBag.IdBiletu = idBiletu;
 
             return View();
         }

@@ -1,58 +1,50 @@
-﻿@*@model WydarzenieKulturalne.Data.Entities.Uzytkownik
-
-*@
+﻿
 @model WydarzeniaKulturalne.Data.Entities.Uzytkownik
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <section class="py-5">
     <div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-5 col-md-8">
-                            <form class="bg-white rounded-5 shadow-5-strong p-5"  asp-action="Create">
-                                @* <div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+                    <form class="bg-white rounded-5 shadow-5-strong p-5" asp-action="Create" onsubmit="return sprawdzWarunki();">
                         <div class="form-group mb-4">
-                                    @* <label asp-for="Imie" class="form-label" for="form3Example1cg">Imię</label>*@
-                            <input asp-for="Imie" type="text" placeholder="Imię" id="form3Example1cg" class="form-control form-control-user"  />
-                                    
+                            <input asp-for="Imie" type="text" placeholder="Imię" id="form3Example1cg" class="form-control form-control-user" />
                             <p class="text-danger">@ViewBag.DaneErrorMessage</p>
-                                </div>
+                        </div>
                         <div class="form-group mb-4">
-                                    @* <label asp-for="Imie" class="form-label" for="form3Example1cg">Imię</label>*@
-                                    <input asp-for="Nazwisko" type="text" placeholder="Nazwisko" id="form3Example1cg" class="form-control form-control-user" />
-                            
+                            <input asp-for="Nazwisko" type="text" placeholder="Nazwisko" id="form3Example1cg" class="form-control form-control-user" />
                             <p class="text-danger">@ViewBag.DaneErrorMessage</p>
-                                </div>
-                        @*        <p style="color: blue">@ViewBag.RegisterErrorMessage</p>*@
+                        </div>
                         <div class="form-group mb-4">
-                                    @*      <label asp-for="Haslo" class="form-label" for="form3Example1cg">Hasło</label>*@
                             <input asp-for="Email" type="Email" placeholder="Email" id="form3Example4cg" class="form-control form-control-user" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
                         <p class="text-danger">@ViewBag.EmailErrorMessage</p>
 
                         <div class="form-group mb-4">
-                                    @*      <label asp-for="Haslo" class="form-label" for="form3Example1cg">Hasło</label>*@
                             <input asp-for="Haslo" type="password" placeholder="Hasło" id="form3Example4cg" class="form-control form-control-user" />
-                                    <span  asp-validation-for="Haslo" class="text-danger"></span>
-                                </div>
+                            <span asp-validation-for="Haslo" class="text-danger"></span>
+                        </div>
                         <div class="form-group mb-4">
-                                    @*     <label class="form-label" for="form3Example1cg">Powtórz hasło</label>*@
                             <input type="password" placeholder="Powtórz hasło" class="form-control form-control-user" id="weryfikujHaslo" name="weryfikujHaslo">
-
-                                </div>
-
+                        </div>
                         <p class="text-danger">@ViewBag.PasswordErrorMessage</p>
-                                <p>Rejestrując się, potwierdzam, że przeczytałem(-am) i akceptuję Warunki korzystania z wk</p>
-            
-                            <input id="re3" type="submit" value="Zarejestruj się" class="btn btn-primary btn-user btn-block" />
-                          
-                                @*  <a id = "rejestracja" class="btn-get-started"  type="submit" value="Zarejestruj się" style="margin-left: 5%">Zarejestruj się</a>*@
-                            </form>
+
+                        <div class="form-group form-check mb-4">
+                            <input type="checkbox" class="form-check-input" id="akceptacjaWarunkow" name="akceptacjaWarunkow" />
+                            <label class="form-check-label" for="akceptacjaWarunkow">
+                                Rejestrując się potwierdzam, że przeczytał*m 
+                                <br />i akceptuję warunki korzystania z serwisu
+                            </label>
+                            <p class="text-danger">@ViewBag.AkceptacjaErrorMessage</p>
+                        </div>
+
+                        <input type="submit" value="Zarejestruj się" class="btn btn-dark btn-user btn-block" />
+                    </form>
 
                 </div>
             </div>
@@ -61,45 +53,19 @@
 </section>
 
 
+                            <script>
+    function sprawdzWarunki() {
+        // Pobierz referencję do pola wyboru
+        var checkbox = document.getElementById('akceptacjaWarunkow');
 
-@*
+        // Sprawdź, czy pole wyboru zostało zaznaczone
+        if (!checkbox.checked) {
+            // Jeśli nie zostało zaznaczone, wyświetl komunikat i zatrzymaj wysyłanie formularza
+            alert("Musisz zaakceptować warunki korzystania przed rejestracją.");
+            return false;
+        }
 
-
-<section class="py-5">
-    <div>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-5 col-md-8">
-                    <form class="bg-white rounded-5 shadow-5-strong p-5" asp-action="Logowanie" asp-controller="Uzytkownik">
-                        <!-- Email input -->
-                        <div class="form-group mb-4">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input asp-for="Email" type="Email" placeholder="Email" id="form3Example4cg" class="form-control form-control-user" />
-                        </div>
-                        <!-- Password input -->
-                        <div class="form-group mb-4">
-                            <label class="form-label" for="form1Example2">Password</label>
-                            <input type="password" asp-for="Haslo" class="form-control form-control-user" placeholder="Hasło" />
-                        </div>
-                        <!-- 2 column grid layout for inline styling -->
-                        <div class="row mb-4">
-                            <div class="col d-flex justify-content-center">
-                                <div>
-                                    <label class="form-check-label" for="form1Example3">
-                                        Zarejestruj się
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col text-center">
-                                <!-- Simple link -->
-                                <a href="#!">Forgot password?</a>
-                            </div>
-                        </div>
-                        <p style="color: red">@ViewBag.ErrorMessageLogin</p>
-                        <input type="submit" value="Logowanie" class="btn btn-primary btn-user btn-block" />
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>*@
+        // Jeśli pole wyboru zostało zaznaczone, kontynuuj wysyłanie formularza
+        return true;
+    }
+</script>

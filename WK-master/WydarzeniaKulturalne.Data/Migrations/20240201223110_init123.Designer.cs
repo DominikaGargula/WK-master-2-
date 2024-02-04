@@ -12,8 +12,8 @@ using WydarzeniaKulturalne.Data;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     [DbContext(typeof(WydarzeniaKulturalneContext))]
-    [Migration("20240126165800_Init")]
-    partial class Init
+    [Migration("20240201223110_init123")]
+    partial class init123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,8 +78,8 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Ilosc")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Ilosc")
+                        .HasColumnType("int");
 
                     b.HasKey("IdElementuKoszyka");
 
@@ -224,7 +224,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Property<decimal>("Cena")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("DataUwtorzenia")
+                    b.Property<DateTime>("DataUwtorzenia")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("KategoriaWydarzeniaId")
@@ -274,11 +274,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Imie")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nazwisko")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
@@ -287,7 +285,12 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Property<decimal>("Suma")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<int>("UzytkownikId")
+                        .HasColumnType("int");
+
                     b.HasKey("IdZamowienie");
+
+                    b.HasIndex("UzytkownikId");
 
                     b.ToTable("Zamowienie");
                 });
@@ -299,9 +302,6 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdZamowienieSzczegoly"));
-
-                    b.Property<int>("BiletyId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Cena")
                         .HasColumnType("decimal(18, 2)");
@@ -315,12 +315,10 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Property<int>("Ilosc")
                         .HasColumnType("int");
 
-                    b.Property<int>("ZamowienieIdZamowienie")
+                    b.Property<int?>("ZamowienieIdZamowienie")
                         .HasColumnType("int");
 
                     b.HasKey("IdZamowienieSzczegoly");
-
-                    b.HasIndex("BiletyId");
 
                     b.HasIndex("ZamowienieIdZamowienie");
 
@@ -330,7 +328,7 @@ namespace WydarzeniaKulturalne.Data.Migrations
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.Bilety", b =>
                 {
                     b.HasOne("WydarzeniaKulturalne.Data.Entities.LokalizacjaWydarzenia", "Lokalizacja")
-                        .WithMany()
+                        .WithMany("Bilety")
                         .HasForeignKey("LokalizacjaWydarzeniaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -387,23 +385,22 @@ namespace WydarzeniaKulturalne.Data.Migrations
                     b.Navigation("SpecjalnyTag");
                 });
 
+            modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.Zamowienie", b =>
+                {
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Uzytkownik", "uzytkownik")
+                        .WithMany()
+                        .HasForeignKey("UzytkownikId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("uzytkownik");
+                });
+
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.ZamowienieSzczegoly", b =>
                 {
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Bilety", "Bilety")
-                        .WithMany()
-                        .HasForeignKey("BiletyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", "Zamowienie")
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", null)
                         .WithMany("ZamowienieSzczegolu")
-                        .HasForeignKey("ZamowienieIdZamowienie")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bilety");
-
-                    b.Navigation("Zamowienie");
+                        .HasForeignKey("ZamowienieIdZamowienie");
                 });
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.KategoriaWydarzenia", b =>
@@ -413,6 +410,8 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.LokalizacjaWydarzenia", b =>
                 {
+                    b.Navigation("Bilety");
+
                     b.Navigation("WydarzenieKulturalne");
                 });
 

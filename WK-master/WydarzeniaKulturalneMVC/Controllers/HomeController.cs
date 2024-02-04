@@ -210,4 +210,19 @@ public class HomeController : Controller
 
         return View(bilety);
     }
+
+
+    [HttpPost]
+    public IActionResult WyszukajPoDacie(DateTime dataWydarzenia)
+    {
+
+
+        var biletyZDaty = _context.Bilety
+            .Where(b => b.DataWydarzenia.Date == dataWydarzenia.Date)
+            .Include(b=>b.Wydarzenie)
+            .ToList();
+
+        return View("WynikData", biletyZDaty);
+    }
+
 }

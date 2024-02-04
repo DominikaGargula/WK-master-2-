@@ -2,8 +2,7 @@
 @{
     ViewData["Title"] = "DetailsCard";
     var wydarzenie = (WydarzeniaKulturalne.Data.Entities.Bilety)ViewBag.InformacjeOWydarzeniu;
-    var idBiletu = ViewBag.IdBiletu;
-    
+
 }
 <style>
 
@@ -96,7 +95,6 @@
                             <span class="badge bg-info me-1">Promowane</span>
                         }
                     </div>
-
                     <strong><p style="font-size: 20px;">@wydarzenie.Wydarzenie?.Nazwa</p></strong>
                     <p>@Html.Raw(@wydarzenie.Wydarzenie?.Opis)</p>
                 </div>
@@ -106,15 +104,15 @@
         <div class="container rounded mt-3 bg-white p-md-4">
             <div class="h5-detail m-3 mb-3">
                 Dostępne wydarzenia
-                @*               <div class="dropdown float-end mb-3">
-                <button class="btn btn-dark btn-details-header dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                Lokalizacja
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+ @*               <div class="dropdown float-end mb-3">
+                    <button class="btn btn-dark btn-details-header dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lokalizacja
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
                 </div>*@
             </div>
             <div class="table-responsive w-100">
@@ -133,7 +131,7 @@
                             <tr class="bg-details">
                                 <td class="pt-3 mt-1">
                                     @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br />
-                                    @bilet.DataWydarzenia.ToString(" HH:mm")
+                                    @bilet.DataWydarzenia.ToString(" HH:mm:ss")
                                 </td>
                                 <td class="pt-3 mt-1">
                                     <div class="pl-lg-5 pl-md-3 pl-1 nameDetails">
@@ -151,36 +149,15 @@
                                 @if (@bilet.IloscBiletow > 0)
                                 {
                                     <td class="pt-3 mt-1"><span class="fa fa-check pl-3"></span></td>
-                                    <td class="pt-3 mt-2">
-
-                                        @if (User.Identity.IsAuthenticated)
-                                        {
-                                            <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@bilet.Id" class="btn btn-dark">
-                                                Kup bilet
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <p>Zaloguj się, aby dodać bilet do koszyka.</p>
-                                            <a asp-controller="Uzytkownik" asp-action="Logowanie" class="btn btn-primary">
-                                                Zaloguj się
-                                            </a>
-                                        }
-                                    </td>
+                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right">Kup bilet</button></td>
                                 }
                                 else
                                 {
                                     <td class="pt-3 mt-1"><span class="pl-3"></span>Bilety wyprzedane</td>
-                                    <td class="pt-3 mt-2">
-                                        <a class="btn btn-grey" disabled>
-                                         Wyprzedane
-                                        </a>
-                                    </td>
+                                    <td class="pt-3 mt-2"><button class="btn btn-dark" style="float:right" disabled>Kup bilet</button></td>
                                 }
 
-                               @* <a asp-controller="Koszyk" asp-action="DodajDoKoszyka" asp-route-id="@idBiletu" class="btn btn-dark">
-                                    Kup bilet
-                                </a>*@
+                            
                             </tr>
 
                             <tr id="spacing-row">
