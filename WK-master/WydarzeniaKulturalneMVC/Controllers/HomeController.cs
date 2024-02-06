@@ -89,7 +89,8 @@ public class HomeController : Controller
         ViewBag.SumaWydarzen = _context.WydarzenieKulturalne.Count();
         ViewBag.LiczbaKategorii = _context.KategoriaWydarzenia.Count();
         ViewBag.SumaUzytkownikow = _context.Uzytkownik.Where(u => u.Rola.Nazwa != "Admin").Count();
-
+        ViewBag.WydarzenieAktywne = _context.Bilety.Where(u => u.CzyDostepne == true).Count();
+        ViewBag.WydarzenieNieAktywne = _context.Bilety.Where(u => u.CzyDostepne == false).Count();
         ViewBag.NowiUzytkownicy = _context.Uzytkownik.Where(u => u.Rola.Nazwa == "Uzytkownik").
                                                       OrderByDescending(u => u.Id).
                                                       Take(5).ToList();
@@ -105,6 +106,25 @@ public class HomeController : Controller
             .Include(w => w.Lokalizacja)
             .Include(w => w.Wydarzenie)
             .ToList();
+
+        var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                     join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
+                     select new
+                     {
+                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
+                         ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, // Dodano dostęp do daty wydarzenia
+                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
+                         NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
+                         LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
+                     })
+                .OrderByDescending(v => v.LacznaIlosc)
+                .Take(5)
+                .ToList();
+
+
+        ViewBag.TopSprzedaz = wynik;
+
         return View();
     }
 

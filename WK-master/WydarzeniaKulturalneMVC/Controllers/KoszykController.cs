@@ -90,16 +90,24 @@ public ActionResult UsunZKoszyka(int id)
 
             return RedirectToAction("Index");
         }
-        public PartialViewResult PodsumowanieKoszyka()
+        //public PartialViewResult PodsumowanieKoszyka()
+        //{
+        //    var koszyk = new Koszyk(_context, this.HttpContext);
+        //    int iloscBiletowWKoszyku = koszyk.GetIloscBiletow().Result;
+
+        //    ViewData["iloscBiletowWKoszyku"] = iloscBiletowWKoszyku;
+     
+        //    return PartialView("_PodsumowanieKoszyka", iloscBiletowWKoszyku);
+        //}
+        public ActionResult PodsumowanieKoszyka()
         {
             var koszyk = new Koszyk(_context, this.HttpContext);
             int iloscBiletowWKoszyku = koszyk.GetIloscBiletow().Result;
 
             ViewData["iloscBiletowWKoszyku"] = iloscBiletowWKoszyku;
-     
-            return PartialView("_PodsumowanieKoszyka", iloscBiletowWKoszyku);
+            @ViewBag.IloscBiletow = iloscBiletowWKoszyku;
+            return View();
         }
-
 
     }
 }

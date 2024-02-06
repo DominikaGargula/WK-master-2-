@@ -86,12 +86,12 @@
     <div class="row">
 
         <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-6 col-lg-7">
 
             <!-- Card Header - Dropdown -->
             <div class="card shadow mb-4 pl-4 pt-4">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h6 class="m-0 font-weight-bold text-primary">Promowane</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Top sprzedaż</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -103,24 +103,25 @@
                                         Nazwa
                                     </th>
                                     <th>
-
+                                        Lokalizacja
                                     </th>
                                     <th>
-
+                                        Ilość
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="admin-table-tbody">
-                                @foreach (var item in @ViewBag.Promowane)
+                                @foreach (var item in @ViewBag.TopSprzedaz)
                                 {
                                     <tr>
                                         <td>
-                                            @item.Wydarzenie.Nazwa
+                                            @item.NazwaWydarzenia
                                         </td>
                                         <td>
-                                            
+                                            @item.MiejsceWydarzenia, @item.NazwaMiejsca
                                         </td>
                                         <td>
+                                            @item.LacznaIlosc
                                         </td>
                                     </tr>
                                 }
@@ -136,7 +137,7 @@
         </div>
 
         <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5 d-flex">
+        <div class="col-xl-3 col-lg-5 d-flex">
             <div class="p-0 d-flex">
                 <div class="card shadow mb-4 text-center small pb-4">
                     <!-- Card Header - Dropdown -->
@@ -162,6 +163,20 @@
                                 <i class="fas fa-circle text-primary"></i> @ViewBag.Random.Nazwa
                             </span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary"> Bilety</h6>
+                </div>
+                <!-- Card Body -->
+
+                <div class="card-body">
+                    <div class="chart-pie mt-1 pt-4 pb-2">
+                        <canvas id="myPieChart1"></canvas>
                     </div>
                 </div>
             </div>
@@ -237,7 +252,7 @@
                                         Nazwa
                                     </th>
                                     <th>
-                                      Data
+                                        Data
                                     </th>
                                 </tr>
                             </thead>
@@ -250,7 +265,7 @@
                                         </td>
                                         <td>
                                             @item.DataUwtorzenia.ToString("yyyy-MM-dd")
-                                        </td>                       
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -266,3 +281,23 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('myPieChart1').getContext('2d');
+    var aktywne = parseInt('@ViewBag.WydarzenieAktywne');
+    var nieaktywne = parseInt('@ViewBag.WydarzenieNieAktywne');
+    var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['W sprzedaży', 'Wyprzedane'],
+                datasets: [{
+                    data: [aktywne, nieaktywne],
+                    backgroundColor: ['#de753f', '#1cc88a'],
+                    borderColor: ['gray', 'gray'], // Dodano, aby zaznaczyć krawędzie
+                    borderWidth: 0.1 // Ustaw szerokość obramowania
+                }]
+            },
+    });
+});
+</script>
