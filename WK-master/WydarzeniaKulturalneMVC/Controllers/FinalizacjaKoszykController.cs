@@ -6,7 +6,7 @@ using System.Security.Claims;
 using WydarzeniaKulturalne.Data;
 using WydarzeniaKulturalne.Data.Entities;
 using WydarzeniaKulturalneMVC.Models;
-
+using WydarzeniaKulturalneMVC.ViewModel;
 namespace WydarzeniaKulturalneMVC.Controllers
 {
     [Authorize]
@@ -43,7 +43,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             var koszykElementy = _context.ElementKoszyka
                                  .Include(e => e.Bilety)
-                                 .Include(e=> e.Bilety.Wydarzenie)
+                                 .Include(e => e.Bilety.Wydarzenie)
                                  .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka).ToList();
 
 
@@ -60,7 +60,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 UzytkownikId = uzytkownikId, // Ustawienie UzytkownikId
                 OrderDate = DateTime.Now,
                 Suma = sumaZamowienia
-                // ... inne pola zamówienia
+
             };
 
             if (string.Equals(kodPromocyjny, kodPromocyjny, StringComparison.OrdinalIgnoreCase) == false)
@@ -78,7 +78,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 // Pobierz elementy koszyka dla zalogowanego użytkownika
                 var loggedInUserCartItems = _context.ElementKoszyka
                         .Where(c => c.IdSesjiKoszyka == idSesjiKoszyka)
-                     
+
                         .Include(c => c.Bilety)
                         .Include(c => c.Bilety.Wydarzenie)
                         .ToList();
@@ -91,12 +91,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
                         IdZamowienie = order.IdZamowienie,
                         IdBilet = cartItem.IdBilet,
                         Ilosc = cartItem.Ilosc,
-                        Cena = cartItem.Bilety.Wydarzenie.Cena // Uzupełnij odpowiednią właściwość zależnie od Twojego modelu
-                                                               // ... inne pola szczegółów zamówienia
+                        Cena = cartItem.Bilety.Wydarzenie.Cena
                     };
                     _context.ZamowienieSzczegoly.Add(szczegolZamowienia);
-
-
 
                 }
 
@@ -108,132 +105,60 @@ namespace WydarzeniaKulturalneMVC.Controllers
             }
             catch (Exception ex)
             {
-                // Logowanie błędu - zależnie od systemu logowania
-                // _logger.LogError("Błąd przy zapisie zamówienia: ", ex);
 
                 ViewBag.ErrorMessage = "Wystąpił problem podczas przetwarzania zamówienia. Spróbuj ponownie.";
                 return View(zamowienie);
             }
 
-            //return RedirectToAction("Complete", new { id = order.IdZamowienie });
-            return View("Zakoncz");
+            return RedirectToAction("Zakoncz", new { id = order.IdZamowienie });
 
         }
 
         public IActionResult Zakoncz(int id)
         {
-            // Pobierz zamówienie z identyfikatorem id z bazy danych
-            var zamowienie = _context.Zamowienie
-                .Include(z => z.ZamowienieSzczegolu)
-                .FirstOrDefault(z => z.IdZamowienie == id);
+            return View(id);
 
-            // Sprawdź, czy zamówienie istnieje i czy należy do aktualnie zalogowanego użytkownika
-            bool isValid = zamowienie != null &&
-                           zamowienie.Email == User.Identity.Name;
-
-            if (isValid)
-            {
-                return View(zamowienie);
-            }
-            else
-            {
-                return View("Error");
-            }
         }
-        //[HttpPost]
-        //public IActionResult Platnosc(Zamowienie zamowienie, string kodPromocyjny)
-        //{
-        //    int uzytkownikId = PobierzIdUzytkownika();
-        //    if (uzytkownikId == 0)
-        //    {
-        //        // Możesz dodać obsługę błędu, np. przekierowanie na stronę logowania
-        //        return View("Error", new ErrorViewModel { RequestId = "UserIDNotFound" });
-        //    }
+        public IActionResult ListaSzczegolowZamowienPoEmail()
+        {
+            var userEmail = User.Identity.Name; // Pobranie e-maila zalogowanego użytkownika
 
-        //    Zamowienie order = StworzZamowienie(zamowienie, uzytkownikId);
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                // Użytkownik niezalogowany lub brak e-maila
+                // Można zwrócić błąd lub pustą listę w zależności od wymagań aplikacji
+                return View(new List<ZamowienieSzczegoly>());
+            }
 
-        //    if (!SprawdzKodPromocyjny(kodPromocyjny))
-        //    {
-        //        ViewBag.ErrorMessage = "Nieprawidłowy kod promocyjny.";
-        //        return View(zamowienie);
-        //    }
+            var zamowienieSzczegolyList = _context.ZamowienieSzczegoly
+             .Join(_context.Zamowienie,
+                 szczegol => szczegol.IdZamowienie,
+                 zamowienie => zamowienie.IdZamowienie,
+                 (szczegol, zamowienie) => new { Szczegol = szczegol, Zamowienie = zamowienie })
+             .Join(_context.Bilety,
+                 szczegolZamowienie => szczegolZamowienie.Szczegol.IdBilet,
+                 bilet => bilet.Id,
+                 (szczegolZamowienie, bilet) => new { SzczegolZamowienie = szczegolZamowienie, Bilet = bilet })
+             .Where(x => x.SzczegolZamowienie.Zamowienie.Email == userEmail)
+             .OrderByDescending(x => x.SzczegolZamowienie.Szczegol.IdZamowienie)
+             .Select(x => new
+             {
+                 IdZamowienieSzczegoly = x.SzczegolZamowienie.Szczegol.IdZamowienieSzczegoly,
+                 IdZamowienie = x.SzczegolZamowienie.Szczegol.IdZamowienie,
+                 IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
+                 Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
+                 Cena = x.SzczegolZamowienie.Szczegol.Cena,
+                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, // Zakładam, że właściwość Nazwa jest dostępna bezpośrednio w Bilety
+                 DataWydarzenia = x.Bilet.DataWydarzenia,
+                 ZdjecieUrl=x.Bilet.Wydarzenie.ZdjecieUrl,
+                 Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
+                 NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca// Dodane założenie, że DataWydarzenia jest dostępna w Bilety
+             })
+             .ToList();
 
-        //    try
-        //    {
-        //        _context.Zamowienie.Add(order);
-        //        _context.SaveChanges();
-
-        //        var loggedInUserCartItems = PobierzElementyKoszyka();
-        //        PrzypiszElementyKoszykaDoZamowienia(loggedInUserCartItems, order);
-
-        //        WyczyscKoszyk(loggedInUserCartItems);
-
-        //        // Tutaj możesz dodać logikę przekierowania po pomyślnej płatności
-        //        return RedirectToAction("Zakoncz", new { id = order.IdZamowienie });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Logowanie błędu i obsługa
-        //        ViewBag.ErrorMessage = "Wystąpił błąd podczas przetwarzania zamówienia. Spróbuj ponownie.";
-        //        return View("Error", new ErrorViewModel { RequestId = ex.Message });
-        //    }
-        //}
-        //private int PobierzIdUzytkownika()
-        //{
-        //    var uzytkownikIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        //    if (uzytkownikIdClaim != null && int.TryParse(uzytkownikIdClaim, out var parsedId))
-        //    {
-        //        return parsedId;
-        //    }
-
-        //    return 0; // lub inna wartość, wskazująca na błąd
-        //}
-        //private Zamowienie StworzZamowienie(Zamowienie zamowienie, int uzytkownikId)
-        //{
-        //    return new Zamowienie
-        //    {
-        //        Imie = zamowienie.Imie,
-        //        Nazwisko = zamowienie.Nazwisko,
-        //        Email = User.Identity.Name,
-        //        UzytkownikId = uzytkownikId,
-        //        OrderDate = DateTime.Now,
-        //        // ... inne pola zamówienia
-        //    };
-        //}
-        //private bool SprawdzKodPromocyjny(string kodPromocyjny)
-        //{
-        //    string prawidlowyKodPromocyjny = "WSB"; // Zastąp właściwym kodem
-        //    return string.Equals(kodPromocyjny, prawidlowyKodPromocyjny, StringComparison.OrdinalIgnoreCase);
-        //}
-        //private List<ElementKoszyka> PobierzElementyKoszyka()
-        //{
-        //    return _context.ElementKoszyka
-        //        .Where(c => c.IdSesjiKoszyka == User.Identity.Name)
-        //        .Include(c => c.Bilety)
-        //        .Include(c => c.Bilety.Wydarzenie)
-        //        .ToList();
-        //}
-        //private void PrzypiszElementyKoszykaDoZamowienia(List<ElementKoszyka> koszyk, Zamowienie zamowienie)
-        //{
-        //    foreach (var item in koszyk)
-        //    {
-        //        var szczegolyZamowienia = new ZamowienieSzczegoly
-        //        {
-        //            IdZamowienie = zamowienie.IdZamowienie,
-        //            IdBilet = item.IdBilet,
-        //            Ilosc = item.Ilosc,
-        //            Cena = item.Bilety.Wydarzenie.Cena
-        //            // ... inne pola szczegółów zamówienia
-        //        };
-        //        _context.ZamowienieSzczegoly.Add(szczegolyZamowienia);
-        //    }
-        //}
-
-        //private void WyczyscKoszyk(List<ElementKoszyka> koszyk)
-        //{
-        //    _context.ElementKoszyka.RemoveRange(koszyk);
-        //    _context.SaveChanges();
-        //}
+            ViewBag.bilety = zamowienieSzczegolyList;
+            return View(zamowienieSzczegolyList);
+        }
 
     }
 }

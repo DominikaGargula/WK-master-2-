@@ -19,6 +19,7 @@ namespace WydarzeniaKulturalne.Data.Entities
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Cena { get; set; } //UnitPrice
-    
+        public virtual Bilety? Bilet { get; set; }
+        public virtual Zamowienie? Zamowienie { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WydarzeniaKulturalne.Data;
 
@@ -11,9 +12,11 @@ using WydarzeniaKulturalne.Data;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     [DbContext(typeof(WydarzeniaKulturalneContext))]
-    partial class WydarzeniaKulturalneContextModelSnapshot : ModelSnapshot
+    [Migration("20240205194344_init53")]
+    partial class init53
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -404,13 +407,11 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .WithMany()
                         .HasForeignKey("BiletId");
 
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", "Zamowienie")
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", null)
                         .WithMany("ZamowienieSzczegolu")
                         .HasForeignKey("ZamowienieIdZamowienie");
 
                     b.Navigation("Bilet");
-
-                    b.Navigation("Zamowienie");
                 });
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.KategoriaWydarzenia", b =>

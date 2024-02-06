@@ -32,5 +32,6 @@ namespace WydarzeniaKulturalne.Data.Entities
 
         [Display(Name = "Czy dostępne?")]
         public bool CzyDostepne { get; set; }
+
     }
 }

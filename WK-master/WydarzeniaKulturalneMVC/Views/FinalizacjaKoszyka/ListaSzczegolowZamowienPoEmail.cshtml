@@ -1,0 +1,80 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Any())
+{
+   
+    var groupedOrders = Model.GroupBy(x => x.IdZamowienie).OrderByDescending(g => g.Key);
+    foreach (var group in groupedOrders)
+    {
+        decimal totalSum = 0;
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-12">
+                    <div class="card-shop">
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                <div class="col-lg-12">
+                                    <div class="p-5">
+                                        <h5>Zamówienie nr: @group.Key</h5>                                 
+                                        @foreach (var item in group)
+                                        {
+                                            var suma = item.Ilosc * item.Cena;
+                                            totalSum += suma;
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                <div class="col-md-2 col-lg-2 col-xl-2 mt-2">
+                                                    @if (string.IsNullOrEmpty(@item.ZdjecieUrl))
+                                                    {
+                                                        <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.IdBilet">
+                                                            <img src="~/Zdjecia/noimage.png" class="img-fluid rounded-3" />
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.IdBilet">
+                                                            <img src="@item.ZdjecieUrl" class="img-fluid rounded-3" />
+                                                        </a>
+                                                    }
+
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <h6 class="text-muted">@item.NazwaBiletu</h6>
+                                                    <h6 class="text-black mt-2 small">@item.DataWydarzenia.ToString("dd/MM/yyyy")</h6>
+                                                    <h6 class="text-black mt-2 small">godz. @item.DataWydarzenia.ToString("hh:mm")</h6>
+                                                    <h6 class="text-black mt-2 small">@item.NazwaLokalizacji, @item.Miejscowosc </h6>
+
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                    Ilość: @item.Ilosc
+                                                </div>
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <h6 class="mb-0">@suma.ToString("C")</h6>
+                                                </div>
+                                                
+                                            </div>
+                                        }
+                                        <div class="d-flex justify-content-end m-5 mb-0">
+                                            <div class="text-right">
+                                                <h6 class="text-muted">Podsumowanie: @totalSum.ToString("C")</h6>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    }
+}
+else
+{
+    <p>Nie znaleziono zakupionych biletów.</p>
+} 

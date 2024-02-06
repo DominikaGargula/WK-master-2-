@@ -52,6 +52,21 @@ public class HomeController : Controller
     .ToList();
 
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
+        var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                     join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Lokalizacja.Miejscowosc } into grupowaneBilety
+                     select new
+                     {
+                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa, // Usunięto błąd w ścieżce dostępu
+                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc, // Usunięto błąd w ścieżce dostępu
+                         LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
+                     })
+                    .OrderByDescending(v => v.LacznaIlosc)
+                    .ToList();
+
+
+        ViewBag.TopSprzedaz = wynik;
+
 
         return View();
     }
