@@ -15,7 +15,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+          rel="stylesheet" type='text/css'>
     <!-- MDB -->
     <link href="~/adminPanel/css/sb-admin-2.min.css" rel="stylesheet">
     <!--TinyMCE-->
@@ -102,6 +103,7 @@
     input[type=checkbox] {
         accent-color: #de753f;
     }
+
     .sidebar-dark .nav-item .nav-link i {
         color: #ffffff;
     }
@@ -239,7 +241,6 @@
         width: 7rem;
     }
 
-    
 </style>
 
 <body id="page-top">
@@ -324,8 +325,15 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="SpecjalnyTag" asp-action="Index">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-bookmark"></i>
                     <span>SpecjalnyTag</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="FinalizacjaKoszyka" asp-action="StatystykaSprzedazy">
+                    <i class="fa fa-chart-area"></i>
+                    <span>Statystyka sprzedaży</span>
                 </a>
             </li>
 
@@ -427,7 +435,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/adminPanel/js/sb-admin-2.min.js"></script>
-  
+
     <!-- Page level plugins -->
     <script src="~/adminPanel/vendor/chart.js/Chart.min.js"></script>
 

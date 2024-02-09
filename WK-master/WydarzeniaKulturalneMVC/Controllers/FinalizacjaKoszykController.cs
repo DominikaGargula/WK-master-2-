@@ -14,7 +14,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
     {
 
         private readonly WydarzeniaKulturalneContext _context;
-        string kodPromocyjny = "WSB";
+        string kodPromocyjny;
         private Koszyk _koszyk;
 
         public FinalizacjaKoszykaController(WydarzeniaKulturalneContext context, IHttpContextAccessor httpContextAccessor)
@@ -31,7 +31,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Platnosc(Zamowienie zamowienie, string kodPromocyjny)
+        public IActionResult Platnosc(Zamowienie zamowienie, string kodPromocyjnyWpis)
         {
             var idSesjiKoszyka = _koszyk.IdSesjiKoszyka;
             int uzytkownikId = 0;
@@ -51,6 +51,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                                  .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka)
                                  .Sum(item => item.Bilety.Wydarzenie.Cena * item.Ilosc);
 
+
             var order = new Zamowienie
             {
 
@@ -62,10 +63,16 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 Suma = sumaZamowienia
 
             };
+            //if (!ModelState.IsValid)
+            //{
+            //    // Jeśli model nie przeszedł walidacji, zwróć ten sam widok z bieżącym modelem
+            //    return View(zamowienie);
+            //}
+            kodPromocyjny = "WSB";
 
-            if (string.Equals(kodPromocyjny, kodPromocyjny, StringComparison.OrdinalIgnoreCase) == false)
+            if (string.Equals(kodPromocyjny, kodPromocyjnyWpis, StringComparison.OrdinalIgnoreCase) == false)
             {
-                ViewBag.ErrorMessage = "Invalid promo code.";
+                TempData["ErrorMessagePlatnosc"] = "Błędny kod promocji.";
                 return View(order);
             }
 
@@ -150,7 +157,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                  Cena = x.SzczegolZamowienie.Szczegol.Cena,
                  NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, // Zakładam, że właściwość Nazwa jest dostępna bezpośrednio w Bilety
                  DataWydarzenia = x.Bilet.DataWydarzenia,
-                 ZdjecieUrl=x.Bilet.Wydarzenie.ZdjecieUrl,
+                 ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
                  Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
                  NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca// Dodane założenie, że DataWydarzenia jest dostępna w Bilety
              })
@@ -159,6 +166,30 @@ namespace WydarzeniaKulturalneMVC.Controllers
             ViewBag.bilety = zamowienieSzczegolyList;
             return View(zamowienieSzczegolyList);
         }
+
+        public IActionResult StatystykaSprzedazy(string Filtruj)
+        {     
+
+            var statystyka = _context.ZamowienieSzczegoly.Include(u => u.Bilet).ToList();
+
+            var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                         join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                         group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
+                         select new
+                         {
+                             NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
+                             ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, // Dodano dostęp do daty wydarzenia
+                             MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
+                             NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
+                             LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc),
+                             Zarobek = grupowaneBilety.Sum(gb => gb.Cena)
+                         })
+               .OrderByDescending(v => v.LacznaIlosc)
+               .ToList();
+            ViewBag.SprzedazBiletow = wynik;
+            return View();
+        }
+
 
     }
 }

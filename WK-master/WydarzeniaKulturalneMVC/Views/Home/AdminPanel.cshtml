@@ -34,7 +34,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Suma wydarzeń
+                               Aktywne wydarzenia
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaWydarzen </div>
                         </div>
@@ -52,9 +52,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Liczba kategorii
+                                Bilety sprzedane
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.LiczbaKategorii</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaBiletowSprzedanych</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-solid fa-list fa-2x  text-gray-300 "></i>
@@ -70,7 +70,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Suma biletów
+                               Suma biletów
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaBiletow</div>
                         </div>
@@ -175,7 +175,7 @@
                 <!-- Card Body -->
 
                 <div class="card-body">
-                    <div class="chart-pie mt-1 pt-4 pb-2">
+                    <div class="chart-pie mt-2 mb-5">
                         <canvas id="myPieChart1"></canvas>
                     </div>
                 </div>
@@ -283,21 +283,40 @@
 <!-- /.container-fluid -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var ctx = document.getElementById('myPieChart1').getContext('2d');
-    var aktywne = parseInt('@ViewBag.WydarzenieAktywne');
-    var nieaktywne = parseInt('@ViewBag.WydarzenieNieAktywne');
-    var myPieChart = new Chart(ctx, {
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('myPieChart1').getContext('2d');
+        var aktywne = parseInt('@ViewBag.WydarzenieAktywne');
+        var nieaktywne = parseInt('@ViewBag.WydarzenieNieAktywne');
+        var myPieChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['W sprzedaży', 'Wyprzedane'],
                 datasets: [{
                     data: [aktywne, nieaktywne],
-                    backgroundColor: ['#de753f', '#1cc88a'],
-                    borderColor: ['gray', 'gray'], // Dodano, aby zaznaczyć krawędzie
-                    borderWidth: 0.1 // Ustaw szerokość obramowania
+                    backgroundColor: ['#de753f', '#383e57', '#36b9cc'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    borderColor: '#dddfeb'
                 }]
             },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 5,
+                    yPadding: 5,
+                    displayColors: false,
+                    caretPadding: 1,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 80,
+            },
+        });
     });
-});
+
 </script>

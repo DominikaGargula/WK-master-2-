@@ -1,5 +1,4 @@
-﻿
-@model WydarzeniaKulturalne.Data.Entities.Uzytkownik
+﻿@model WydarzeniaKulturalne.Data.Entities.Uzytkownik
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,7 +36,7 @@
                         <div class="form-group form-check mb-4">
                             <input type="checkbox" class="form-check-input" id="akceptacjaWarunkow" name="akceptacjaWarunkow" />
                             <label class="form-check-label" for="akceptacjaWarunkow">
-                                Rejestrując się potwierdzam, że przeczytał*m 
+                                Rejestrując się potwierdzam, że przeczytał*m
                                 <br />i akceptuję warunki korzystania z serwisu
                             </label>
                             <p class="text-danger">@ViewBag.AkceptacjaErrorMessage</p>
@@ -53,7 +52,7 @@
 </section>
 
 
-                            <script>
+<script>
     function sprawdzWarunki() {
         // Pobierz referencję do pola wyboru
         var checkbox = document.getElementById('akceptacjaWarunkow');
@@ -64,7 +63,6 @@
             alert("Musisz zaakceptować warunki korzystania przed rejestracją.");
             return false;
         }
-
         // Jeśli pole wyboru zostało zaznaczone, kontynuuj wysyłanie formularza
         return true;
     }

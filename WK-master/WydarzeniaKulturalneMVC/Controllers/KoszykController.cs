@@ -40,8 +40,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             var bilet = await _context.Bilety.FindAsync(id);
             if (bilet == null)
             {
-                // Jeśli bilet nie istnieje, możesz obsłużyć to odpowiednim komunikatem lub przekierowaniem
-                // W tym przypadku zakładam, że przekierowujesz z powrotem do widoku z błędem
                 TempData["Error"] = "Bilet o podanym identyfikatorze nie został znaleziony.";
                 return RedirectToAction("Index", "Home"); // Zmienić na odpowiednią akcję i kontroler
             }
@@ -90,15 +88,7 @@ public ActionResult UsunZKoszyka(int id)
 
             return RedirectToAction("Index");
         }
-        //public PartialViewResult PodsumowanieKoszyka()
-        //{
-        //    var koszyk = new Koszyk(_context, this.HttpContext);
-        //    int iloscBiletowWKoszyku = koszyk.GetIloscBiletow().Result;
 
-        //    ViewData["iloscBiletowWKoszyku"] = iloscBiletowWKoszyku;
-     
-        //    return PartialView("_PodsumowanieKoszyka", iloscBiletowWKoszyku);
-        //}
         public ActionResult PodsumowanieKoszyka()
         {
             var koszyk = new Koszyk(_context, this.HttpContext);
