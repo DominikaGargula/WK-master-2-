@@ -26,9 +26,9 @@
                     </div>
                 </div>
             </form>
-            <a asp-action="Create" title="Dodaj" class="d-sm-inline-block btn btn-primary shadow-sm  mr-md-3 admin-btn">
+           @* <a asp-action="Create" title="Dodaj" class="d-sm-inline-block btn btn-primary shadow-sm  mr-md-3 admin-btn">
                 <i class="fas fa-plus-square fa-sm text-white-50"></i> Dodaj
-            </a>
+            </a>*@
         </div>
     </div>
     <div class="card-body">
@@ -72,10 +72,10 @@
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id"
+                          @*      <a asp-action="Edit" asp-route-id="@item.Id"
                                class="btn btn-info btn-circle btn-sm m-1" title="Edytuj">
                                     <i class="fas fa-pencil-alt"> </i>
-                                </a>
+                                </a>*@
                                 <a asp-action="Delete" asp-route-id="@item.Id"
                                class="btn btn-danger btn-circle btn-sm delete  m-1" title="Usuń">
                                     <i class="fa fa-times" aria-hidden="true"></i>

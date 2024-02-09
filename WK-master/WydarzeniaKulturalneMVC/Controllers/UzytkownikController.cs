@@ -215,6 +215,66 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             this.HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik);
         }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var uzytkownik = await _context.Uzytkownik.FindAsync(id);
+            if (uzytkownik == null)
+            {
+                return NotFound();
+            }
+            return View(uzytkownik);
+        }
+
+        // UPDATE: POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Imie,Nazwisko,Haslo,Email,RolaId")] Uzytkownik uzytkownik)
+        {
+            if (id != uzytkownik.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(uzytkownik);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(uzytkownik);
+        }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var uzytkownik = await _context.Uzytkownik
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (uzytkownik == null)
+            {
+                return NotFound();
+            }
+
+            return View(uzytkownik);
+        }
+
+        // DELETE: POST
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var uzytkownik = await _context.Uzytkownik.FindAsync(id);
+            _context.Uzytkownik.Remove(uzytkownik);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
    
 

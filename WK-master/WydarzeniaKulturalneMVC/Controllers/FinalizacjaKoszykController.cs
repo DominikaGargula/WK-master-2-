@@ -9,7 +9,7 @@ using WydarzeniaKulturalneMVC.Models;
 using WydarzeniaKulturalneMVC.ViewModel;
 namespace WydarzeniaKulturalneMVC.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class FinalizacjaKoszykaController : Controller
     {
 
@@ -22,9 +22,13 @@ namespace WydarzeniaKulturalneMVC.Controllers
             _koszyk = new Koszyk(context, httpContextAccessor.HttpContext);
             _context = context;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return _context.ZamowienieSzczegoly != null ?
+                          View(await _context.ZamowienieSzczegoly.ToListAsync()) :
+                          Problem("Entity set 'WydarzeniaKulturalneMVCContext.ZamowienieSzczegoly'  is null.");
+           
         }
         public IActionResult Platnosc()
         {
@@ -63,11 +67,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 Suma = sumaZamowienia
 
             };
-            //if (!ModelState.IsValid)
-            //{
-            //    // Jeśli model nie przeszedł walidacji, zwróć ten sam widok z bieżącym modelem
-            //    return View(zamowienie);
-            //}
+
             kodPromocyjny = "WSB";
 
             if (string.Equals(kodPromocyjny, kodPromocyjnyWpis, StringComparison.OrdinalIgnoreCase) == false)
