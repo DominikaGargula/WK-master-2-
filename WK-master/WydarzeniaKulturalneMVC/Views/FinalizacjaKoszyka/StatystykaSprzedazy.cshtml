@@ -1,10 +1,8 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Panel administratora";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     decimal totalSum = 0;
 }
-
 
 <div class="card shadow m-4 p-2">
     <div class="card-header py-3">
@@ -32,17 +30,13 @@
                         <th class="text-right align-middle">
                             Zysk ze sprzedaży
                         </th>
-                        @*                        <th class="th-action">
-                        Akcja
-                        </th>*@
-
                     </tr>
                 </thead>
                 <tbody class="admin-table-tbody">
                     @foreach (var item in @ViewBag.SprzedazBiletow)
                     {
                         var suma = item.Zarobek;
-                                            totalSum += suma;
+                        totalSum += suma;
                         <tr>
                             <td>
                                 @item.NazwaWydarzenia
@@ -59,8 +53,9 @@
                         </tr>
                     }
                 </tbody>
-                <h6 class="text-right mb-5" >Łączna kwota ze sprzedaży biletów: @totalSum.ToString("C")</h6>
+                <h6 class="text-right mb-5">Łączna kwota ze sprzedaży biletów: @totalSum.ToString("C")</h6>
             </table>
         </div>
     </div>
 </div>
+

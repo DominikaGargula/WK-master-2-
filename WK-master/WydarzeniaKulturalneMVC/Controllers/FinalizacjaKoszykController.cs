@@ -25,10 +25,48 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return _context.ZamowienieSzczegoly != null ?
-                          View(await _context.ZamowienieSzczegoly.ToListAsync()) :
-                          Problem("Entity set 'WydarzeniaKulturalneMVCContext.ZamowienieSzczegoly'  is null.");
-           
+            //var grupowaneSzczegoly = await _context.ZamowienieSzczegoly
+            //.Include(sz => sz.Zamowienie) // Opcjonalne: Dołączenie encji Zamowienie, jeśli chcesz używać danych zamówienia
+            //.Include(sz => sz.Bilet) // Opcjonalne: Dołączenie encji Bilet, jeśli chcesz używać danych biletu
+            //.GroupBy(sz => sz.IdZamowienie)
+            //.Select(grupa => new
+            //{
+            //    IdZamowienie = grupa.Key,
+            //    Szczegoly = grupa.ToList()
+            //})
+            //.ToListAsync();
+
+            var zamowienieSzczegolyList = _context.ZamowienieSzczegoly
+             .Join(_context.Zamowienie,
+                 szczegol => szczegol.IdZamowienie,
+                 zamowienie => zamowienie.IdZamowienie,
+                 (szczegol, zamowienie) => new { Szczegol = szczegol, Zamowienie = zamowienie })
+             .Join(_context.Bilety,
+                 szczegolZamowienie => szczegolZamowienie.Szczegol.IdBilet,
+                 bilet => bilet.Id,
+                 (szczegolZamowienie, bilet) => new { SzczegolZamowienie = szczegolZamowienie, Bilet = bilet })
+             .OrderByDescending(x => x.SzczegolZamowienie.Szczegol.IdZamowienie)
+             .Select(x => new
+             {
+                 IdZamowienieSzczegoly = x.SzczegolZamowienie.Szczegol.IdZamowienieSzczegoly,
+                 IdZamowienie = x.SzczegolZamowienie.Szczegol.IdZamowienie,
+                 IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
+                 Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
+                 Cena = x.SzczegolZamowienie.Szczegol.Cena,
+                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, // Zakładam, że właściwość Nazwa jest dostępna bezpośrednio w Bilety
+                 DataWydarzenia = x.Bilet.DataWydarzenia,
+                 ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
+                 Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
+                 NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca// Dodane założenie, że DataWydarzenia jest dostępna w Bilety
+             })
+             .ToList();
+
+            ViewBag.SprzedaneBilety = zamowienieSzczegolyList;
+
+
+
+            return View(zamowienieSzczegolyList);
+
         }
         public IActionResult Platnosc()
         {
@@ -155,11 +193,11 @@ namespace WydarzeniaKulturalneMVC.Controllers
                  IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
                  Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
                  Cena = x.SzczegolZamowienie.Szczegol.Cena,
-                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, // Zakładam, że właściwość Nazwa jest dostępna bezpośrednio w Bilety
+                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, 
                  DataWydarzenia = x.Bilet.DataWydarzenia,
                  ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
                  Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
-                 NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca// Dodane założenie, że DataWydarzenia jest dostępna w Bilety
+                 NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca
              })
              .ToList();
 
@@ -168,7 +206,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
 
         public IActionResult StatystykaSprzedazy(string Filtruj)
-        {     
+        {
 
             var statystyka = _context.ZamowienieSzczegoly.Include(u => u.Bilet).ToList();
 
@@ -178,7 +216,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                          select new
                          {
                              NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
-                             ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, // Dodano dostęp do daty wydarzenia
+                             ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, 
                              MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
                              NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
                              LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc),
