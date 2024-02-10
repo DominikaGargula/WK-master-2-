@@ -23,51 +23,47 @@ namespace WydarzeniaKulturalneMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Filtruj)
         {
-            //var grupowaneSzczegoly = await _context.ZamowienieSzczegoly
-            //.Include(sz => sz.Zamowienie) // Opcjonalne: Dołączenie encji Zamowienie, jeśli chcesz używać danych zamówienia
-            //.Include(sz => sz.Bilet) // Opcjonalne: Dołączenie encji Bilet, jeśli chcesz używać danych biletu
-            //.GroupBy(sz => sz.IdZamowienie)
-            //.Select(grupa => new
-            //{
-            //    IdZamowienie = grupa.Key,
-            //    Szczegoly = grupa.ToList()
-            //})
-            //.ToListAsync();
+            
+            var zamowienieSzczegolyQuery = _context.ZamowienieSzczegoly
+                 .Join(_context.Zamowienie,
+                     szczegol => szczegol.IdZamowienie,
+                     zamowienie => zamowienie.IdZamowienie,
+                     (szczegol, zamowienie) => new { Szczegol = szczegol, Zamowienie = zamowienie })
+                 .Join(_context.Bilety,
+                     szczegolZamowienie => szczegolZamowienie.Szczegol.IdBilet,
+                     bilet => bilet.Id,
+                     (szczegolZamowienie, bilet) => new { SzczegolZamowienie = szczegolZamowienie, Bilet = bilet })
+                 .OrderByDescending(x => x.SzczegolZamowienie.Szczegol.IdZamowienie)
+                 .Select(x => new
+                 {
+                     IdZamowienieSzczegoly = x.SzczegolZamowienie.Szczegol.IdZamowienieSzczegoly,
+                     IdZamowienie = x.SzczegolZamowienie.Szczegol.IdZamowienie,
+                     IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
+                     Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
+                     Cena = x.SzczegolZamowienie.Szczegol.Cena,
+                     NazwaBiletu = x.Bilet.Wydarzenie.Nazwa,
+                     DataWydarzenia = x.Bilet.DataWydarzenia,
+                     ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
+                     Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
+                     NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca
+                 });
 
-            var zamowienieSzczegolyList = _context.ZamowienieSzczegoly
-             .Join(_context.Zamowienie,
-                 szczegol => szczegol.IdZamowienie,
-                 zamowienie => zamowienie.IdZamowienie,
-                 (szczegol, zamowienie) => new { Szczegol = szczegol, Zamowienie = zamowienie })
-             .Join(_context.Bilety,
-                 szczegolZamowienie => szczegolZamowienie.Szczegol.IdBilet,
-                 bilet => bilet.Id,
-                 (szczegolZamowienie, bilet) => new { SzczegolZamowienie = szczegolZamowienie, Bilet = bilet })
-             .OrderByDescending(x => x.SzczegolZamowienie.Szczegol.IdZamowienie)
-             .Select(x => new
-             {
-                 IdZamowienieSzczegoly = x.SzczegolZamowienie.Szczegol.IdZamowienieSzczegoly,
-                 IdZamowienie = x.SzczegolZamowienie.Szczegol.IdZamowienie,
-                 IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
-                 Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
-                 Cena = x.SzczegolZamowienie.Szczegol.Cena,
-                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, // Zakładam, że właściwość Nazwa jest dostępna bezpośrednio w Bilety
-                 DataWydarzenia = x.Bilet.DataWydarzenia,
-                 ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
-                 Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
-                 NazwaLokalizacji = x.Bilet.Lokalizacja.NazwaMiejsca// Dodane założenie, że DataWydarzenia jest dostępna w Bilety
-             })
-             .ToList();
+            if (!string.IsNullOrEmpty(Filtruj))
+            {
+                zamowienieSzczegolyQuery = zamowienieSzczegolyQuery
+                    .Where(x => x.IdZamowienie.ToString().Equals(Filtruj));
+            }
 
+            var zamowienieSzczegolyList = await zamowienieSzczegolyQuery.ToListAsync();
+
+            ViewBag.Filtruj = Filtruj;
             ViewBag.SprzedaneBilety = zamowienieSzczegolyList;
 
-
-
             return View(zamowienieSzczegolyList);
-
         }
+
         public IActionResult Platnosc()
         {
             return View();
