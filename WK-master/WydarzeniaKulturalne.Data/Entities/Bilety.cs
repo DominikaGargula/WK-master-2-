@@ -33,5 +33,8 @@ namespace WydarzeniaKulturalne.Data.Entities
         [Display(Name = "Czy dostępne?")]
         public bool CzyDostepne { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
+        [Required(ErrorMessage = "Marża jest wymagana")]
+        public decimal Marza { get; set; }
     }
 }

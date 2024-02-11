@@ -43,6 +43,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                      IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
                      Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
                      Cena = x.SzczegolZamowienie.Szczegol.Cena,
+                     Marza = x.Bilet.Marza,
                      NazwaBiletu = x.Bilet.Wydarzenie.Nazwa,
                      DataWydarzenia = x.Bilet.DataWydarzenia,
                      ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
@@ -189,6 +190,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                  IdBilet = x.SzczegolZamowienie.Szczegol.IdBilet,
                  Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
                  Cena = x.SzczegolZamowienie.Szczegol.Cena,
+                 Marza = x.Bilet.Marza,
                  NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, 
                  DataWydarzenia = x.Bilet.DataWydarzenia,
                  ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
@@ -205,21 +207,21 @@ namespace WydarzeniaKulturalneMVC.Controllers
         {
 
             var statystyka = _context.ZamowienieSzczegoly.Include(u => u.Bilet).ToList();
-
             var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
                          join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
-                         group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
+                         group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca, bilet.Marza } into grupowaneBilety
                          select new
                          {
                              NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
-                             ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, 
+                             ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl,
                              MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
                              NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
                              LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc),
-                             Zarobek = grupowaneBilety.Sum(gb => gb.Cena)
+                             ZyskZMarzy = grupowaneBilety.Key.Marza,
+                             Zarobek = grupowaneBilety.Sum(gb => gb.Ilosc * (gb.Cena + grupowaneBilety.Key.Marza)) // Poprawka tutaj
                          })
-               .OrderByDescending(v => v.LacznaIlosc)
-               .ToList();
+            .OrderByDescending(v => v.LacznaIlosc)
+            .ToList();
             ViewBag.SprzedazBiletow = wynik;
             return View();
         }

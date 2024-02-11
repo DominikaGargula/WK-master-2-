@@ -130,6 +130,7 @@
                     <tbody>
                         @foreach (var bilet in ViewBag.InformacjeOWydarzeniu1)
                         {
+                            var sumaCena = bilet.Wydarzenie.Cena + bilet.Marza;
                             <tr class="bg-details">
                                 <td class="pt-3 mt-1">
                                     @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br />
@@ -146,7 +147,7 @@
                                 <td class="pt-3 mt-1">
                                     Dotępne bilety: @bilet.IloscBiletow
                                     <br>
-                                    Cena: @bilet.Wydarzenie.Cena.ToString("C")
+                                    Cena: @sumaCena.ToString("C")
                                 </td>
                                 @if (@bilet.IloscBiletow > 0)
                                 {

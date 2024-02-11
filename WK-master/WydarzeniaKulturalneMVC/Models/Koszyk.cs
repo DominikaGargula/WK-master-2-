@@ -163,7 +163,7 @@ namespace WydarzeniaKulturalneMVC.Models
             var suma = await (
                 from element in _context.ElementKoszyka
                 where element.IdSesjiKoszyka == this.IdSesjiKoszyka
-                select (decimal?)element.Ilosc * element.Bilety.Wydarzenie.Cena
+                select (decimal?)element.Ilosc * (element.Bilety.Wydarzenie.Cena + element.Bilety.Marza)
             ).SumAsync() ?? decimal.Zero;
 
             return suma;

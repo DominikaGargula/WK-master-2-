@@ -47,7 +47,7 @@
                     <tbody class="admin-table-tbody">
                         @foreach (var group in groupedOrders)
                         {
-                            decimal totalSum = group.Sum(item => (decimal)(item.Ilosc * item.Cena));
+                            decimal totalSum = group.Sum(item => (decimal)(item.Ilosc * (item.Cena+ item.Marza)));
                             <tr data-toggle="collapse" data-target="#order-details-@group.Key" class="accordion-toggle">
                                 <td>@group.Key</td>                               
                                 <td class="text-left align-middle ">
@@ -71,12 +71,13 @@
                                             <tbody>
                                                 @foreach (var item in group)
                                                 {
+                                                    var suma = item.Cena + item.Marza;
                                                     <tr>
                                                         <td>@item.NazwaBiletu</td>
                                                         <td>@item.DataWydarzenia.ToString("dd/MM/yyyy")</td>
                                                         <td>@item.NazwaLokalizacji, @item.Miejscowosc</td>
                                                         <td>@item.Ilosc</td>
-                                                        <td class="text-center align-middle">@item.Cena.ToString("c")</td>   
+                                                        <td class="text-center align-middle">@suma.ToString("c")</td>   
                                                     </tr>
                                                 }
                                             </tbody>
