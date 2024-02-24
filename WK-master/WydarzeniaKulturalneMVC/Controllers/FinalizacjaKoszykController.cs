@@ -25,7 +25,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
         public async Task<IActionResult> Index(string Filtruj)
         {
-            
+
             var zamowienieSzczegolyQuery = _context.ZamowienieSzczegoly
                  .Join(_context.Zamowienie,
                      szczegol => szczegol.IdZamowienie,
@@ -67,6 +67,14 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
         public IActionResult Platnosc()
         {
+            var idSesjiKoszyka = _koszyk.IdSesjiKoszyka;
+            decimal sumaZamowienia = _context.ElementKoszyka
+                                  .Include(b => b.Bilety)
+                                 .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka)
+                                 .Sum(item => (item.Bilety.Wydarzenie.Cena + ((item.Bilety.Wydarzenie.Cena * item.Bilety.Marza)) / 100) * item.Ilosc);
+
+            ViewBag.SumaZamowienia = sumaZamowienia;
+
             return View();
         }
         [HttpPost]
@@ -85,12 +93,12 @@ namespace WydarzeniaKulturalneMVC.Controllers
                                  .Include(e => e.Bilety.Wydarzenie)
                                  .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka).ToList();
 
-
             decimal sumaZamowienia = _context.ElementKoszyka
-                                 .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka)
-                                 .Sum(item => item.Bilety.Wydarzenie.Cena * item.Ilosc);
+                                            .Include(b => b.Bilety)
+                                           .Where(e => e.IdSesjiKoszyka == idSesjiKoszyka)
+                                           .Sum(item => (item.Bilety.Wydarzenie.Cena + item.Bilety.Marza) * item.Ilosc);
 
-
+            ViewBag.SumaZamowienia = sumaZamowienia;
             var order = new Zamowienie
             {
 
@@ -107,10 +115,9 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
             if (string.Equals(kodPromocyjny, kodPromocyjnyWpis, StringComparison.OrdinalIgnoreCase) == false)
             {
-                TempData["ErrorMessagePlatnosc"] = "Błędny kod promocji.";
+                TempData["ErrorMessagePlatnosc"] = "Błędny kod promocji. Jedyny właściwy to: WSB";
                 return View(order);
             }
-
             try
             {
                 // Zapisz zamówienie
@@ -118,15 +125,14 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 _context.SaveChanges();
 
                 // Pobierz elementy koszyka dla zalogowanego użytkownika
-                var loggedInUserCartItems = _context.ElementKoszyka
+                var zalogowanyUzytkownikKoszyk = _context.ElementKoszyka
                         .Where(c => c.IdSesjiKoszyka == idSesjiKoszyka)
-
                         .Include(c => c.Bilety)
                         .Include(c => c.Bilety.Wydarzenie)
                         .ToList();
 
                 // Przypisz elementy koszyka do zamówienia
-                foreach (var cartItem in loggedInUserCartItems)
+                foreach (var cartItem in zalogowanyUzytkownikKoszyk)
                 {
                     var szczegolZamowienia = new ZamowienieSzczegoly
                     {
@@ -139,10 +145,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
                 }
 
-                // Wyczyść koszyk użytkownika
-
-
-                _context.ElementKoszyka.RemoveRange(loggedInUserCartItems);
+                _context.ElementKoszyka.RemoveRange(zalogowanyUzytkownikKoszyk);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -163,12 +166,10 @@ namespace WydarzeniaKulturalneMVC.Controllers
         }
         public IActionResult ListaSzczegolowZamowienPoEmail()
         {
-            var userEmail = User.Identity.Name; // Pobranie e-maila zalogowanego użytkownika
+            var userEmail = User.Identity.Name;
 
             if (string.IsNullOrEmpty(userEmail))
             {
-                // Użytkownik niezalogowany lub brak e-maila
-                // Można zwrócić błąd lub pustą listę w zależności od wymagań aplikacji
                 return View(new List<ZamowienieSzczegoly>());
             }
 
@@ -191,7 +192,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
                  Ilosc = x.SzczegolZamowienie.Szczegol.Ilosc,
                  Cena = x.SzczegolZamowienie.Szczegol.Cena,
                  Marza = x.Bilet.Marza,
-                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa, 
+                 NazwaBiletu = x.Bilet.Wydarzenie.Nazwa,
                  DataWydarzenia = x.Bilet.DataWydarzenia,
                  ZdjecieUrl = x.Bilet.Wydarzenie.ZdjecieUrl,
                  Miejscowosc = x.Bilet.Lokalizacja.Miejscowosc,
@@ -199,16 +200,16 @@ namespace WydarzeniaKulturalneMVC.Controllers
              })
              .ToList();
 
-            ViewBag.bilety = zamowienieSzczegolyList;
             return View(zamowienieSzczegolyList);
         }
 
-        public IActionResult StatystykaSprzedazy(string Filtruj)
+        public IActionResult StatystykaSprzedazy(DateTime? dataWydarzeniaOd, DateTime? dataWydarzeniaDo)
         {
 
-            var statystyka = _context.ZamowienieSzczegoly.Include(u => u.Bilet).ToList();
+
             var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
                          join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                         join zamowienie in _context.Zamowienie on zamowienieSzczegoly.IdZamowienie equals zamowienie.IdZamowienie
                          group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca, bilet.Marza } into grupowaneBilety
                          select new
                          {
@@ -217,15 +218,39 @@ namespace WydarzeniaKulturalneMVC.Controllers
                              MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
                              NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
                              LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc),
-                             ZyskZMarzy = grupowaneBilety.Key.Marza,
-                             Zarobek = grupowaneBilety.Sum(gb => gb.Ilosc * (gb.Cena + grupowaneBilety.Key.Marza)) // Poprawka tutaj
+                             ZyskZMarzy = grupowaneBilety.Sum(gb => gb.Ilosc * gb.Cena * grupowaneBilety.Key.Marza / 100),
+                             Zarobek = grupowaneBilety.Sum(gb => gb.Ilosc * (gb.Cena + ((gb.Cena * grupowaneBilety.Key.Marza) / 100)))
                          })
+        .OrderByDescending(v => v.LacznaIlosc)
+        .ToList();
+            ViewBag.SprzedazBiletow = wynik;
+            if (dataWydarzeniaOd.HasValue || dataWydarzeniaDo.HasValue)
+            {
+                var koniecDniaDataDo = dataWydarzeniaDo?.AddDays(1).AddTicks(-1);
+                var wynikF = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                              join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                              join zamowienie in _context.Zamowienie on zamowienieSzczegoly.IdZamowienie equals zamowienie.IdZamowienie
+                              where (!dataWydarzeniaOd.HasValue || zamowienie.OrderDate >= dataWydarzeniaOd.Value) &&
+                            (!koniecDniaDataDo.HasValue || zamowienie.OrderDate <= koniecDniaDataDo.Value)
+                              group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca, bilet.Marza } into grupowaneBilety
+                              select new
+                              {
+                                  NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
+                                  ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl,
+                                  MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
+                                  NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
+                                  LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc),
+                                  ZyskZMarzy = grupowaneBilety.Sum(gb => gb.Ilosc * gb.Cena * grupowaneBilety.Key.Marza / 100),
+                                  Zarobek = grupowaneBilety.Sum(gb => gb.Ilosc * (gb.Cena + ((gb.Cena * grupowaneBilety.Key.Marza) / 100)))
+                              })
             .OrderByDescending(v => v.LacznaIlosc)
             .ToList();
-            ViewBag.SprzedazBiletow = wynik;
+                ViewBag.SprzedazBiletow = wynikF;
+                ViewBag.DataOd = dataWydarzeniaOd;
+                ViewBag.DataDo = dataWydarzeniaDo;
+                return View();
+            }
             return View();
         }
-
-
     }
 }

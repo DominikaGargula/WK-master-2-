@@ -130,7 +130,7 @@
                     <tbody>
                         @foreach (var bilet in ViewBag.InformacjeOWydarzeniu1)
                         {
-                            var sumaCena = bilet.Wydarzenie.Cena + bilet.Marza;
+                            var sumaCena = bilet.Wydarzenie.Cena+(bilet.Wydarzenie.Cena * bilet.Marza)/100;
                             <tr class="bg-details">
                                 <td class="pt-3 mt-1">
                                     @bilet.DataWydarzenia.ToString("yyyy-MM-dd") <br />

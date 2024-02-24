@@ -45,7 +45,8 @@
 
                                             @foreach (var item in Model.ElementyKoszyka)
                                             {
-                                                var sumaBilet = item.Bilety.Wydarzenie.Cena + item.Bilety.Marza;
+                                         
+                                                var sumaBilet = item.Bilety.Wydarzenie.Cena + (item.Bilety.Wydarzenie.Cena * item.Bilety.Marza)/100;
                                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                     <div class="col-md-2 col-lg-2 col-xl-2">
                                                         @if (string.IsNullOrEmpty(@item.Bilety?.Wydarzenie?.ZdjecieUrl))
@@ -113,26 +114,22 @@
                                                 <h6>  @Model.Razem.ToString("C")</h6>
                                             </div>
                                         </div>
-                                        @*      <div class="row ">
-                                        <div class="d-flex justify-content-between mb-4">
-                                        <div class="col-4 mt-2">
-                                        <h6 class="text-uppercase text-mude mb-3">Podaj kod</h6></div
-                                        <div class="col-8">
-                                        <div class="form-outline">
-                                        <input type="text" id="typeText" class="form-control" />
-                                        <label class="form-label" for="typeText"></label>
-                                        </div>
-                                        </div>
-                                        </div>
-                                        </div>  *@
-                                        <div class="col-12">
-                                            <a asp-controller="FinalizacjaKoszyka" asp-action="Platnosc" class="text-body">
-                                                <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
-                                                    Zapłać
-                                                </button>
 
-                                            </a>
-                                        </div>
+                                          @if (Model.ElementyKoszyka != null && Model.ElementyKoszyka.Any())
+                                        {
+                                            <div class="col-12">
+                                                <a asp-controller="FinalizacjaKoszyka" asp-action="Platnosc" class="text-body">
+                                                    <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
+                                                        Zapłać
+                                                    </button>
+
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            
+                                        }
                                     </div>
                                 </div>
                             </div>

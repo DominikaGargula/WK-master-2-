@@ -143,9 +143,12 @@
                                         {
                                             <tr>
                                                 <th scope="row">@lp</th>
-                                                <td> <a>@item.NazwaWydarzenia</a></td>
+
+                                                <td>
+                                                    <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">@item.NazwaWydarzenia</a>
+                                                </td>
                                                 <td>@item.MiejsceWydarzenia</td>
-                                                <td>@item.LacznaIlosc</td>
+
                                             </tr>
                                             lp++;
                                         }

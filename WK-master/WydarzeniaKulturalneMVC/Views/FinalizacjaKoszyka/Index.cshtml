@@ -47,7 +47,7 @@
                     <tbody class="admin-table-tbody">
                         @foreach (var group in groupedOrders)
                         {
-                            decimal totalSum = group.Sum(item => (decimal)(item.Ilosc * (item.Cena+ item.Marza)));
+                            decimal totalSum = group.Sum(item => (decimal)(item.Ilosc * (item.Cena+ (item.Cena * item.Marza)/100)));
                             <tr data-toggle="collapse" data-target="#order-details-@group.Key" class="accordion-toggle">
                                 <td>@group.Key</td>                               
                                 <td class="text-left align-middle ">
@@ -71,7 +71,7 @@
                                             <tbody>
                                                 @foreach (var item in group)
                                                 {
-                                                    var suma = item.Cena + item.Marza;
+                                                    var suma = item.Cena + (item.Cena * item.Marza)/100;
                                                     <tr>
                                                         <td>@item.NazwaBiletu</td>
                                                         <td>@item.DataWydarzenia.ToString("dd/MM/yyyy")</td>
@@ -91,4 +91,31 @@
             </div>
         </div>
     </div>
+}
+else
+{    <div class="card shadow m-4 p-2">
+        <div class="card-header py-3">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-primary admin-table-title">Zamówienia</h1>
+            </div>
+            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                    <form asp-action="Index" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" name="Filtruj" placeholder="Szukaj" value="@ViewBag.Filtruj" class="form-control d-inline"
+                               aria-label="Szukaj" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-small" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                                <button class="btn btn-secondary btn-small" type="button" onclick="location.href='@Url.Action("Index")'">
+                                    <i class="fas fa-times fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
 }

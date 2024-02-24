@@ -52,9 +52,10 @@ public class HomeController : Controller
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
         var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
                      join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
-                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Lokalizacja.Miejscowosc } into grupowaneBilety
+                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Lokalizacja.Miejscowosc, bilet.Id } into grupowaneBilety
                      select new
                      {
+                         Id = grupowaneBilety.Key.Id,
                          NazwaWydarzenia = grupowaneBilety.Key.Nazwa, // Usunięto błąd w ścieżce dostępu
                          MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc, // Usunięto błąd w ścieżce dostępu
                          LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
@@ -85,8 +86,8 @@ public class HomeController : Controller
         ViewBag.SumaWydarzen = _context.WydarzenieKulturalne.Count();
 
         ViewBag.SumaUzytkownikow = _context.Uzytkownik.Where(u => u.Rola.Nazwa != "Admin").Count();
-        ViewBag.WydarzenieAktywne = _context.Bilety.Where(u => u.CzyDostepne == true).Count();
-        ViewBag.WydarzenieNieAktywne = _context.Bilety.Where(u => u.CzyDostepne == false).Count();
+        ViewBag.WydarzenieAktywne = _context.Bilety.Where(u => u.IloscBiletow > 0).Count();
+        ViewBag.WydarzenieNieAktywne = _context.Bilety.Where(u => u.IloscBiletow == 0).Count();
         ViewBag.NowiUzytkownicy = _context.Uzytkownik.Where(u => u.Rola.Nazwa == "Uzytkownik").
                                                       OrderByDescending(u => u.Id).
                                                       Take(5).ToList();
