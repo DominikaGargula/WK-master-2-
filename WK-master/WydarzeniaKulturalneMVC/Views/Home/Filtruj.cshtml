@@ -121,8 +121,9 @@
                                                 <p class="card-text">
                                                     <small class="text-muted">
                                                         Najbliższe wydarzenie:
-                                                    </small>
-                                                    @bilety.DataWydarzenia.ToShortDateString()
+                                                    
+                                                    </small>                                                                                           
+                                                    @bilety.DataWydarzenia.ToShortDateString()                                                 
                                                 </p>
                                                 <div class="text-end">
                                                     <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@bilety.Id" class="btn btn-dark">

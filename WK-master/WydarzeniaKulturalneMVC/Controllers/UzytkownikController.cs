@@ -57,7 +57,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Logowanie(string Email, string Haslo)
         {
-            // Check for empty email or password
+           
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Haslo))
             {
                 ViewBag.ErrorMessageLogin = "Email i hasło są wymagane.";
@@ -112,9 +112,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             }
         }
 
-
-
-        // GET: Uzytkownik/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Uzytkownik == null)
@@ -149,7 +146,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 return View("Rejestracja");
             }
 
-            // Check for white spaces in email or password
             if (uzytkownik.Email.Contains(" ") || uzytkownik.Haslo.Contains(" "))
             {
                 ViewBag.EmailErrorMessage = "Adres email i hasło nie mogą zawierać spacji.";
@@ -180,7 +176,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
 
                         await _context.SaveChangesAsync();
 
-                        MigrujKoszyk(uzytkownik.Email);
 
                         ViewBag.LoginMessage = "Konto zostało pomyślnie utworzone";
                         TempData["Save"] = "Pomyślnie utworzono nowy obiekt";
@@ -206,15 +201,7 @@ namespace WydarzeniaKulturalneMVC.Controllers
         {
             return source.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0;
         }
-        private void MigrujKoszyk(string uzytkownik)
-        {
-          
-            var koszyk = new Koszyk(_context, this.HttpContext);
 
-            koszyk.MigrujKoszyk(uzytkownik);
-
-            this.HttpContext.Session.SetString(koszyk.IdSesjiKoszyka, uzytkownik);
-        }
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
