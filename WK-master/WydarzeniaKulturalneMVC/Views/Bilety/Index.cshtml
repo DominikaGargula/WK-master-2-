@@ -52,6 +52,10 @@
                             @Html.DisplayNameFor(model => model.IloscBiletow)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.Marza)
+                        </th>
+                      
+                        <th>
                             @Html.DisplayNameFor(model => model.DataWydarzenia)
                         </th>
                         <th>
@@ -79,6 +83,9 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.IloscBiletow)
+                            </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.Marza) %
                             </td>
                             <td>
                                 @item.DataWydarzenia.ToString("yyyy-MM-dd HH:mm")

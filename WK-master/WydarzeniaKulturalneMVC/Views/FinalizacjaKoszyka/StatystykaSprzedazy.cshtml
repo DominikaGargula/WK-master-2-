@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    decimal totalSum = 0;
+    decimal totalSumZysk = 0;
+}
+
+<div class="card shadow m-4 p-2">
+    <div class="card-header py-3">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-primary admin-table-title">Statystyka sprzedanych biletów </h1>
+        </div>
+        <div class="d-sm-flex align-items-center justify-content-between mb-2">
+        </div>
+    </div>
+    <form asp-controller="FinalizacjaKoszyka" asp-action="StatystykaSprzedazy" method="post" class="form-inline ml-3 my-2">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text-dataPicker">Data od:</span>
+            </div>
+            <input type="date" id="dataWydarzeniaOd" name="dataWydarzeniaOd" class="form-control" aria-label="Wybierz datę początkową" />
+
+            <div class="input-group-prepend">
+                <span class="input-group-text-dataPicker">Data do:</span>
+            </div>
+            <input type="date" id="dataWydarzeniaDo" name="dataWydarzeniaDo" class="form-control" aria-label="Wybierz datę końcową" />
+
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+                <button class="btn btn-secondary" type="button" onclick="location.href='@Url.Action("StatystykaSprzedazy")'">
+                    <i class="fas fa-times fa-sm"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    @foreach (var item in @ViewBag.SprzedazBiletow)
+    {
+        var suma = item.ZyskZMarzy;
+        totalSum += suma;
+        var sumaWszystko = item.Zarobek;
+        totalSumZysk += sumaWszystko;
+    }
+    <div class="card-body">
+        <div class="table-responsive">
+            @if (ViewBag.DataOd != null || ViewBag.DataDo != null)
+            {
+                <div class="text-right">
+                    Zakres dat: <span class="ml-2">
+                        @(ViewBag.DataOd != null ? ViewBag.DataOd.ToString("yyyy-MM-dd") : "-") /
+                        @(ViewBag.DataDo != null ? ViewBag.DataDo.ToString("yyyy-MM-dd") : "-")
+                    </span>
+                </div>
+            }
+            <div class="text-right">
+                Łączna kwota sprzedaży biletów: <span class="ml-2">@totalSumZysk.ToString("C")</span>
+            </div>
+            <div class="text-right mb-5">
+                Marża ze sprzedaży biletów: <span class="ml-2">@totalSum.ToString("C")</span>
+            </div>
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="admin-table-thead">
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Lokalizacja</th>
+                        <th>Sprzedanych biletów</th>
+                        <th class="text-right align-middle">Kwota sprzedaży biletów</th>
+                    </tr>
+                </thead>
+                <tbody class="admin-table-tbody">
+                    @foreach (var item in @ViewBag.SprzedazBiletow)
+                    {
+                        var suma = item.ZyskZMarzy;
+                        totalSum += suma;
+                        var sumaWszystko = item.Zarobek;
+                        totalSumZysk += sumaWszystko;
+
+                        <tr>
+                            <td>
+                                @item.NazwaWydarzenia
+                            </td>
+                            <td>
+                                @item.MiejsceWydarzenia, @item.NazwaMiejsca
+                            </td>
+                            <td class="text-center align-middle">
+                                @item.LacznaIlosc
+                            </td>
+                            <td class="text-right align-middle">
+                                @item.Zarobek.ToString("c")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

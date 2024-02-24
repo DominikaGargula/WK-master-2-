@@ -12,8 +12,8 @@ using WydarzeniaKulturalne.Data;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     [DbContext(typeof(WydarzeniaKulturalneContext))]
-    [Migration("20240201223110_init123")]
-    partial class init123
+    [Migration("20240210160531_dodanoMArza")]
+    partial class dodanoMArza
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
                     b.Property<int>("LokalizacjaWydarzeniaId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Marza")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("WydarzenieKulturalneId")
                         .HasColumnType("int");
@@ -274,9 +277,11 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Imie")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nazwisko")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
@@ -303,6 +308,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdZamowienieSzczegoly"));
 
+                    b.Property<int?>("BiletId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Cena")
                         .HasColumnType("decimal(18, 2)");
 
@@ -319,6 +327,8 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("IdZamowienieSzczegoly");
+
+                    b.HasIndex("BiletId");
 
                     b.HasIndex("ZamowienieIdZamowienie");
 
@@ -398,9 +408,17 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.ZamowienieSzczegoly", b =>
                 {
-                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", null)
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Bilety", "Bilet")
+                        .WithMany()
+                        .HasForeignKey("BiletId");
+
+                    b.HasOne("WydarzeniaKulturalne.Data.Entities.Zamowienie", "Zamowienie")
                         .WithMany("ZamowienieSzczegolu")
                         .HasForeignKey("ZamowienieIdZamowienie");
+
+                    b.Navigation("Bilet");
+
+                    b.Navigation("Zamowienie");
                 });
 
             modelBuilder.Entity("WydarzeniaKulturalne.Data.Entities.KategoriaWydarzenia", b =>

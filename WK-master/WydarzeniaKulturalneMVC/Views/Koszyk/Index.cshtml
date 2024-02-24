@@ -15,7 +15,7 @@
                     type: "POST",
                     data: { "id": recordToDelete },
                     success: function (data) {
-                         location.reload(true);
+                        location.reload(true);
                     }
                 });
             }
@@ -32,7 +32,6 @@
                             <div class="row g-0">
                                 <div class="col-lg-8">
                                     <div class="p-5">
-
                                         <div class="d-flex justify-content-between align-items-center">
                                             <strong><p style="font-size: 20px;">Koszyk</p></strong>
                                             <h6 class="mb-0 text-muted">
@@ -41,44 +40,58 @@
                                             </h6>
                                         </div>
                                         <hr class="my-4">
-                                        @foreach (var item in Model.ElementyKoszyka)
-                                        {
-                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
-                                                <div class="col-md-2 col-lg-2 col-xl-2">
-                                                       @if (string.IsNullOrEmpty(@item.Bilety?.Wydarzenie?.ZdjecieUrl))
+                                        @if (Model.ElementyKoszyka != null && Model.ElementyKoszyka.Any())
+                                        { 
+
+                                            @foreach (var item in Model.ElementyKoszyka)
+                                            {
+                                         
+                                                var sumaBilet = item.Bilety.Wydarzenie.Cena + (item.Bilety.Wydarzenie.Cena * item.Bilety.Marza)/100;
+                                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                                        @if (string.IsNullOrEmpty(@item.Bilety?.Wydarzenie?.ZdjecieUrl))
                                                         {
                                                             <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.IdBilet">
-                                                            <img src="~/Zdjecia/noimage.png"  class="img-fluid rounded-3"  />
+                                                                <img src="~/Zdjecia/noimage.png" class="img-fluid rounded-3" />
                                                             </a>
                                                         }
                                                         else
                                                         {
                                                             <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.IdBilet">
-                                                            <img src="@item.Bilety?.Wydarzenie.ZdjecieUrl"  class="img-fluid rounded-3"/>
+                                                                <img src="@item.Bilety?.Wydarzenie.ZdjecieUrl" class="img-fluid rounded-3" />
                                                             </a>
                                                         }
 
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                                        <h6 class="text-muted">@item.Bilety?.Wydarzenie?.Nazwa</h6>
+                                                        <h6 class="text-black mb-2">@item.Bilety?.Lokalizacja?.NazwaMiejsca</h6>
+                                                        <h6 class="text-black mb-2 small">@item.Bilety?.Lokalizacja?.Miejscowosc</h6>
+                                                        <h6 class="text-black mt-2 small">@item.Bilety?.DataWydarzenia.ToString("yyyy-MM-dd")</h6>
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                        <a href="#" class="Usuwanie" data-id="@item.IdElementuKoszyka">
+                                                            <i class="fas fa-minus" style="margin-right: 1rem;"></i>
+                                                        </a>
+                                                        @item.Ilosc
+                                                    </div>
+                                                   
+                                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                        <h6 class="mb-0">@sumaBilet.ToString("C")</h6>
+                                                    </div>
+                                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-3 col-lg-3 col-xl-3">
-                                                    <h6 class="text-muted">@item.Bilety?.Wydarzenie?.Nazwa</h6>
-                                                    <h6 class="text-black mb-2">@item.Bilety?.Lokalizacja?.NazwaMiejsca</h6>
-                                                     <h6 class="text-black mb-2 small">@item.Bilety?.Lokalizacja?.Miejscowosc</h6>
-                                                    <h6 class="text-black mt-2 small">@item.Bilety?.DataWydarzenia.ToString("yyyy-MM-dd")</h6>
-                                                </div>
-                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                                    <a href="#" class="Usuwanie" data-id="@item.IdElementuKoszyka">
-                                                     <i class="fas fa-minus" style="margin-right: 1rem;"></i>
-                                                     </a>
-                                                      @item.Ilosc
-                                                </div>
-                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                    <h6 class="mb-0">@item.Bilety?.Wydarzenie?.Cena.ToString("C")</h6>
-                                                </div>
-                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                                    <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
-                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-warning" role="alert">
+                                                Obecnie brak biletów w koszyku.
                                             </div>
                                         }
+
                                         <div class="pt-5">
                                             <h6 class="mb-0">
                                                 <a asp-controller="Home" asp-action="Index" class="text-body">
@@ -100,28 +113,24 @@
                                                 <h6 class="text-uppercase text-muted">Kwota</h6>
                                                 <h6>  @Model.Razem.ToString("C")</h6>
                                             </div>
-                                         </div>
-                                  @*      <div class="row ">
-                                                <div class="d-flex justify-content-between mb-4">
-                                                    <div class="col-4 mt-2">      
-                                                        <h6 class="text-uppercase text-mude mb-3">Podaj kod</h6></div
-                                                    <div class="col-8">
-                                                        <div class="form-outline">
-                                                            <input type="text" id="typeText" class="form-control" />
-                                                             <label class="form-label" for="typeText"></label>
-                                                         </div>
-                                                    </div>
-                                                </div>
-                                         </div>  *@ 
-                                    <div class="col-12">
-                                            <a asp-controller="FinalizacjaKoszyka" asp-action="Platnosc" class="text-body">
-                                        <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
-                                            Zapłać
-                                            </button>
+                                        </div>
+
+                                          @if (Model.ElementyKoszyka != null && Model.ElementyKoszyka.Any())
+                                        {
+                                            <div class="col-12">
+                                                <a asp-controller="FinalizacjaKoszyka" asp-action="Platnosc" class="text-body">
+                                                    <button type="button" class="btn btn-dark btn-lg  m-5" style="float:right">
+                                                        Zapłać
+                                                    </button>
+
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
                                             
-                                        </a>
+                                        }
                                     </div>
-                                    </div>                            
                                 </div>
                             </div>
                         </div>

@@ -34,11 +34,21 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="IloscBiletow" class="control-label"></label>
                             <input asp-for="IloscBiletow" class="form-control" />
                             <span asp-validation-for="IloscBiletow" class="text-danger"></span>
+                            <p style="color: darkred">@ViewBag.ErrorMessageLiczbaBiletow</p>
+                      
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="Marza" class="control-label">Marża %</label>
+                            <input asp-for="Marza" class="form-control"/><p></p>
+                            <span asp-validation-for="Marza" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -46,6 +56,7 @@
                             <label asp-for="DataWydarzenia" class="control-label"></label>
                             <input asp-for="DataWydarzenia" class="form-control" />
                             <span asp-validation-for="DataWydarzenia" class="text-danger"></span>
+                            <p style="color: darkred">@ViewBag.ErrorMessageData</p>
                         </div>
                     </div>
                 </div>

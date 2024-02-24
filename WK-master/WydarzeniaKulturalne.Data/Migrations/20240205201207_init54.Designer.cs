@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WydarzeniaKulturalne.Data;
 
@@ -11,9 +12,11 @@ using WydarzeniaKulturalne.Data;
 namespace WydarzeniaKulturalne.Data.Migrations
 {
     [DbContext(typeof(WydarzeniaKulturalneContext))]
-    partial class WydarzeniaKulturalneContextModelSnapshot : ModelSnapshot
+    [Migration("20240205201207_init54")]
+    partial class init54
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +44,6 @@ namespace WydarzeniaKulturalne.Data.Migrations
 
                     b.Property<int>("LokalizacjaWydarzeniaId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Marza")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("WydarzenieKulturalneId")
                         .HasColumnType("int");
@@ -274,11 +274,9 @@ namespace WydarzeniaKulturalne.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Imie")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nazwisko")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")

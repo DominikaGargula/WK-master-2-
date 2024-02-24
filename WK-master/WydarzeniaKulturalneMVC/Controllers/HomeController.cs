@@ -15,8 +15,6 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly WydarzeniaKulturalneContext _context;
 
-
-    //to jest obiekt reprezentującyych
     public HomeController(ILogger<HomeController> logger, WydarzeniaKulturalneContext context)
     {
         _logger = logger;
@@ -52,7 +50,20 @@ public class HomeController : Controller
     .ToList();
 
         ViewBag.KategoriaWydarzenia = kategorieZWydarzeniami;
+        var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                     join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Lokalizacja.Miejscowosc, bilet.Id } into grupowaneBilety
+                     select new
+                     {
+                         Id = grupowaneBilety.Key.Id,
+                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa, // Usunięto błąd w ścieżce dostępu
+                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc, // Usunięto błąd w ścieżce dostępu
+                         LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
+                     })
+                    .OrderByDescending(v => v.LacznaIlosc)
+                    .ToList();
 
+        ViewBag.TopSprzedaz = wynik;
         return View();
     }
 
@@ -70,11 +81,13 @@ public class HomeController : Controller
 
         var suma = _context.WydarzenieKulturalne.ToList();
 
+        ViewBag.SumaBiletowSprzedanych = _context.ZamowienieSzczegoly.Sum(b => b.Ilosc);
         ViewBag.SumaBiletow = _context.Bilety.Sum(b => b.IloscBiletow);
         ViewBag.SumaWydarzen = _context.WydarzenieKulturalne.Count();
-        ViewBag.LiczbaKategorii = _context.KategoriaWydarzenia.Count();
-        ViewBag.SumaUzytkownikow = _context.Uzytkownik.Where(u => u.Rola.Nazwa != "Admin").Count();
 
+        ViewBag.SumaUzytkownikow = _context.Uzytkownik.Where(u => u.Rola.Nazwa != "Admin").Count();
+        ViewBag.WydarzenieAktywne = _context.Bilety.Where(u => u.IloscBiletow > 0).Count();
+        ViewBag.WydarzenieNieAktywne = _context.Bilety.Where(u => u.IloscBiletow == 0).Count();
         ViewBag.NowiUzytkownicy = _context.Uzytkownik.Where(u => u.Rola.Nazwa == "Uzytkownik").
                                                       OrderByDescending(u => u.Id).
                                                       Take(5).ToList();
@@ -90,28 +103,29 @@ public class HomeController : Controller
             .Include(w => w.Lokalizacja)
             .Include(w => w.Wydarzenie)
             .ToList();
+
+        var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
+                     join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
+                     group zamowienieSzczegoly by new {bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
+                     select new
+                     {
+
+                      
+                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
+                         ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, // Dodano dostęp do daty wydarzenia
+                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
+                         NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
+                         LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
+                     })
+                .OrderByDescending(v => v.LacznaIlosc)
+                .Take(5)
+                .ToList();
+
+
+        ViewBag.TopSprzedaz = wynik;
+
         return View();
     }
-
-
-    //public async Task<IActionResult> Filtruj(string Szukaj)
-
-    //{
-    //    var wydarzenia = _context.WydarzenieKulturalne.Include(x => x.KategoriaWydarzenia).ToList();
-    //    ViewBag.FiltrujListe = Szukaj;
-
-    //    if (!string.IsNullOrWhiteSpace(Szukaj) && Szukaj.Length > 2)
-    //    {
-    //        if (Filtruj != null)
-    //            wydarzenia = wydarzenia.Where(f => ContainsString(f.Nazwa, Szukaj) ||
-    //            ContainsString(f.KategoriaWydarzenia.Nazwa, Szukaj)
-    //            ).ToList();
-
-    //        return View(wydarzenia);
-    //    }
-
-    //    return View();
-    //}
     public async Task<IActionResult> Filtruj(string Szukaj)
 
     {
@@ -178,10 +192,6 @@ public class HomeController : Controller
         .OrderBy(w => w.DataWydarzenia)
         .ToListAsync();
 
-
-
-        //ViewBag.Nazwa = bilety;
-
         return View(bilety);
     }
 
@@ -219,7 +229,7 @@ public class HomeController : Controller
 
         var biletyZDaty = _context.Bilety
             .Where(b => b.DataWydarzenia.Date == dataWydarzenia.Date)
-            .Include(b=>b.Wydarzenie)
+            .Include(b => b.Wydarzenie)
             .ToList();
 
         return View("WynikData", biletyZDaty);

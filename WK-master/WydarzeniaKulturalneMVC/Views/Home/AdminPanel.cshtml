@@ -9,7 +9,6 @@
 
     <!-- Content Row -->
     <div class="row">
-
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
@@ -27,14 +26,13 @@
                 </div>
             </div>
         </div>
-
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Suma wydarzeń
+                               Aktywne wydarzenia
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaWydarzen </div>
                         </div>
@@ -45,16 +43,15 @@
                 </div>
             </div>
         </div>
-
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Liczba kategorii
+                                Bilety sprzedane
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.LiczbaKategorii</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaBiletowSprzedanych</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-solid fa-list fa-2x  text-gray-300 "></i>
@@ -70,7 +67,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Suma biletów
+                               Dostępne bilety
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SumaBiletow</div>
                         </div>
@@ -86,12 +83,12 @@
     <div class="row">
 
         <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-6 col-lg-7">
 
             <!-- Card Header - Dropdown -->
             <div class="card shadow mb-4 pl-4 pt-4">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h6 class="m-0 font-weight-bold text-primary">Promowane</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Top sprzedaż</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -103,31 +100,32 @@
                                         Nazwa
                                     </th>
                                     <th>
-
+                                        Lokalizacja
                                     </th>
                                     <th>
-
+                                        Ilość
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="admin-table-tbody">
-                                @foreach (var item in @ViewBag.Promowane)
+                                @foreach (var item in @ViewBag.TopSprzedaz)
                                 {
                                     <tr>
                                         <td>
-                                            @item.Wydarzenie.Nazwa
+                                            @item.NazwaWydarzenia
                                         </td>
                                         <td>
-                                            
+                                            @item.MiejsceWydarzenia, @item.NazwaMiejsca
                                         </td>
                                         <td>
+                                            @item.LacznaIlosc
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                         <div class="card-footer text-center bg-footer mt-4">
-                            <a class="text-muted" asp-area="" asp-controller="WydarzenieKulturalne" asp-action="Index">Zobacz wszystkie</a>
+                            <a class="text-muted" asp-area="" asp-controller="FinalizacjaKoszyka" asp-action="StatystykaSprzedazy">Zobacz wszystkie</a>
                         </div>
                     </div>
                 </div>
@@ -136,7 +134,7 @@
         </div>
 
         <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5 d-flex">
+        <div class="col-xl-3 col-lg-5 d-flex">
             <div class="p-0 d-flex">
                 <div class="card shadow mb-4 text-center small pb-4">
                     <!-- Card Header - Dropdown -->
@@ -162,6 +160,18 @@
                                 <i class="fas fa-circle text-primary"></i> @ViewBag.Random.Nazwa
                             </span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary"> Wydarzenia</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie mt-2 mb-5">
+                        <canvas id="myPieChart1"></canvas>
                     </div>
                 </div>
             </div>
@@ -237,7 +247,7 @@
                                         Nazwa
                                     </th>
                                     <th>
-                                      Data
+                                        Data
                                     </th>
                                 </tr>
                             </thead>
@@ -250,7 +260,7 @@
                                         </td>
                                         <td>
                                             @item.DataUwtorzenia.ToString("yyyy-MM-dd")
-                                        </td>                       
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -266,3 +276,42 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('myPieChart1').getContext('2d');
+        var aktywne = parseInt('@ViewBag.WydarzenieAktywne');
+        var nieaktywne = parseInt('@ViewBag.WydarzenieNieAktywne');
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['W sprzedaży', 'Wyprzedane'],
+                datasets: [{
+                    data: [aktywne, nieaktywne],
+                    backgroundColor: ['#de753f', '#383e57', '#36b9cc'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    borderColor: '#dddfeb'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 5,
+                    yPadding: 5,
+                    displayColors: false,
+                    caretPadding: 1,
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 80,
+            },
+        });
+    });
+
+</script>

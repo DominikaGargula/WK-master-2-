@@ -6,64 +6,10 @@
         <div class="container-fluid mx-5 ">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item active mx-1 ">
-                    @*        <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle navDrop " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Kategorie
-                    </button>
-                    <ul class="dropdown-menu">
-                    @foreach (var item in @ViewBag.KategoriaWydarzenia)
-                    {
-                    <li>
-                    <a class="dropdown-item" asp-route-id="@item.id" asp-action="listaWydarzen"> @item.Nazwa </a>
-                    </li>
 
-                    }
-                    </ul>
-                    </div>*@
                 </li>
                 <li class="nav-item active mx-1">
-                    @*            <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Lokalizacja
-                    </a>
-                    <ul class="dropdown-menu">
-                    @foreach (var item in @ViewBag.LokalizacjaWydarzenia)
-                    {
-                    if (!dodaneMiejscowosci.Contains(item.Miejscowosc))
-                    {
-                    <li>
-                    <a class="dropdown-item" asp-route-id="@item.Id" asp-action="ListaLokalizacji"> @item.Miejscowosc </a>
-                    </li>
-                    dodaneMiejscowosci.Add(item.Miejscowosc);
-                    }
-                    }
-                    </ul>
-                    </div>*@
                 </li>
-                @*              <form asp-controller="Home" asp-action="WyszukajPoDacie" method="post">
-                <li class="nav-item active mx-1">
-                <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle navDrop" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Wybierz date
-                </a>
-                <ul class="dropdown-menu">
-                <div class="form-group">
-                <li>
-                <a class="dropdown-item">
-                <div class="input-group">
-                <input type="date" id="dataPicker" name="dataWydarzenia" class="form-control" />
-                <span class="input-group-text">
-                <button type="submit" class="search-icon-btn">
-                <i class="fas fa-search"></i>
-                </button>
-                </span>
-                </div>
-                </a>
-                </li>
-                </ul>
-                </div>
-                </li>
-                </form>*@
             </ul>
         </div>
         <!-- Container wrapper -->

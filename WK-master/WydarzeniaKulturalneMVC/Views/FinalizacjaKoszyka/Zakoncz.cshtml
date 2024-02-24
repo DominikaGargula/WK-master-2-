@@ -1,10 +1,15 @@
 ﻿@model int
 @{
-    ViewBag.Title = "Checkout Complete";
+    ViewBag.Title = "Finalizacja zakupów";
 }
-<h2>Checkout Complete</h2>
-<p>Thanks for your order! Your order number is: @Model</p>
-<p>How about shopping for some more music in our 
-    @Html.ActionLink("store",
-"Index", "Home")
-</p>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5 mb-10">
+        <div class="link-container">
+                <h5>Dziękujemy za złożenie zamówienia numer: @Model</h5>
+                Zapraszam do dalszych zakupów
+            </p>
+            <br />
+            <a class="btn btn-dark" asp-controller="Home" asp-action="Index">Sklep</a>
+        </div>
+    </div>
+</section>

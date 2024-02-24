@@ -135,17 +135,20 @@
                 <div class="col-md-6 col-12 ">
                     <div class="flex-md-equal w-100 my-md-3 pl-md-3">
                         <div class=" mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-                            <h5 class="card-title titleTabel"> Ostatnio dodane</h5>
+                            <h5 class="card-title titleTabel"> Top sprzedaż</h5>
                             <div class="my-3 py-3 table-responsive">
                                 <table class="table  ">
                                     <tbody>
-                                        @foreach (var item in @ViewBag.NoweWydarzenia)
+                                        @foreach (var item in @ViewBag.TopSprzedaz)
                                         {
                                             <tr>
                                                 <th scope="row">@lp</th>
-                                                <td> <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">@item.Wydarzenie.Nazwa</a></td>
-                                                <td></td>
-                                                <td>@item.Lokalizacja.Miejscowosc</td>
+
+                                                <td>
+                                                    <a asp-controller="Bilety" asp-action="DetailsCard" asp-route-id="@item.Id">@item.NazwaWydarzenia</a>
+                                                </td>
+                                                <td>@item.MiejsceWydarzenia</td>
+
                                             </tr>
                                             lp++;
                                         }

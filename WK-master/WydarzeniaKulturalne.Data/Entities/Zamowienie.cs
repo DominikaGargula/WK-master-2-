@@ -14,7 +14,9 @@ namespace WydarzeniaKulturalne.Data.Entities
         [Key]
         [ScaffoldColumn(false)]
         public int IdZamowienie { get; set; } //orderId
+        [Required(ErrorMessage = "Podanie imienia jest wymagane.")]
         public string? Imie { get; set; }
+        [Required(ErrorMessage = "Podanie nazwiska jest wymagane.")]
         public string? Nazwisko { get; set; }
 
         [ScaffoldColumn(false)]

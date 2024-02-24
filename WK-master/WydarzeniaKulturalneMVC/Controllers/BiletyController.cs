@@ -73,18 +73,46 @@ namespace WydarzeniaKulturalneMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Bilety bilety)
         {
-
-            if (ModelState.IsValid) //sprawdza poprawnosc wprowadzanych parametrow
+            // Sprawdza, czy model przesłany do metody jest poprawny.
+            if (ModelState.IsValid)
             {
+                // Sprawdza, czy data wydarzenia jest w przyszłości.
+                if (bilety.DataWydarzenia <= DateTime.Now)
+                {
+                    // Jeśli data wydarzenia nie jest w przyszłości, ustawia komunikat błędu.
+                    ViewBag.ErrorMessageData = "Data wydarzenia musi być datą w przyszłości.";
+                    BiletyDropDownLists();
+                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby zachować wprowadzone dane.
+                }
+                if (bilety.IloscBiletow < 0)
+                {
+                    // Jeśli liczba biletów jest mniejsza niż 0, ustawia komunikat błędu.
+                    ViewBag.ErrorMessageLiczbaBiletow = "Liczba biletów nie może być mniejsza niż 0.";
+                    BiletyDropDownLists();
+                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby użytkownik mógł poprawić dane.
+                }
+
+                // Dodaje obiekt bilety do kontekstu bazy danych.
                 _context.Add(bilety);
+                // Zapisuje zmiany w bazie danych asynchronicznie.
                 await _context.SaveChangesAsync();
-                TempData["Save"] = "Pomyślnie utworzono biekt";
+                // Ustawia komunikat potwierdzający pomyślne utworzenie obiektu.
+                TempData["Save"] = "Pomyślnie utworzono bilet.";
+                // Przekierowuje do metody Index po pomyślnym utworzeniu.
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca", bilety.LokalizacjaWydarzeniaId);
-            ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa", bilety.WydarzenieKulturalneId);
 
+            // Jeśli model nie jest poprawny, ponownie przygotowuje SelectListy dla dropdownów.
+            // To zapewnia, że formularz będzie miał wypełnione dropdowny po ponownym wyświetleniu.
+            BiletyDropDownLists();
+
+            // Zwraca widok z obiektem bilety w przypadku, gdy model nie jest poprawny.
             return View(bilety);
+        }
+        private void BiletyDropDownLists()
+        {
+            ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca");
+            ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa");
         }
         public async Task<IActionResult> Edit(int? id)
         {
@@ -112,6 +140,20 @@ namespace WydarzeniaKulturalneMVC.Controllers
             }
             if (ModelState.IsValid)
             {
+                if (bilety.DataWydarzenia <= DateTime.Now)
+                {
+                    // Jeśli data wydarzenia nie jest w przyszłości, ustawia komunikat błędu.
+                    ViewBag.ErrorMessageData = "Data wydarzenia musi być datą w przyszłości.";
+                    BiletyDropDownLists();
+                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby zachować wprowadzone dane.
+                }
+                if (bilety.IloscBiletow < 0)
+                {
+                    // Jeśli liczba biletów jest mniejsza niż 0, ustawia komunikat błędu.
+                    ViewBag.ErrorMessageLiczbaBiletow = "Liczba biletów nie może być mniejsza niż 0.";
+                    BiletyDropDownLists();
+                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby użytkownik mógł poprawić dane.
+                }
                 try
                 {
                     _context.Update(bilety);
@@ -130,8 +172,8 @@ namespace WydarzeniaKulturalneMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.LokalizacjaWydarzenia = new SelectList(_context.LokalizacjaWydarzenia, "Id", "NazwaMiejsca");
-            ViewBag.WydarzenieKulturalne = new SelectList(_context.WydarzenieKulturalne, "Id", "Nazwa");
+            BiletyDropDownLists();
+
 
             return View(bilety);
         }
