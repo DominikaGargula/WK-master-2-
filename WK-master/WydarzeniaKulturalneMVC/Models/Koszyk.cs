@@ -117,62 +117,7 @@ namespace WydarzeniaKulturalneMVC.Models
 
             return iloscBiletow;
         }
-        //public int GetIlosc() 
-        //{
 
-        //    int? zlicz = (from element in _context.ElementKoszyka
-        //                  where element.IdSesjiKoszyka == this.IdSesjiKoszyka
-        //                  select (int?)element.Ilosc).Sum();
-        //    return zlicz ?? 0;
-        //}
-        //public int StworzZamowienie(Zamowienie zamowienie)
-        //{
-        //    decimal wartoscZamowienia = 0;
-        //    var elementyKoszyka = GetElementyKoszyka();
-        //    foreach (var item in elementyKoszyka)
-        //    {
-        //        var szczegolyZamowienia = new ZamowienieSzczegoly
-        //        {
-        //            IdBilet = item.IdBilet,
-        //            IdZamowienie = zamowienie.IdZamowienie,
-        //            Cena = item.Bilety.Wydarzenie.Cena,
-        //            Ilosc = item.Ilosc
-        //        };
-
-        //        wartoscZamowienia += (item.Ilosc * item.Bilety.Wydarzenie.Cena);
-        //        zamowienie.ZamowienieSzczegolu.Add(szczegolyZamowienia);
-        //    }
-        //    zamowienie.Suma = wartoscZamowienia;
-        //    zamowienie.OrderDate = DateTime.Now;
-        //    _context.Zamowienie.Add(zamowienie);
-        //    _context.SaveChanges();
-        //    OproznijKoszyk();
-        //    return zamowienie.IdZamowienie;
-        //}
-
-        //public void OproznijKoszyk()
-        //{
-        //    var elementyKoszyka = _context.ElementKoszyka.Where(
-        //        e => e.IdSesjiKoszyka == IdSesjiKoszyka).ToList();
-
-        //    foreach (var element in elementyKoszyka)
-        //    {
-        //        _context.ElementKoszyka.Remove(element);
-        //    }
-
-        //    _context.SaveChanges();
-        //}
-        public void MigrujKoszyk(string nazwaUzytkownika)
-        {
-
-
-            var koszyk = _context.ElementKoszyka.Where(c => c.IdSesjiKoszyka == IdSesjiKoszyka).ToList();
-            foreach (ElementKoszyka item in koszyk)
-            {
-                item.IdSesjiKoszyka = this.IdSesjiKoszyka;
-            }
-            _context.SaveChanges();
-        }
 
     }
 }

@@ -56,8 +56,8 @@ public class HomeController : Controller
                      select new
                      {
                          Id = grupowaneBilety.Key.Id,
-                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa, // Usunięto błąd w ścieżce dostępu
-                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc, // Usunięto błąd w ścieżce dostępu
+                         NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
+                         MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
                          LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
                      })
                     .OrderByDescending(v => v.LacznaIlosc)
@@ -71,7 +71,7 @@ public class HomeController : Controller
     {
         return View();
     }
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public IActionResult AdminPanel()
     {
 
@@ -106,13 +106,13 @@ public class HomeController : Controller
 
         var wynik = (from zamowienieSzczegoly in _context.ZamowienieSzczegoly
                      join bilet in _context.Bilety on zamowienieSzczegoly.IdBilet equals bilet.Id
-                     group zamowienieSzczegoly by new {bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
+                     group zamowienieSzczegoly by new { bilet.Wydarzenie.Nazwa, bilet.Wydarzenie.ZdjecieUrl, bilet.Lokalizacja.Miejscowosc, bilet.Lokalizacja.NazwaMiejsca } into grupowaneBilety
                      select new
                      {
 
-                      
+
                          NazwaWydarzenia = grupowaneBilety.Key.Nazwa,
-                         ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl, // Dodano dostęp do daty wydarzenia
+                         ZdjecieUrl = grupowaneBilety.Key.ZdjecieUrl,
                          MiejsceWydarzenia = grupowaneBilety.Key.Miejscowosc,
                          NazwaMiejsca = grupowaneBilety.Key.NazwaMiejsca,
                          LacznaIlosc = grupowaneBilety.Sum(gb => gb.Ilosc)
@@ -137,7 +137,7 @@ public class HomeController : Controller
 
         ViewBag.LokalizacjaWydarzenia = await _context.Bilety
         .Select(b => b.Lokalizacja)
-        .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+        .Where(l => l != null)
         .Distinct()
         .ToListAsync();
 
@@ -152,7 +152,9 @@ public class HomeController : Controller
         {
             if (Filtruj != null)
                 bilety = bilety.Where(f => ContainsString(f.Wydarzenie.Nazwa, Szukaj) ||
-                ContainsString(f.Wydarzenie.KategoriaWydarzenia.Nazwa, Szukaj)
+                ContainsString(f.Wydarzenie.KategoriaWydarzenia.Nazwa, Szukaj) ||
+                ContainsString(f.Lokalizacja.Miejscowosc, Szukaj) ||
+                ContainsString(f.Lokalizacja.NazwaMiejsca, Szukaj)
                 ).ToList();
 
             return View(bilety);
@@ -183,7 +185,7 @@ public class HomeController : Controller
 
         ViewBag.LokalizacjaWydarzenia = await _context.Bilety
               .Select(b => b.Lokalizacja)
-              .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+              .Where(l => l != null)
               .Distinct()
               .ToListAsync();
         var bilety = await _context.Bilety
@@ -207,7 +209,7 @@ public class HomeController : Controller
 
         ViewBag.LokalizacjaWydarzenia = await _context.Bilety
         .Select(b => b.Lokalizacja)
-        .Where(l => l != null)  // Filtrowanie lokalizacji, które nie są null
+        .Where(l => l != null)
         .Distinct()
         .ToListAsync();
 

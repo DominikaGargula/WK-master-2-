@@ -73,40 +73,30 @@ namespace WydarzeniaKulturalneMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Bilety bilety)
         {
-            // Sprawdza, czy model przesłany do metody jest poprawny.
             if (ModelState.IsValid)
             {
-                // Sprawdza, czy data wydarzenia jest w przyszłości.
                 if (bilety.DataWydarzenia <= DateTime.Now)
                 {
-                    // Jeśli data wydarzenia nie jest w przyszłości, ustawia komunikat błędu.
                     ViewBag.ErrorMessageData = "Data wydarzenia musi być datą w przyszłości.";
                     BiletyDropDownLists();
-                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby zachować wprowadzone dane.
+                    return View(bilety); 
                 }
                 if (bilety.IloscBiletow < 0)
                 {
-                    // Jeśli liczba biletów jest mniejsza niż 0, ustawia komunikat błędu.
                     ViewBag.ErrorMessageLiczbaBiletow = "Liczba biletów nie może być mniejsza niż 0.";
                     BiletyDropDownLists();
-                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby użytkownik mógł poprawić dane.
+                    return View(bilety); 
                 }
-
-                // Dodaje obiekt bilety do kontekstu bazy danych.
+        
                 _context.Add(bilety);
-                // Zapisuje zmiany w bazie danych asynchronicznie.
                 await _context.SaveChangesAsync();
-                // Ustawia komunikat potwierdzający pomyślne utworzenie obiektu.
                 TempData["Save"] = "Pomyślnie utworzono bilet.";
-                // Przekierowuje do metody Index po pomyślnym utworzeniu.
                 return RedirectToAction(nameof(Index));
             }
 
-            // Jeśli model nie jest poprawny, ponownie przygotowuje SelectListy dla dropdownów.
-            // To zapewnia, że formularz będzie miał wypełnione dropdowny po ponownym wyświetleniu.
+
             BiletyDropDownLists();
 
-            // Zwraca widok z obiektem bilety w przypadku, gdy model nie jest poprawny.
             return View(bilety);
         }
         private void BiletyDropDownLists()
@@ -145,14 +135,13 @@ namespace WydarzeniaKulturalneMVC.Controllers
                     // Jeśli data wydarzenia nie jest w przyszłości, ustawia komunikat błędu.
                     ViewBag.ErrorMessageData = "Data wydarzenia musi być datą w przyszłości.";
                     BiletyDropDownLists();
-                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby zachować wprowadzone dane.
+                    return View(bilety);
                 }
                 if (bilety.IloscBiletow < 0)
                 {
-                    // Jeśli liczba biletów jest mniejsza niż 0, ustawia komunikat błędu.
                     ViewBag.ErrorMessageLiczbaBiletow = "Liczba biletów nie może być mniejsza niż 0.";
                     BiletyDropDownLists();
-                    return View(bilety); // Zwraca ten sam widok z obiektem bilety, aby użytkownik mógł poprawić dane.
+                    return View(bilety); 
                 }
                 try
                 {
@@ -198,7 +187,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return View(bilety);
         }
 
-        // POST: LokalizacjaWydarzenia/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

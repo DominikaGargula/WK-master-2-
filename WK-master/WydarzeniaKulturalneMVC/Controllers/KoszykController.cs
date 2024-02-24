@@ -72,16 +72,6 @@ namespace WydarzeniaKulturalneMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult PodsumowanieKoszyka()
-        {
-            var koszyk = new Koszyk(_context, this.HttpContext);
-            int iloscBiletowWKoszyku = koszyk.GetIloscBiletow().Result;
-
-            ViewData["iloscBiletowWKoszyku"] = iloscBiletowWKoszyku;
-            ViewBag.IloscBiletow = iloscBiletowWKoszyku;
-            return View();
-        }
-
     }
 }
 
