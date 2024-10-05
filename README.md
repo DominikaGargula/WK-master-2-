@@ -13,4 +13,8 @@ W ramach pracy inżynierskiej zaprojektowałam aplikację webową do zarządzani
 - **Funkcjonalności**: Implementacja autoryzacji, uwierzytelniania, rejestracji, logowania, filtrowania, pobierania danych biletów, tworzenia zamówień oraz zarządzania panelem administratora.
 
 ## Oczekiwane rezultaty
-Funkcjonalna i bezpieczna aplikacja webowa, która usprawni zarządzanie wydarzeniami kulturalnymi i poprawi dostępność kultury. Projekt uwzględnia najlepsze praktyki programistyczne i aktualne standardy bezpieczeństwa.
+Funkcjonalna i bezpieczna aplikacja webowa, która usprawni zarządzanie wydarzeniami kulturalnymi i poprawi dostępność kultury. 
+
+
+### Widok strony głównej aplikacji:
+![Strona główna aplikacji](Sytrona_Glowna)
