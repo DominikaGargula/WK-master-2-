@@ -17,4 +17,27 @@ Funkcjonalna i bezpieczna aplikacja webowa, która usprawni zarządzanie wydarze
 
 
 ### Widok strony głównej aplikacji:
-![Strona główna aplikacji](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Strona_Glowna.png) 
+
+![Strona główna aplikacji](Strona_Glowna_mini.png) 
+[Zobacz pełną wersję](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Strona_Glowna.png)
+
+
+### Widok szczegółów biletu:
+
+![Bilety szczegóły biletu](Bilety_DetailsCard_mini.png) 
+[Zobacz pełną wersję](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Bilety_DetailsCard.png)
+
+### Widok administratora aplikacji:
+
+![Administrator aplikacji](Home_AdminPanel_mini.png) 
+[Zobacz pełną wersję](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Home_AdminPanel.png)
+
+
+### Widok administrator - zarządzanie biletami
+![administrator - Statystyka sprzedaży](Admin_Bilety_mini.png) 
+[Zobacz pełną wersję](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Admin_Bilety.png)
+
+### Widok administrator - Statystyka sprzedaży
+
+![administrator - Statystyka sprzedaży](Admin_FinalizacjaKoszyka_StatystykaSprzedazy_mini.png) 
+[Zobacz pełną wersję](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Admin_FinalizacjaKoszyka_StatystykaSprzedazy.png)
