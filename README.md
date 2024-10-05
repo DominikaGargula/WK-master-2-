@@ -17,4 +17,4 @@ Funkcjonalna i bezpieczna aplikacja webowa, która usprawni zarządzanie wydarze
 
 
 ### Widok strony głównej aplikacji:
-![Strona główna aplikacji](Strona_Glowna)
+![Strona główna aplikacji](Strona_Glowna.png) 
