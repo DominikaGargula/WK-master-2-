@@ -17,4 +17,4 @@ Funkcjonalna i bezpieczna aplikacja webowa, która usprawni zarządzanie wydarze
 
 
 ### Widok strony głównej aplikacji:
-![Strona główna aplikacji]([Strona_Glowna.png](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Strona_Glowna.png) 
+![Strona główna aplikacji](https://github.com/DominikaGargula/WydarzeniaKulturale/blob/main/Strona_Glowna.png) 
